@@ -74,11 +74,28 @@ u="file:///$(cygpath -m "$PWD/docs/demos/businesshub/index.html")"; u="${u// /%2
   --user-data-dir="$TEMP/ik-shots" --screenshot="$(cygpath -w "$PWD/shots/businesshub-mobile.png")" "$u"
 ```
 
-## Custom domain
+## Custom domain: iksolutions-inc.com (GoDaddy)
 
-In the repository settings, Pages → Custom domain, enter your domain (for example
-`ikdigital.com`), add the CNAME record GitHub shows at your registrar, then rebuild with
-`--base-url https://your-domain/` so the sitemap and canonical links match.
+DNS records at GoDaddy (leave every mail record untouched):
+
+| Type | Name | Data |
+|---|---|---|
+| A | @ | 185.199.108.153 |
+| A | @ | 185.199.109.153 |
+| A | @ | 185.199.110.153 |
+| A | @ | 185.199.111.153 |
+| CNAME | www | raelpanga.github.io |
+
+Delete the existing `A @ WebsiteBuilder Site` record and change the existing `www`
+CNAME (it currently points to the apex). Then, once `nslookup iksolutions-inc.com`
+returns a 185.199.x.153 address, set the custom domain on GitHub (Settings → Pages →
+Custom domain → `iksolutions-inc.com`, then tick Enforce HTTPS after the certificate is
+issued) and rebuild with the CNAME file:
+
+```bash
+node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com
+git add -A && git commit -m "Custom domain" && git push
+```
 
 ## Old material
 
