@@ -12,7 +12,7 @@ window.KDS = {
     // WhatsApp number in international format without "+".
     whatsapp: "18593825280",
     email: "ikasolution00@gmail.com",
-    location: { fr: "Washington, États-Unis", en: "Washington, United States" }
+    location: { fr: "Kentucky, États-Unis", en: "Kentucky, United States" }
   },
 
   i18n: {
@@ -23,7 +23,7 @@ window.KDS = {
       whatsapp: "Écrire sur WhatsApp",
       waMessage: "Bonjour IK Digital Solutions, je souhaite discuter d'un projet de site ou d'application.",
       hero: {
-        eyebrow: "Studio de développement · Washington, États-Unis · clients en RDC",
+        eyebrow: "Studio de développement · Kentucky, États-Unis · clients en RDC",
         title: "Nous concevons, déployons et supervisons vos applications. En RDC, sur des serveurs en RDC.",
         lead: "Sites web, applications métier et paiement mobile money pour les entreprises, écoles, distributeurs et sous-traitants qui doivent fonctionner avec une connexion 3G, des coupures d'électricité et des factures en dollars.",
         cta1: "Voir les démonstrateurs",
@@ -135,8 +135,8 @@ window.KDS = {
       },
       about: {
         eyebrow: "À propos",
-        title: "Un studio basé à Washington, au service des entreprises de Kinshasa, Lubumbashi et de l'Est.",
-        text: "IK Digital Solutions est un studio de développement fondé par Israel Kapanga, installé à Washington, aux États-Unis. Nous construisons des systèmes qui doivent tenir dans les conditions réelles du Congo : réseau instable, électricité coupée, clients sans adresse e-mail, paiements en dollars et en francs. Nous travaillons en français avec vos équipes, en anglais avec vos partenaires, et nous nous déplaçons pour le cadrage et la mise en service.",
+        title: "Un studio basé dans le Kentucky, au service des entreprises de Kinshasa, Lubumbashi et de l'Est.",
+        text: "IK Digital Solutions est un studio de développement fondé par Israel Kapanga, installé dans le Kentucky, aux États-Unis. Nous construisons des systèmes qui doivent tenir dans les conditions réelles du Congo : réseau instable, électricité coupée, clients sans adresse e-mail, paiements en dollars et en francs. Nous travaillons en français avec vos équipes, en anglais avec vos partenaires, et nous nous déplaçons pour le cadrage et la mise en service.",
         founderRole: "Fondateur · développement et exploitation"
       },
       contact: {
@@ -183,7 +183,7 @@ window.KDS = {
       whatsapp: "Message on WhatsApp",
       waMessage: "Hello IK Digital Solutions, I would like to discuss a website or application project.",
       hero: {
-        eyebrow: "Software studio · Washington, United States · clients in the DRC",
+        eyebrow: "Software studio · Kentucky, United States · clients in the DRC",
         title: "We design, deploy and keep your applications running. In the DRC, on servers in the DRC.",
         lead: "Websites, business applications and mobile money payments for companies, schools, distributors and contractors that must work on 3G, through power cuts, and with invoices in dollars.",
         cta1: "See the demonstrators",
@@ -295,8 +295,8 @@ window.KDS = {
       },
       about: {
         eyebrow: "About",
-        title: "A Washington-based studio, serving businesses in Kinshasa, Lubumbashi and the East.",
-        text: "IK Digital Solutions is a software studio founded by Israel Kapanga, based in Washington, United States. We build systems that must hold up in Congo's real conditions: unstable network, power cuts, customers without e-mail, payments in dollars and francs. We work in French with your teams and in English with your partners, and we travel for scoping and go-live.",
+        title: "A Kentucky-based studio, serving businesses in Kinshasa, Lubumbashi and the East.",
+        text: "IK Digital Solutions is a software studio founded by Israel Kapanga, based in Kentucky, United States. We build systems that must hold up in Congo's real conditions: unstable network, power cuts, customers without e-mail, payments in dollars and francs. We work in French with your teams and in English with your partners, and we travel for scoping and go-live.",
         founderRole: "Founder · development and operations"
       },
       contact: {
