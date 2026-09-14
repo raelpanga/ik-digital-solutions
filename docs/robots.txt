@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://raelpanga.github.io/ik-digital-solutions/sitemap.xml

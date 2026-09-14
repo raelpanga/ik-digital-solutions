@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Complexe Scolaire Elikya · Démo Portail Scolaire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#F4F4FA;--surface:#FFFFFF;--surface-2:#EAEAF5;--ink:#161631;--ink-2:#4E4E76;--ink-3:#7E7EA3;--line:#D8D8EA;--accent:#4338CA;--accent-soft:#E6E4FB;--on-accent:#FFFFFF;--ok:#1E7F48;--ok-soft:#DDF3E5;--warn:#8F6210;--warn-soft:#F8EDD3;--bad:#B3261E;--bad-soft:#F9E0DE;--copper:#A84E27;--copper-soft:#F7E7DE;--radius:6px;--font:"Instrument Sans","Segoe UI",Arial,sans-serif;--display:"Bricolage Grotesque","Arial Narrow",Arial,sans-serif;--mono:"IBM Plex Mono",Consolas,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F0F22;--surface:#17172E;--surface-2:#1F1F3A;--ink:#E9E9F5;--ink-2:#ABABCB;--ink-3:#8181A6;--line:#2C2C4D;--accent:#9A92F5;--accent-soft:#25234D;--on-accent:#0F0F22;--ok:#4FCB84;--ok-soft:#163326;--warn:#E3B75C;--warn-soft:#3A2E12;--bad:#F08A80;--bad-soft:#3B1A17;--copper:#E08B5D;--copper-soft:#3A241A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F0F22;--surface:#17172E;--surface-2:#1F1F3A;--ink:#E9E9F5;--ink-2:#ABABCB;--ink-3:#8181A6;--line:#2C2C4D;--accent:#9A92F5;--accent-soft:#25234D;--on-accent:#0F0F22;--ok:#4FCB84;--ok-soft:#163326;--warn:#E3B75C;--warn-soft:#3A2E12;--bad:#F08A80;--bad-soft:#3B1A17;--copper:#E08B5D;--copper-soft:#3A241A;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;padding-inline:clamp(16px,3vw,32px);padding-block:0 48px}
+h1,h2,h3{margin:0;font-family:var(--display);line-height:1.15;text-wrap:balance}
+h1{font-size:clamp(1.5rem,3.5vw,2.2rem)}h2{font-size:1.25rem}h3{font-size:1.05rem}
+p{margin:0}a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ikbar{margin-inline:calc(-1*clamp(16px,3vw,32px));background:var(--copper-soft);border-bottom:1px solid var(--line);padding:.45rem clamp(16px,3vw,32px);font-size:.82rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.ikbar strong{color:var(--copper)}.ikbar a{color:var(--ink-2)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding-block:1.1rem;border-bottom:1px solid var(--line)}
+.brand{display:grid}.brand span{font-family:var(--display);font-weight:700;font-size:1.35rem}.brand small{color:var(--ink-3);font-size:.8rem}
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.tabs button{font:inherit;font-weight:600;font-size:.9rem;background:transparent;color:var(--ink-2);border:0;padding:.5rem .9rem;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:.55rem .7rem}
+input[type=number]{font-family:var(--mono)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;font:inherit;font-weight:600;font-size:.92rem;padding:.6rem .95rem;border-radius:4px;border:1px solid transparent;cursor:pointer;text-decoration:none;line-height:1.2}
+.btn.primary{background:var(--accent);color:var(--on-accent)}.btn.ghost{background:transparent;border-color:var(--ink-3);color:var(--ink)}.btn.small{padding:.38rem .65rem;font-size:.82rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+main{padding-top:1.4rem;display:grid;gap:1.4rem}
+.muted{color:var(--ink-3);font-size:.85rem}
+.phone{max-width:520px;margin-inline:auto;display:grid;gap:1rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1.1rem 1.2rem;display:grid;gap:.8rem}
+.field{display:grid;gap:.3rem;font-size:.9rem;font-weight:600}.field small{font-weight:400;color:var(--ink-3)}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:end}
+.pupil{display:grid;grid-template-columns:1fr auto;gap:.6rem;align-items:start}
+.balance{font-family:var(--mono);font-size:1.6rem}.balance small{display:block;font-size:.85rem;color:var(--ink-3)}
+.sched{display:grid;gap:.4rem}
+.sched-row{display:grid;grid-template-columns:1fr auto auto;gap:.6rem;align-items:center;padding:.5rem .7rem;border:1px solid var(--line);border-radius:4px;font-size:.92rem}
+.sched-row .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:.15rem .45rem;border-radius:3px;white-space:nowrap}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}.tag.warn{background:var(--warn-soft);color:var(--warn)}.tag.bad{background:var(--bad-soft);color:var(--bad)}.tag.info{background:var(--accent-soft);color:var(--accent)}.tag.sandbox{background:var(--copper-soft);color:var(--copper)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1rem;display:grid;gap:.2rem}
+.kpi .l{font-size:.75rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono)}
+.kpi .v{font-family:var(--mono);font-size:1.5rem;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:.92rem}
+th,td{text-align:left;padding:.6rem .8rem;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:500;background:var(--surface-2)}
+tr:last-child td{border-bottom:0}td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;min-width:120px}.bar i{display:block;height:100%;background:var(--accent)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}@media (max-width:860px){.two{grid-template-columns:1fr}}
+.list{display:grid;gap:.5rem}.list .item{padding:.6rem .8rem;border:1px solid var(--line);border-radius:4px;font-size:.92rem;background:var(--surface)}.list .item small{display:block;color:var(--ink-3)}
+.overlay{position:fixed;inset:0;background:rgba(12,12,30,.55);display:grid;place-items:center;padding:16px;z-index:100}
+.dialog{background:var(--surface);color:var(--ink);border-radius:8px;max-width:440px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.35);overflow:hidden}
+.dlg-head{padding:1rem 1.2rem;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap}
+.dlg-body{padding:1.1rem 1.2rem;display:grid;gap:.9rem}
+.amount{font-family:var(--mono);font-size:1.6rem}.amount small{font-size:.9rem;color:var(--ink-3);display:block}
+fieldset{border:1px solid var(--line);border-radius:4px;padding:.6rem .8rem;display:flex;gap:.9rem;flex-wrap:wrap}legend{font-size:.8rem;color:var(--ink-3);padding-inline:.3rem}
+.radio{display:flex;gap:.35rem;align-items:center;font-size:.92rem}
+.dlg-actions{display:flex;justify-content:flex-end;gap:.6rem;flex-wrap:wrap}
+.progress{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:var(--accent);animation:fill 1.8s linear forwards}
+@keyframes fill{to{width:100%}}
+@media (prefers-reduced-motion:reduce){.progress i{animation:none;width:100%}}
+.sms{background:var(--surface-2);border-left:3px solid var(--ok);padding:.6rem .8rem;font-family:var(--mono);font-size:.82rem;white-space:pre-wrap}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:4px;font-size:.9rem;z-index:110}
+.school{background:var(--accent);color:var(--on-accent);border-radius:16px;padding:1.3rem 1.4rem;display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:center;position:relative;overflow:hidden}
+.school::after{content:"";position:absolute;right:-50px;bottom:-60px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.14)}
+.crest{width:64px;height:64px;border-radius:16px;background:rgba(255,255,255,.22);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:1.1rem;letter-spacing:.04em;border:2px solid rgba(255,255,255,.5)}
+.school h1{color:var(--on-accent);font-size:1.4rem}
+.school p{opacity:.85;font-size:.88rem;margin-top:.2rem}
+.info{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.info div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.6rem .7rem;display:grid;gap:.05rem}
+.info b{font-family:var(--mono);font-weight:500;font-size:.95rem}.info span{font-size:.72rem;color:var(--ink-3)}
+.ann{display:grid;gap:.5rem}.ann .a{display:grid;grid-template-columns:auto 1fr;gap:.8rem;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.7rem .8rem;font-size:.9rem}
+.ann .d{background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:.35rem .5rem;font-family:var(--mono);font-size:.72rem;text-align:center;line-height:1.2;min-width:3.2rem}
+.ann small{display:block;color:var(--ink-3)}
+.sch-foot{font-size:.8rem;color:var(--ink-3);text-align:center;padding-top:.6rem}
+</style>
+</head>
+<body>
+<div class="ikbar"><span><strong>Démonstrateur IK Digital Solutions</strong> · école fictive · données d'exemple · paiements simulés</span><a href="../../index.html">← Retour au portfolio</a></div>
+
+<header class="top">
+  <div class="brand"><span>Complexe Scolaire Elikya</span><small>Exemple · Kinshasa, Lemba · maternelle, primaire, secondaire</small></div>
+  <div class="tabs" role="tablist" aria-label="Vue">
+    <button type="button" role="tab" data-view="parent" aria-selected="true">Parent</button>
+    <button type="button" role="tab" data-view="dir" aria-selected="false">Direction</button>
+    <button type="button" role="tab" data-view="sec" aria-selected="false">Secrétariat</button>
+  </div>
+</header>
+
+<main id="view"></main>
+<div id="modal"></div>
+
+<script>
+(function(){
+"use strict";
+const KEY="ik-demo-scolaire-v1", RATE=2850;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtUsd=n=>n.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" USD";
+const fmtCdf=n=>Math.round(n*RATE).toLocaleString("fr-FR")+" CDF";
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const now=()=>new Date().toTimeString().slice(0,5);
+const mkRef=p=>p+"-"+Math.random().toString(36).slice(2,8).toUpperCase();
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10);};
+const fmtDate=d=>new Date(d+"T00:00:00").toLocaleDateString("fr-FR",{day:"2-digit",month:"short"});
+
+function seed(){
+  const t=today();
+  const tranches=[{n:"1re tranche",due:addDays(t,-40),amt:150},{n:"2e tranche",due:addDays(t,12),amt:150},{n:"3e tranche",due:addDays(t,95),amt:150}];
+  const pupils=[
+    {code:"EL-2026-014",name:"Grâce Mbuyi",cls:"5e primaire",parent:"+243 81 555 01 14",paid:150},
+    {code:"EL-2026-027",name:"Jonathan Kalala",cls:"5e primaire",parent:"+243 99 555 02 27",paid:300},
+    {code:"EL-2026-033",name:"Esther Nsimba",cls:"3e secondaire",parent:"+243 82 555 03 33",paid:60},
+    {code:"EL-2026-041",name:"David Mukendi",cls:"3e secondaire",parent:"+243 81 555 04 41",paid:0},
+    {code:"EL-2026-052",name:"Sarah Ilunga",cls:"1re secondaire",parent:"+243 97 555 05 52",paid:450},
+    {code:"EL-2026-058",name:"Emmanuel Tshimanga",cls:"1re secondaire",parent:"+243 81 555 05 58",paid:150}
+  ];
+  const payments=[
+    {id:mkRef("PAY"),date:t,time:"07:48",code:"EL-2026-027",amt:150,method:"M-Pesa",ref:"MP-EX0027",sample:true},
+    {id:mkRef("PAY"),date:t,time:"09:02",code:"EL-2026-033",amt:60,method:"Espèces (secrétariat)",ref:"—",sample:true}
+  ];
+  const ann=[{date:addDays(t,-1),text:"Réunion des parents samedi à 9h, salle polyvalente.",sms:6},{date:addDays(t,-5),text:"Rappel : la 2e tranche des frais est attendue avant le "+fmtDate(addDays(t,12))+".",sms:6}];
+  return {tranches,pupils,payments,ann};
+}
+function load(){try{const s=localStorage.getItem(KEY);if(s)return JSON.parse(s);}catch(e){}return seed();}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+let state=load(), view="parent", code="";
+const total=()=>state.tranches.reduce((s,x)=>s+x.amt,0);
+const pupil=c=>state.pupils.find(p=>p.code===c);
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);}
+
+function payModal(o){
+  const m=$("modal"),ops=["M-Pesa","Airtel Money","Orange Money"];
+  m.innerHTML=`<div class="overlay"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="pm-title"><div class="dlg-head"><h2 id="pm-title">${esc(o.title)}</h2><span class="tag sandbox">Bac à sable · aucun argent réel</span></div><div class="dlg-body" id="pm-body">
+    <p class="amount">${fmtUsd(o.amount)}<small>≈ ${fmtCdf(o.amount)} au taux d'exemple</small></p>
+    <fieldset><legend>Opérateur</legend>${ops.map((x,i)=>`<label class="radio"><input type="radio" name="op" value="${x}" ${i===0?"checked":""}> ${x}</label>`).join("")}</fieldset>
+    <label class="field">Numéro du parent <input id="pm-phone" type="tel" value="${esc(o.phone)}"></label>
+    <div class="dlg-actions"><button type="button" class="btn ghost" id="pm-cancel">Annuler</button><button type="button" class="btn primary" id="pm-send">Payer</button></div></div></div></div>`;
+  $("pm-cancel").onclick=()=>{m.innerHTML="";};
+  $("pm-send").onclick=()=>{
+    const op=m.querySelector("input[name=op]:checked").value, phone=$("pm-phone").value.trim()||o.phone;
+    $("pm-body").innerHTML=`<p>Demande envoyée au <strong>${esc(phone)}</strong> via <strong>${esc(op)}</strong>.</p><p class="muted">Confirmez avec votre code PIN sur votre téléphone.</p><div class="progress"><i></i></div>`;
+    setTimeout(()=>{const r=mkRef(op==="M-Pesa"?"MP":op==="Airtel Money"?"AM":"OM");
+      $("pm-body").innerHTML=`<p><span class="tag ok">Paiement reçu</span></p><p class="amount">${fmtUsd(o.amount)}<small>Réf. ${r} · ${esc(op)}</small></p><div><p class="muted" style="margin-bottom:.3rem">Reçu envoyé par SMS (simulé)</p><div class="sms">CS Elikya: recu ${fmtUsd(o.amount)} pour ${esc(o.pupilName)}. Ref ${r}. Solde restant: ${fmtUsd(o.remaining)}. Merci.</div></div><div class="dlg-actions"><button type="button" class="btn primary" id="pm-close">Fermer</button></div>`;
+      $("pm-close").onclick=()=>{m.innerHTML="";o.onSuccess({op,ref:r,phone});};},1900);
+  };
+}
+
+function schedule(p){
+  let paid=p.paid;
+  return state.tranches.map(tr=>{const cover=Math.min(paid,tr.amt);paid-=cover;const st=cover>=tr.amt?"payée":cover>0?"partielle":new Date(tr.due)<new Date(today())?"en retard":"à venir";return {...tr,cover,st};});
+}
+
+function renderParent(){
+  const p=pupil(code);
+  let card="";
+  if(!p){
+    card=`<div class="card"><h2>Espace parent</h2><p class="muted">Entrez le code élève figurant sur la carte scolaire. Codes d'exemple : ${state.pupils.slice(0,3).map(x=>`<a href="#" data-code="${x.code}">${x.code}</a>`).join(", ")}.</p>
+      <form class="row" id="f-code"><label class="field" style="flex:1">Code élève <input id="p-code" placeholder="EL-2026-000" autocomplete="off"></label><button type="submit" class="btn primary">Voir</button></form>
+      ${code?`<p class="muted" style="color:var(--bad)">Code inconnu. Vérifiez la carte scolaire ou appelez le secrétariat.</p>`:""}</div>`;
+  } else {
+    const sch=schedule(p), remaining=total()-p.paid;
+    const next=sch.find(x=>x.st!=="payée");
+    card=`<div class="card"><div class="pupil"><div><h2>${esc(p.name)}</h2><p class="muted">${esc(p.cls)} · ${esc(p.code)} · parent ${esc(p.parent)}</p></div><button type="button" class="btn ghost small" id="logout">Changer</button></div>
+      <div class="balance">${fmtUsd(remaining)}<small>reste à payer sur ${fmtUsd(total())} · ≈ ${fmtCdf(remaining)}</small></div>
+      <div class="sched">${sch.map(x=>`<div class="sched-row"><span>${esc(x.n)} <span class="muted">· échéance ${fmtDate(x.due)}</span></span><span class="num">${fmtUsd(x.cover)} / ${fmtUsd(x.amt)}</span><span class="tag ${x.st==="payée"?"ok":x.st==="en retard"?"bad":x.st==="partielle"?"warn":"info"}">${x.st}</span></div>`).join("")}</div>
+      ${remaining>0?`<form class="row" id="f-pay"><label class="field" style="flex:1">Montant à payer <small>paiement partiel accepté</small><input id="p-amt" type="number" min="1" max="${remaining}" step="1" value="${next?Math.min(next.amt-next.cover,remaining):remaining}"></label><button type="submit" class="btn primary">Payer par mobile money</button></form>`:`<p><span class="tag ok">Frais soldés pour l'année</span></p>`}
+      </div>
+      <div class="card"><h3>Horaire de demain</h3><div class="list"><div class="item">07:30 · Mathématiques</div><div class="item">09:30 · Français</div><div class="item">11:00 · Sciences</div></div></div>
+      <div class="card"><h3>Annonces de l'école</h3><div class="ann">${state.ann.map(a=>`<div class="a"><span class="d">${fmtDate(a.date).replace(" ","<br>")}</span><span>${esc(a.text)}<small>reçue par SMS et WhatsApp</small></span></div>`).join("")}</div></div>`;
+  }
+  $("view").innerHTML=`<div class="phone">
+    <div class="school"><div class="crest">CSE</div><div><p class="eyebrow" style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin:0 0 .2rem">Espace parents · année 2026-2027</p><h1>Complexe Scolaire Elikya</h1><p>Frais, bulletins, horaires et annonces, depuis votre téléphone.</p></div></div>
+    <div class="info"><div><b>${fmtUsd(total())}</b><span>frais annuels</span></div><div><b>${state.tranches.length} tranches</b><span>paiement partiel accepté</span></div><div><b>7 h 30</b><span>début des cours</span></div></div>
+    ${card}
+    <p class="sch-foot">Sans smartphone, le parent reçoit les mêmes informations par SMS. · Portail réalisé par <a href="../../index.html">IK Digital Solutions</a></p></div>`;
+  document.querySelectorAll("[data-code]").forEach(a=>a.onclick=e=>{e.preventDefault();code=a.dataset.code;renderParent();});
+  const fc=$("f-code");if(fc)fc.onsubmit=e=>{e.preventDefault();code=$("p-code").value.trim().toUpperCase();renderParent();};
+  const lo=$("logout");if(lo)lo.onclick=()=>{code="";renderParent();};
+  const fp=$("f-pay");if(fp)fp.onsubmit=e=>{e.preventDefault();const amt=Math.min(Math.max(1,parseFloat($("p-amt").value)||0),total()-p.paid);payModal({title:"Frais scolaires · "+p.name,amount:amt,phone:p.parent,pupilName:p.name,remaining:total()-p.paid-amt,onSuccess:r=>{p.paid+=amt;state.payments.unshift({id:mkRef("PAY"),date:today(),time:now(),code:p.code,amt,method:r.op,ref:r.ref});save();renderParent();toast("Paiement enregistré. Visible dans la vue Direction.");}});};
+}
+
+function renderDir(){
+  const t=state.payments.filter(x=>x.date===today());
+  const collected=t.reduce((s,x)=>s+x.amt,0);
+  const mm=t.filter(x=>x.method!=="Espèces (secrétariat)"&&x.method!=="Virement bancaire").reduce((s,x)=>s+x.amt,0);
+  const classes={};state.pupils.forEach(p=>{const c=classes[p.cls]||(classes[p.cls]={n:0,due:0,paid:0});c.n++;c.due+=total();c.paid+=p.paid;});
+  const late=state.pupils.filter(p=>schedule(p).some(x=>x.st==="en retard"));
+  $("view").innerHTML=`<div class="section-head"><div><h1>Direction · ce matin</h1><p class="muted">Encaissements, impayés par classe, annonces. Les lignes « exemple » sont des données de démonstration.</p></div><button type="button" class="btn ghost small" id="reset">Réinitialiser la démo</button></div>
+    <div class="kpis">
+      <div class="kpi"><span class="l">Encaissé aujourd'hui</span><span class="v">${fmtUsd(collected)}</span><span class="muted">dont ${fmtUsd(mm)} en mobile money</span></div>
+      <div class="kpi"><span class="l">Élèves en retard de paiement</span><span class="v">${late.length}</span></div>
+      <div class="kpi"><span class="l">Taux de recouvrement</span><span class="v">${Math.round(state.pupils.reduce((s,p)=>s+p.paid,0)/(state.pupils.length*total())*100)} %</span></div>
+      <div class="kpi"><span class="l">Espèces manipulées aujourd'hui</span><span class="v">${fmtUsd(collected-mm)}</span></div>
+    </div>
+    <div class="two">
+      <section><h2>Impayés par classe</h2><div class="tablewrap" style="margin-top:.6rem"><table style="min-width:0"><thead><tr><th>Classe</th><th>Élèves</th><th>Recouvré</th><th>Reste</th></tr></thead><tbody>
+      ${Object.keys(classes).map(c=>{const x=classes[c];const pct=Math.round(x.paid/x.due*100);return `<tr><td>${esc(c)}</td><td class="num">${x.n}</td><td><div class="bar" title="${pct} %"><i style="width:${pct}%"></i></div><span class="muted">${pct} %</span></td><td class="num">${fmtUsd(x.due-x.paid)}</td></tr>`;}).join("")}
+      </tbody></table></div>
+      <h2 style="margin-top:1.2rem">Élèves en retard</h2><div class="list" style="margin-top:.6rem">${late.length?late.map(p=>`<div class="item">${esc(p.name)} · ${esc(p.cls)}<small>${esc(p.code)} · reste ${fmtUsd(total()-p.paid)} · parent ${esc(p.parent)}</small></div>`).join(""):`<div class="item">Aucun retard.</div>`}</div></section>
+      <section><h2>Envoyer une annonce</h2><form class="card" id="f-ann" style="margin-top:.6rem"><label class="field">Message aux parents <small>envoyé par SMS et WhatsApp à ${state.pupils.length} familles</small><textarea id="a-text" required placeholder="Ex. : les cours reprennent lundi à 7h30."></textarea></label><div><button type="submit" class="btn primary">Envoyer</button></div></form>
+      <h2 style="margin-top:1.2rem">Historique</h2><div class="list" style="margin-top:.6rem">${state.ann.map(a=>`<div class="item">${esc(a.text)}<small>${fmtDate(a.date)} · ${a.sms} SMS envoyés (simulé)</small></div>`).join("")}</div></section>
+    </div>
+    <section><h2>Paiements du jour</h2><div class="tablewrap" style="margin-top:.6rem"><table><thead><tr><th>N°</th><th>Heure</th><th>Élève</th><th>Montant</th><th>Mode</th><th>Référence</th></tr></thead><tbody>
+    ${t.length?t.map(x=>{const p=pupil(x.code);return `<tr><td class="num">${esc(x.id)}${x.sample?' <span class="tag info">exemple</span>':""}</td><td class="num">${esc(x.time)}</td><td>${p?esc(p.name):esc(x.code)}</td><td class="num">${fmtUsd(x.amt)}</td><td>${esc(x.method)}</td><td class="num">${esc(x.ref)}</td></tr>`;}).join(""):`<tr><td colspan="6" class="muted">Aucun paiement aujourd'hui.</td></tr>`}
+    </tbody></table></div></section>`;
+  $("f-ann").onsubmit=e=>{e.preventDefault();state.ann.unshift({date:today(),text:$("a-text").value.trim(),sms:state.pupils.length});save();renderDir();toast(state.pupils.length+" SMS et messages WhatsApp envoyés (simulé).");};
+  $("reset").onclick=()=>{state=seed();code="";save();renderDir();toast("Données de démonstration réinitialisées");};
+}
+
+function renderSec(){
+  $("view").innerHTML=`<div class="phone"><div class="card"><h2>Secrétariat · enregistrer un paiement</h2><p class="muted">Pour un parent qui paie en espèces ou par virement. Le reçu SMS part quand même, et la direction le voit immédiatement. En cas de coupure, la saisie reste sur l'ordinateur et se synchronise ensuite.</p>
+    <form id="f-sec" style="display:grid;gap:.8rem">
+      <label class="field">Élève <select id="s-code">${state.pupils.map(p=>`<option value="${p.code}">${esc(p.name)} · ${esc(p.cls)} · reste ${fmtUsd(total()-p.paid)}</option>`).join("")}</select></label>
+      <label class="field">Montant (USD) <input id="s-amt" type="number" min="1" step="1" value="50" required></label>
+      <label class="field">Mode <select id="s-method"><option>Espèces (secrétariat)</option><option>Virement bancaire</option></select></label>
+      <div><button type="submit" class="btn primary">Enregistrer et envoyer le reçu SMS</button></div>
+    </form><div id="s-out"></div></div></div>`;
+  $("f-sec").onsubmit=e=>{e.preventDefault();const p=pupil($("s-code").value);const amt=Math.min(Math.max(1,parseFloat($("s-amt").value)||0),total()-p.paid);if(amt<=0){toast("Frais déjà soldés.");return;}p.paid+=amt;const ref=$("s-method").value==="Virement bancaire"?mkRef("VIR"):"—";state.payments.unshift({id:mkRef("PAY"),date:today(),time:now(),code:p.code,amt,method:$("s-method").value,ref});save();$("s-out").innerHTML=`<p style="margin-top:.8rem"><span class="tag ok">Enregistré</span></p><div class="sms" style="margin-top:.4rem">CS Elikya: recu ${fmtUsd(amt)} pour ${esc(p.name)}. Solde restant: ${fmtUsd(total()-p.paid)}. Merci.</div>`;toast("Paiement enregistré, reçu SMS envoyé (simulé).");renderSec();$("s-out").innerHTML=`<p style="margin-top:.8rem"><span class="tag ok">Enregistré</span></p><div class="sms" style="margin-top:.4rem">CS Elikya: recu ${fmtUsd(amt)} pour ${esc(p.name)}. Solde restant: ${fmtUsd(total()-p.paid)}. Merci.</div>`;};
+}
+
+function render(){
+  document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",b.dataset.view===view?"true":"false"));
+  ({parent:renderParent,dir:renderDir,sec:renderSec})[view]();
+}
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{view=b.dataset.view;render();});
+render();
+})();
+</script>
+</body>
+</html>

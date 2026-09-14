@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mac & Clay · Démo Suivi des cortèges</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#F5F5F2;--surface:#FFFFFF;--surface-2:#ECECE7;--ink:#141A26;--ink-2:#4A5163;--ink-3:#7C8394;--line:#DCDDD8;--navy:#141A26;--accent:#141A26;--accent-soft:#E6E8EE;--on-accent:#FFFFFF;--gold:#B08D57;--gold-soft:#F3EBDD;--ok:#1E7F48;--ok-soft:#DDF3E5;--warn:#8F6210;--warn-soft:#F8EDD3;--bad:#B3261E;--bad-soft:#F9E0DE;--copper:#A84E27;--copper-soft:#F7E7DE;--radius:6px;--font:"Instrument Sans","Segoe UI",Arial,sans-serif;--display:"Cormorant Garamond",Georgia,serif;--mono:"IBM Plex Mono",Consolas,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F131B;--surface:#171C26;--surface-2:#1F2531;--ink:#E9EAEE;--ink-2:#AEB3C0;--ink-3:#7C8394;--line:#2B3140;--navy:#0B0E14;--accent:#D6C3A0;--accent-soft:#2A2F3D;--on-accent:#0F131B;--gold:#CFAE78;--gold-soft:#3A3121;--ok:#4FCB84;--ok-soft:#163326;--warn:#E3B75C;--warn-soft:#3A2E12;--bad:#F08A80;--bad-soft:#3B1A17;--copper:#E08B5D;--copper-soft:#3A241A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F131B;--surface:#171C26;--surface-2:#1F2531;--ink:#E9EAEE;--ink-2:#AEB3C0;--ink-3:#7C8394;--line:#2B3140;--navy:#0B0E14;--accent:#D6C3A0;--accent-soft:#2A2F3D;--on-accent:#0F131B;--gold:#CFAE78;--gold-soft:#3A3121;--ok:#4FCB84;--ok-soft:#163326;--warn:#E3B75C;--warn-soft:#3A2E12;--bad:#F08A80;--bad-soft:#3B1A17;--copper:#E08B5D;--copper-soft:#3A241A;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.5;padding-inline:clamp(16px,3vw,32px);padding-block:0 40px}
+h1,h2,h3{margin:0;line-height:1.15;text-wrap:balance}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,3.2vw,2.2rem)}h2{font-size:1.1rem;font-weight:600}h3{font-size:.98rem;font-weight:600}
+p{margin:0}a{color:var(--gold)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.ikbar{margin-inline:calc(-1*clamp(16px,3vw,32px));background:var(--copper-soft);border-bottom:1px solid var(--line);padding:.45rem clamp(16px,3vw,32px);font-size:.82rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.ikbar strong{color:var(--copper)}.ikbar a{color:var(--ink-2)}
+.wordmark{font-family:var(--display);font-size:1.7rem;letter-spacing:.14em;font-weight:500}
+.wordmark small{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-top:.1rem}
+.login{min-height:70vh;display:grid;place-items:center;margin-inline:calc(-1*clamp(16px,3vw,32px));background:radial-gradient(80% 60% at 50% 40%,#1B2333,var(--navy));padding:2rem clamp(16px,3vw,32px)}
+.login .box{background:#fff;color:#141A26;width:100%;max-width:440px;padding:2rem 2.2rem;display:grid;gap:1rem;box-shadow:0 30px 60px rgba(0,0,0,.4)}
+.login .wordmark{text-align:center;color:#141A26}.login .wordmark small{color:#B08D57}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.roles label{border:1px solid #DCDDD8;padding:.6rem .7rem;cursor:pointer;display:grid;gap:.1rem;font-size:.85rem}
+.roles label:has(input:checked){border-color:#B08D57;background:#F3EBDD}.roles input{display:none}.roles b{font-size:.9rem}.roles span{color:#7C8394;font-size:.78rem}
+.login .field input{background:#fff;color:#141A26;border-color:#DCDDD8}
+.login .btn.primary{background:#141A26;color:#fff;letter-spacing:.1em;text-transform:uppercase;font-size:.8rem;padding:.8rem}
+.shell{display:grid;grid-template-columns:220px 1fr;gap:1.5rem;padding-top:1.2rem;align-items:start}
+@media (max-width:860px){.shell{grid-template-columns:1fr}}
+.side{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1rem;display:grid;gap:.3rem;position:sticky;top:12px}
+.side .wordmark{font-size:1.3rem;margin-bottom:.6rem}
+.side .lbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:.6rem 0 .2rem}
+.side button{font:inherit;font-size:.9rem;text-align:left;background:transparent;border:0;color:var(--ink-2);padding:.45rem .6rem;border-radius:4px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.side button[aria-current="true"]{background:var(--accent-soft);color:var(--ink);font-weight:600}
+.side .me{margin-top:.8rem;border-top:1px solid var(--line);padding-top:.7rem;font-size:.82rem;color:var(--ink-2)}
+.side .me b{display:block;color:var(--ink)}
+@media (max-width:860px){.side{position:static;display:flex;flex-wrap:wrap;gap:.3rem}.side .wordmark,.side .lbl,.side .me{width:100%}}
+.badge{font-family:var(--mono);font-size:.66rem;background:var(--bad);color:#fff;border-radius:10px;padding:.05rem .4rem}
+main{display:grid;gap:1.1rem;min-width:0}
+.muted{color:var(--ink-3);font-size:.84rem}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:.5rem .6rem}
+input[type=number]{font-family:var(--mono)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;font:inherit;font-weight:600;font-size:.86rem;padding:.5rem .85rem;border-radius:4px;border:1px solid transparent;cursor:pointer;text-decoration:none;line-height:1.2;white-space:nowrap}
+.btn.primary{background:var(--accent);color:var(--on-accent)}.btn.gold{background:var(--gold);color:#fff}.btn.ghost{background:transparent;border-color:var(--ink-3);color:var(--ink)}.btn.small{padding:.32rem .55rem;font-size:.78rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem .9rem;display:grid;gap:.1rem}
+.kpi .l{font-size:.68rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.1em;font-family:var(--mono)}
+.kpi .v{font-family:var(--display);font-size:1.8rem;font-weight:600}
+.kpi.warn .v{color:var(--warn)}.kpi.bad .v{color:var(--bad)}
+.filters{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:.88rem}
+th,td{text-align:left;padding:.58rem .75rem;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:500;background:var(--surface-2)}
+tr:last-child td{border-bottom:0}td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.click{cursor:pointer}tr.click:hover td{background:var(--accent-soft)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;padding:.15rem .42rem;border-radius:3px;white-space:nowrap}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}.tag.warn{background:var(--warn-soft);color:var(--warn)}.tag.bad{background:var(--bad-soft);color:var(--bad)}.tag.info{background:var(--accent-soft);color:var(--ink)}.tag.gold{background:var(--gold-soft);color:var(--gold)}.tag.sandbox{background:var(--copper-soft);color:var(--copper)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem;display:grid;gap:.7rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media (max-width:960px){.two{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:.25rem}.chip{font-family:var(--mono);font-size:.68rem;padding:.12rem .4rem;border-radius:3px;background:var(--surface-2);color:var(--ink-2)}
+.timeline{display:grid;gap:.4rem}.tl{display:grid;grid-template-columns:auto 1fr auto;gap:.7rem;align-items:center;padding:.5rem .7rem;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+.tl .d{font-family:var(--mono);font-size:.74rem;color:var(--ink-3);min-width:6.5rem}.tl.done{opacity:.6}.tl.late{border-color:var(--bad)}
+.notes{display:grid;gap:.4rem}.note{padding:.55rem .7rem;border-left:3px solid var(--gold);background:var(--surface-2);border-radius:0 4px 4px 0;font-size:.88rem}.note small{display:block;color:var(--ink-3)}
+.form{display:grid;gap:.8rem}.frow{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}@media (max-width:640px){.frow{grid-template-columns:1fr}}
+.field{display:grid;gap:.22rem;font-size:.82rem;font-weight:600}.field small{font-weight:400;color:var(--ink-3)}.field select,.field input,.field textarea{width:100%}
+.mrow{display:grid;grid-template-columns:1.2fr 1fr 1fr auto;gap:.5rem;align-items:center}@media (max-width:640px){.mrow{grid-template-columns:1fr}}
+.overlay{position:fixed;inset:0;background:rgba(10,14,22,.6);display:grid;place-items:center;padding:16px;z-index:100;overflow:auto}
+.dialog{background:var(--surface);color:var(--ink);border-radius:6px;max-width:560px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.4);max-height:92vh;display:grid;grid-template-rows:auto 1fr}
+.dlg-head{padding:.9rem 1.2rem;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap}
+.dlg-body{padding:1rem 1.2rem;display:grid;gap:.8rem;overflow:auto}
+.dlg-actions{display:flex;justify-content:flex-end;gap:.6rem;flex-wrap:wrap}
+.meas{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}@media (max-width:640px){.meas{grid-template-columns:1fr 1fr}}
+.sms{background:var(--surface-2);border-left:3px solid var(--ok);padding:.55rem .75rem;font-family:var(--mono);font-size:.78rem;white-space:pre-wrap}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:4px;font-size:.9rem;z-index:110;max-width:90vw}
+.sync{display:grid;grid-template-columns:auto 1fr;gap:.8rem;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1rem}
+.sync .dot{width:12px;height:12px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px var(--ok-soft)}
+#print{display:none}
+@media print{body{padding:0;background:#fff;color:#000}.ikbar,.shell{display:none!important}#print{display:block;font-family:Georgia,serif;font-size:12px}#print h1{font-size:20px;margin:0 0 4px}#print table{width:100%;border-collapse:collapse;min-width:0;margin-top:8px}#print th,#print td{border:1px solid #999;padding:4px 6px;font-size:11px}}
+</style>
+</head>
+<body>
+<div class="ikbar"><span><strong>Démonstrateur IK Digital Solutions</strong> · reproduction de l'outil de production de Mac &amp; Clay avec des données fictives · Shopify, SMS et e-mails simulés · l'outil réel est en anglais</span><a href="../../index.html">← Retour au portfolio</a></div>
+<div id="app"></div>
+<div id="modal"></div>
+<div id="print" aria-hidden="true"></div>
+
+<script>
+(function(){
+"use strict";
+const KEY="ik-demo-macclay-v1";
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $=id=>document.getElementById(id);
+const usd=n=>n.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" USD";
+const today=()=>new Date().toISOString().slice(0,10);
+const nowT=()=>new Date().toTimeString().slice(0,5);
+const addDays=(d,n)=>{const x=new Date(d+"T00:00:00");x.setDate(x.getDate()+n);return x.toISOString().slice(0,10);};
+const daysUntil=d=>Math.round((new Date(d+"T00:00:00")-new Date(today()+"T00:00:00"))/86400000);
+const fmtDate=d=>new Date(d+"T00:00:00").toLocaleDateString("fr-FR",{day:"2-digit",month:"short",year:"numeric"});
+const mkId=p=>p+"-"+Math.random().toString(36).slice(2,7).toUpperCase();
+const ROLES=[["Propriétaire","Matt G.","tout voir, administration"],["Coordinatrice","Ava Thompson","tous les mariages, tous les magasins"],["Responsable de magasin","Noah Kim","mariages de son magasin"],["Personnel","Mia Lopez","mesures, pointages, notes"]];
+const STORES=["Cadentown","Southland Drive","Mercer Road"];
+const STYLISTS=["Ava Thompson","Noah Kim","Mia Lopez"];
+const MROLES=["Marié","Témoin","Garçon d'honneur","Père du marié","Père de la mariée","Porteur d'alliances"];
+const WAIVER=10;
+const CHECKS=[[-60,"Confirmer les membres du cortège"],[-30,"Toutes les mesures prises"],[-14,"Commandes converties dans Shopify"],[-7,"Retraits planifiés et paiements relancés"],[1,"Retours vérifiés, frais de retard appliqués"]];
+
+function seed(){
+  const t=today();
+  const catalog=[{id:"c1",name:"Veste",price:110},{id:"c2",name:"Pantalon",price:35},{id:"c3",name:"Chemise",price:25},{id:"c4",name:"Gilet",price:30},{id:"c5",name:"Cravate / nœud",price:12},{id:"c6",name:"Chaussures",price:28},{id:"c7",name:"Boutons de manchette",price:8}];
+  const full=["c1","c2","c3","c4","c5","c6"];
+  const mk=(id,couple,dd,store,stylist,members,extra)=>{const w={id,couple,date:addDays(t,dd),store,stylist,status:"active",members:members.map((m,i)=>({id:id+"-m"+(i+1),name:m[0],role:m[1],phone:"+1 859 555 0"+(200+i+Math.abs(dd)%50),items:m[2]||full,measured:!!m[3],meas:m[3]||null,shopify:{draft:"MC-D-"+(1000+Math.floor(Math.random()*900)),state:"brouillon",payLinkSent:false,lateFee:0,discount:0}})),checkins:CHECKS.map(([off,label])=>({key:off,label,due:addDays(addDays(t,dd),off),done:false})),notes:[],activity:[]};Object.assign(w,extra||{});return w;};
+  const M={chest:"40",waist:"34",sleeve:"34",neck:"16",inseam:"32",outseam:"42",shoe:"11",height:"180"};
+  const W=[
+    mk("W1","Emma & Lucas Martin",5,"Cadentown","Ava Thompson",[["Lucas Martin","Marié",full,M],["Owen Brooks","Témoin",full,M],["Liam Carter","Garçon d'honneur",full,M],["Noah Bennett","Garçon d'honneur",full,null]]),
+    mk("W2","Sofia & Daniel Reyes",24,"Southland Drive","Noah Kim",[["Daniel Reyes","Marié",full,M],["Mateo Reyes","Témoin",full,null],["Elijah Price","Garçon d'honneur",["c1","c2","c3","c5"],null],["Henry Walsh","Garçon d'honneur",full,null],["Jack Morgan","Garçon d'honneur",full,null]]),
+    mk("W3","Grace & Ethan Cole",41,"Mercer Road","Mia Lopez",[["Ethan Cole","Marié",full,M],["Caleb Ross","Témoin",full,null],["Aiden Ford","Garçon d'honneur",full,null]]),
+    mk("W4","Chloe & Ryan Foster",67,"Cadentown","Ava Thompson",[["Ryan Foster","Marié",full,null],["Sam Foster","Témoin",full,null]]),
+    mk("W5","Olivia & Mason Hill",-12,"Cadentown","Ava Thompson",[["Mason Hill","Marié",full,M],["Levi Hart","Témoin",full,M],["Wyatt Lane","Garçon d'honneur",full,M]],{status:"completed"})
+  ];
+  W[0].checkins[0].done=true;W[0].checkins[1].done=true;W[0].members[0].shopify.state="payé";W[0].members[1].shopify.state="payé";W[0].members[2].shopify.state="commande";W[0].members[2].shopify.payLinkSent=true;
+  W[1].checkins[0].done=true;
+  W[4].checkins.forEach(c=>c.done=true);W[4].members.forEach(m=>m.shopify.state="payé");W[4].members[2].shopify.lateFee=25;
+  W[0].notes.push({date:addDays(t,-3)+" 14:20",by:"Ava Thompson",text:"Noah Bennett vit à Louisville, il passera se faire mesurer samedi."});
+  W[0].activity.push({date:addDays(t,-3)+" 14:20",by:"Ava Thompson",text:"Note ajoutée"},{date:addDays(t,-9)+" 10:05",by:"Système",text:"Brouillons Shopify créés pour 4 membres"});
+  const users=ROLES.map(([r,n])=>({name:n,role:r,store:r==="Responsable de magasin"?"Southland Drive":"Tous"}));
+  return {user:{name:"Ava Thompson",role:"Coordinatrice"},catalog,weddings:W,users,sync:{lastRun:addDays(t,0)+" "+nowT(),runs:184,errors:0},emails:[],sms:[]};
+}
+function load(){try{const s=localStorage.getItem(KEY);if(s)return JSON.parse(s);}catch(e){}return seed();}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+let state=load(), page="dash", sel=null, filt={store:"",stylist:""}, query="";
+const Wd=id=>state.weddings.find(w=>w.id===id);
+const cat=id=>state.catalog.find(c=>c.id===id);
+const total=m=>Math.round((m.items.reduce((s,i)=>s+(cat(i)?cat(i).price:0),0)+WAIVER-(m.shopify.discount||0)+(m.shopify.lateFee||0))*100)/100;
+function toast(t){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),3000);}
+function log(w,text){w.activity.unshift({date:today()+" "+nowT(),by:state.user?state.user.name:"Système",text});}
+function email(to,subject){state.emails.unshift({date:today()+" "+nowT(),to,subject});}
+function sms(to,text){state.sms.unshift({date:today()+" "+nowT(),to,text});}
+function syncPass(){let n=0;state.weddings.forEach(w=>{if(w.status!=="active")return;w.members.forEach(m=>{if(m.shopify.state==="brouillon"&&daysUntil(w.date)<=7){m.shopify.state="commande";n++;log(w,`Brouillon ${m.shopify.draft} converti en commande Shopify (${m.name})`);}});});state.sync.lastRun=today()+" "+nowT();state.sync.runs++;save();return n;}
+function closeModal(){$("modal").innerHTML="";}
+const canAdmin=()=>state.user&&(state.user.role==="Propriétaire"||state.user.role==="Coordinatrice");
+const visible=w=>!(state.user&&state.user.role==="Responsable de magasin"&&w.store!=="Southland Drive");
+
+/* ---------- login ---------- */
+function renderLogin(){
+  $("app").innerHTML=`<div class="login"><form class="box" id="lf"><div class="wordmark">Mac &amp; Clay<small>Wedding Tracker</small></div>
+    <p class="muted" style="text-align:center">Choisissez un rôle pour entrer. En production, chaque membre du personnel a son propre compte.</p>
+    <div class="roles">${ROLES.map(([r,n,d],i)=>`<label><input type="radio" name="role" value="${i}" ${i===1?"checked":""}><b>${r}</b><span>${d}</span></label>`).join("")}</div>
+    <label class="field">E-mail<input value="ava@macandclay.com" readonly></label>
+    <label class="field">Mot de passe<input type="password" value="demo-demo" readonly></label>
+    <button class="btn primary" type="submit">Se connecter</button>
+    <p class="muted" style="text-align:center">Mot de passe oublié ? · <a href="#" id="reset0">Réinitialiser la démo</a></p></form></div>`;
+  $("lf").onsubmit=e=>{e.preventDefault();const i=+document.querySelector("input[name=role]:checked").value;state.user={name:ROLES[i][1],role:ROLES[i][0]};save();page="dash";render();toast("Connecté en tant que "+state.user.role+".");};
+  $("reset0").onclick=e=>{e.preventDefault();state=seed();save();render();};
+}
+
+/* ---------- pieces ---------- */
+function dueCheckins(){return state.weddings.filter(w=>w.status==="active"&&visible(w)).flatMap(w=>w.checkins.filter(c=>!c.done&&c.due<=today()).map(c=>({w,c})));}
+function nextCheckin(w){const c=w.checkins.find(x=>!x.done);return c?c:null;}
+function dday(w){const n=daysUntil(w.date);if(w.status==="completed")return '<span class="tag info">terminé</span>';if(n===0)return '<span class="tag bad">aujourd\'hui</span>';if(n<0)return '<span class="tag warn">retours</span>';return `<span class="tag ${n<=7?"bad":n<=30?"warn":"gold"}">J-${n}</span>`;}
+
+function renderDash(){
+  const act=state.weddings.filter(w=>w.status==="active"&&visible(w));
+  let list=act.filter(w=>(!filt.store||w.store===filt.store)&&(!filt.stylist||w.stylist===filt.stylist)).sort((a,b)=>a.date<b.date?-1:1);
+  const next30=act.filter(w=>daysUntil(w.date)>=0&&daysUntil(w.date)<=30).length;
+  const due=dueCheckins().length;
+  const review=act.filter(w=>daysUntil(w.date)<=30).reduce((s,w)=>s+w.members.filter(m=>!m.measured).length,0);
+  const out=act.filter(w=>daysUntil(w.date)>=-4&&daysUntil(w.date)<=3).reduce((s,w)=>s+w.members.filter(m=>m.shopify.state!=="brouillon").length,0);
+  const parties=act.reduce((s,w)=>s+w.members.length,0);
+  return `<div class="section-head"><div><h1>Tableau de bord</h1><p class="muted">Bonjour ${esc(state.user.name)} · ${fmtDate(today())}</p></div><button type="button" class="btn gold" id="go-new">+ Nouveau mariage</button></div>
+    <div class="kpis"><div class="kpi"><span class="l">Mariages actifs</span><span class="v">${act.length}</span></div><div class="kpi"><span class="l">30 prochains jours</span><span class="v">${next30}</span></div><div class="kpi ${due?"bad":""}"><span class="l">Pointages dus</span><span class="v">${due}</span></div><div class="kpi ${review?"warn":""}"><span class="l">Mesures en attente</span><span class="v">${review}</span></div><div class="kpi"><span class="l">Locations sorties</span><span class="v">${out}</span></div><div class="kpi"><span class="l">Taille moyenne du cortège</span><span class="v">${act.length?(parties/act.length).toFixed(1):"0"}</span></div></div>
+    <div class="filters"><select id="f-store"><option value="">Tous les magasins</option>${STORES.map(s=>`<option ${filt.store===s?"selected":""}>${s}</option>`).join("")}</select><select id="f-sty"><option value="">Tous les stylistes</option>${STYLISTS.map(s=>`<option ${filt.stylist===s?"selected":""}>${s}</option>`).join("")}</select><span class="muted">${list.length} mariage(s)</span></div>
+    <div class="tablewrap"><table><thead><tr><th>Date</th><th>Couple</th><th>Magasin</th><th>Styliste</th><th>Cortège / mesurés</th><th>Shopify</th><th>Prochain pointage</th><th>Statut</th></tr></thead><tbody>
+    ${list.map(w=>{const nc=nextCheckin(w);const paid=w.members.filter(m=>m.shopify.state==="payé").length;return `<tr class="click" data-open="${w.id}"><td class="num">${fmtDate(w.date)}</td><td><strong>${esc(w.couple)}</strong></td><td>${esc(w.store)}</td><td>${esc(w.stylist)}</td><td class="num">${w.members.length} / ${w.members.filter(m=>m.measured).length}</td><td class="num">${paid}/${w.members.length} payés</td><td>${nc?`<span class="${nc.due<=today()?"tag bad":"muted"}">${esc(nc.label)} · ${fmtDate(nc.due)}</span>`:'<span class="tag ok">tout est fait</span>'}</td><td>${dday(w)}</td></tr>`;}).join("")}
+    </tbody></table></div>`;
+}
+function bindDash(){$("go-new").onclick=()=>{page="new";render();};$("f-store").onchange=()=>{filt.store=$("f-store").value;render();};$("f-sty").onchange=()=>{filt.stylist=$("f-sty").value;render();};bindOpen();}
+function bindOpen(){document.querySelectorAll("[data-open]").forEach(el=>el.onclick=()=>{sel=el.dataset.open;page="wedding";render();});}
+
+function renderNew(){
+  return `<div class="section-head"><div><h1>Nouveau mariage</h1><p class="muted">Fiche d'admission. Un e-mail « nouveau mariage » part à la coordinatrice, et les brouillons Shopify sont créés pour chaque membre.</p></div></div>
+    <form class="card form" id="nf"><div class="frow"><label class="field">Couple<input id="n-couple" required placeholder="Emma & Lucas Martin"></label><label class="field">Date du mariage<input id="n-date" type="date" required value="${addDays(today(),50)}" min="${addDays(today(),1)}"></label></div>
+    <div class="frow"><label class="field">Magasin<select id="n-store">${STORES.map(s=>`<option>${s}</option>`).join("")}</select></label><label class="field">Styliste<select id="n-sty">${STYLISTS.map(s=>`<option>${s}</option>`).join("")}</select></label></div>
+    <div><p class="muted" style="margin-bottom:.4rem">Membres du cortège (tenue complète par défaut, modifiable ensuite)</p><div id="n-rows" style="display:grid;gap:.4rem">${[0,1,2].map(i=>`<div class="mrow"><input data-nn="${i}" placeholder="Nom complet" aria-label="Nom"><select data-nr="${i}">${MROLES.map((r,j)=>`<option ${j===i?"selected":""}>${r}</option>`).join("")}</select><input data-np="${i}" placeholder="+1 859 …" aria-label="Téléphone"><span></span></div>`).join("")}</div><button type="button" class="btn ghost small" id="n-add" style="margin-top:.5rem">+ Ajouter une ligne</button></div>
+    <div class="dlg-actions"><button class="btn primary" type="submit">Enregistrer le mariage</button></div></form>`;
+}
+function bindNew(){
+  $("n-add").onclick=()=>{const i=document.querySelectorAll("[data-nn]").length;const d=document.createElement("div");d.className="mrow";d.innerHTML=`<input data-nn="${i}" placeholder="Nom complet" aria-label="Nom"><select data-nr="${i}">${MROLES.map(r=>`<option>${r}</option>`).join("")}</select><input data-np="${i}" placeholder="+1 859 …" aria-label="Téléphone"><span></span>`;$("n-rows").appendChild(d);};
+  $("nf").onsubmit=e=>{e.preventDefault();const names=[...document.querySelectorAll("[data-nn]")];const members=names.map((n,i)=>({name:n.value.trim(),role:document.querySelector(`[data-nr="${i}"]`).value,phone:document.querySelector(`[data-np="${i}"]`).value.trim()||"+1 859 555 0000"})).filter(m=>m.name);
+    if(!members.length){toast("Ajoutez au moins un membre.");return;}
+    const date=$("n-date").value;const w={id:"W"+Date.now(),couple:$("n-couple").value.trim(),date,store:$("n-store").value,stylist:$("n-sty").value,status:"active",members:members.map((m,i)=>({id:"W"+Date.now()+"-m"+i,name:m.name,role:m.role,phone:m.phone,items:["c1","c2","c3","c4","c5","c6"],measured:false,meas:null,shopify:{draft:"MC-D-"+(1000+Math.floor(Math.random()*900)),state:"brouillon",payLinkSent:false,lateFee:0,discount:0}})),checkins:CHECKS.map(([off,label])=>({key:off,label,due:addDays(date,off),done:false})),notes:[],activity:[]};
+    log(w,"Mariage créé");log(w,`Brouillons Shopify créés pour ${members.length} membre(s)`);email("coordination@macandclay.com","Nouveau mariage : "+w.couple);state.weddings.unshift(w);save();sel=w.id;page="wedding";render();toast("Mariage enregistré. E-mail envoyé, brouillons Shopify créés (simulé).");};
+}
+
+function renderWedding(w){
+  const paid=w.members.filter(m=>m.shopify.state==="payé").length;
+  return `<a href="#" id="back" class="muted">← Tableau de bord</a>
+    <div class="section-head"><div><h1>${esc(w.couple)}</h1><p class="muted">${fmtDate(w.date)} · ${esc(w.store)} · styliste ${esc(w.stylist)} · ${w.members.length} membres · ${paid} payés</p></div><div style="display:flex;gap:.5rem;flex-wrap:wrap">${dday(w)} <button type="button" class="btn ghost small" id="print-btn">Fiche imprimable</button>${w.status==="active"?`<button type="button" class="btn ghost small" id="complete">Marquer terminé</button>`:""}</div></div>
+    <h2>Cortège</h2>
+    <div class="tablewrap"><table><thead><tr><th>Membre</th><th>Rôle</th><th>Tenue</th><th>Mesures</th><th>Shopify</th><th>Montant</th><th></th></tr></thead><tbody>
+    ${w.members.map(m=>`<tr><td><strong>${esc(m.name)}</strong><br><span class="muted">${esc(m.phone)}</span></td><td>${esc(m.role)}</td><td><div class="chips">${m.items.map(i=>`<span class="chip">${esc(cat(i).name)}</span>`).join("")}</div></td><td>${m.measured?'<span class="tag ok">prises</span>':'<span class="tag warn">à prendre</span>'}</td><td><span class="mono muted">${esc(m.shopify.draft)}</span><br><span class="tag ${m.shopify.state==="payé"?"ok":m.shopify.state==="commande"?"gold":"info"}">${m.shopify.state}</span>${m.shopify.payLinkSent&&m.shopify.state!=="payé"?' <span class="tag info">lien envoyé</span>':""}${m.shopify.lateFee?` <span class="tag bad">retard +${m.shopify.lateFee} USD</span>`:""}</td><td class="num">${usd(total(m))}</td><td style="white-space:nowrap"><button type="button" class="btn ghost small" data-meas="${m.id}">${m.measured?"Modifier":"Mesurer"}</button> ${m.shopify.state!=="payé"?`<button type="button" class="btn ghost small" data-link="${m.id}">Lien de paiement</button> <button type="button" class="btn primary small" data-paid="${m.id}">Encaissé</button>`:daysUntil(w.date)<0&&!m.shopify.lateFee?`<button type="button" class="btn ghost small" data-late="${m.id}">Frais de retard</button>`:""}</td></tr>`).join("")}
+    </tbody></table></div>
+    <form class="card form" id="addm"><div class="mrow"><input id="am-name" placeholder="Nouveau membre : nom complet" required><select id="am-role">${MROLES.map(r=>`<option>${r}</option>`).join("")}</select><input id="am-phone" placeholder="+1 859 …"><button class="btn ghost small" type="submit">Ajouter</button></div></form>
+    <div class="two"><div class="card"><h2>Pointages</h2><div class="timeline">${w.checkins.map((c,i)=>`<div class="tl ${c.done?"done":c.due<today()?"late":""}"><span class="d">${fmtDate(c.due)}</span><span>${esc(c.label)}</span>${c.done?'<span class="tag ok">fait</span>':`<button type="button" class="btn ghost small" data-ck="${i}">Fait</button>`}</div>`).join("")}</div><p class="muted">Chaque pointage en retard déclenche un e-mail d'alerte à la coordinatrice (simulé).</p></div>
+    <div class="card"><h2>Notes</h2><form id="nf2" class="form"><textarea id="note-txt" placeholder="Ajouter une note, attribuée à ${esc(state.user.name)}" required></textarea><div class="dlg-actions"><button class="btn primary small" type="submit">Ajouter la note</button></div></form><div class="notes">${w.notes.map(n=>`<div class="note">${esc(n.text)}<small>${esc(n.by)} · ${esc(n.date)}</small></div>`).join("")||'<p class="muted">Aucune note.</p>'}</div>
+    <h2 style="margin-top:.4rem">Journal d'activité</h2><div class="notes">${w.activity.slice(0,6).map(a=>`<div class="note" style="border-color:var(--line)">${esc(a.text)}<small>${esc(a.by)} · ${esc(a.date)}</small></div>`).join("")||'<p class="muted">Rien encore.</p>'}</div></div></div>`;
+}
+function bindWedding(w){
+  $("back").onclick=e=>{e.preventDefault();sel=null;page="dash";render();};
+  const cp=$("complete");if(cp)cp.onclick=()=>{w.status="completed";log(w,"Mariage marqué terminé");save();page="done";render();};
+  $("print-btn").onclick=()=>{$("print").innerHTML=`<h1>Mac & Clay · ${esc(w.couple)}</h1><p>${fmtDate(w.date)} · ${esc(w.store)} · ${esc(w.stylist)} · fiche de démonstration</p><table><tr><th>Membre</th><th>Rôle</th><th>Tenue</th><th>Poitrine</th><th>Taille</th><th>Manche</th><th>Cou</th><th>Entrejambe</th><th>Chaussure</th><th>Montant</th></tr>${w.members.map(m=>`<tr><td>${esc(m.name)}</td><td>${esc(m.role)}</td><td>${m.items.map(i=>esc(cat(i).name)).join(", ")}</td>${["chest","waist","sleeve","neck","inseam","shoe"].map(k=>`<td>${m.meas?esc(m.meas[k]||""):""}</td>`).join("")}<td>${usd(total(m))}</td></tr>`).join("")}</table>`;window.print();};
+  document.querySelectorAll("[data-meas]").forEach(b=>b.onclick=()=>measModal(w,w.members.find(m=>m.id===b.dataset.meas)));
+  document.querySelectorAll("[data-link]").forEach(b=>b.onclick=()=>{const m=w.members.find(x=>x.id===b.dataset.link);m.shopify.payLinkSent=true;sms(m.phone,`Mac & Clay: ${m.name}, votre lien de paiement securise pour le mariage ${w.couple} (${usd(total(m))}) : https://checkout.shopify.com/… (simule)`);log(w,`Lien de paiement envoyé par SMS à ${m.name}`);save();render();toast("Lien Shopify envoyé par SMS (simulé).");});
+  document.querySelectorAll("[data-paid]").forEach(b=>b.onclick=()=>{const m=w.members.find(x=>x.id===b.dataset.paid);m.shopify.state="payé";log(w,`Paiement reçu dans Shopify pour ${m.name} (${usd(total(m))}), solde mis à jour`);save();render();toast("Paiement reflété depuis Shopify (simulé).");});
+  document.querySelectorAll("[data-late]").forEach(b=>b.onclick=()=>{const m=w.members.find(x=>x.id===b.dataset.late);m.shopify.lateFee=25;log(w,`Frais de retard de 25 USD ajoutés pour ${m.name}`);save();render();});
+  document.querySelectorAll("[data-ck]").forEach(b=>b.onclick=()=>{const c=w.checkins[b.dataset.ck];c.done=true;log(w,`Pointage « ${c.label} » validé`);email("coordination@macandclay.com",`Pointage validé · ${w.couple} · ${c.label}`);save();render();});
+  $("nf2").onsubmit=e=>{e.preventDefault();w.notes.unshift({date:today()+" "+nowT(),by:state.user.name,text:$("note-txt").value.trim()});log(w,"Note ajoutée");email("coordination@macandclay.com","Note ajoutée · "+w.couple);save();render();};
+  $("addm").onsubmit=e=>{e.preventDefault();const m={id:w.id+"-m"+Date.now(),name:$("am-name").value.trim(),role:$("am-role").value,phone:$("am-phone").value.trim()||"+1 859 555 0000",items:["c1","c2","c3","c4","c5","c6"],measured:false,meas:null,shopify:{draft:"MC-D-"+(1000+Math.floor(Math.random()*900)),state:"brouillon",payLinkSent:false,lateFee:0,discount:0}};w.members.push(m);log(w,`Membre ajouté : ${m.name} · brouillon Shopify ${m.shopify.draft} créé`);save();render();toast("Membre ajouté, brouillon Shopify créé (simulé).");};
+}
+function measModal(w,m){
+  const v=m.meas||{chest:"",waist:"",sleeve:"",neck:"",inseam:"",outseam:"",shoe:"",height:""};
+  const F=[["chest","Poitrine (po)"],["waist","Taille (po)"],["sleeve","Manche (po)"],["neck","Cou (po)"],["inseam","Entrejambe (po)"],["outseam","Longueur ext. (po)"],["shoe","Pointure (US)"],["height","Taille (cm)"]];
+  $("modal").innerHTML=`<div class="overlay"><div class="dialog" role="dialog" aria-modal="true"><div class="dlg-head"><div><h2>Mesures · ${esc(m.name)}</h2><p class="muted">${esc(m.role)} · ${esc(w.couple)}</p></div></div><div class="dlg-body">
+    <div class="meas">${F.map(([k,l])=>`<label class="field">${l}<input id="ms-${k}" value="${esc(v[k])}" inputmode="decimal"></label>`).join("")}</div>
+    <div><p class="muted" style="margin-bottom:.3rem">Tenue</p><div class="chips">${state.catalog.map(c=>`<label class="chip" style="cursor:pointer"><input type="checkbox" data-it="${c.id}" ${m.items.includes(c.id)?"checked":""}> ${esc(c.name)} · ${usd(c.price)}</label>`).join("")}</div></div>
+    <label class="field">Remise (USD)<input id="ms-disc" type="number" min="0" step="1" value="${m.shopify.discount||0}"></label>
+    <div class="dlg-actions"><button type="button" class="btn ghost" id="ms-cancel">Annuler</button><button type="button" class="btn primary" id="ms-ok">Enregistrer</button></div></div></div></div>`;
+  $("ms-cancel").onclick=closeModal;
+  $("ms-ok").onclick=()=>{const meas={};F.forEach(([k])=>{meas[k]=$("ms-"+k).value.trim();});m.meas=meas;m.measured=Object.values(meas).some(x=>x);m.items=[...document.querySelectorAll("[data-it]")].filter(c=>c.checked).map(c=>c.dataset.it);m.shopify.discount=parseFloat($("ms-disc").value)||0;log(w,`Mesures et tenue enregistrées pour ${m.name} · brouillon ${m.shopify.draft} reconstruit (${usd(total(m))})`);if(m.measured)email("coordination@macandclay.com",`Mesures terminées · ${m.name} · ${w.couple}`);save();closeModal();render();toast("Enregistré. Le brouillon Shopify est reconstruit dans la minute (simulé).");};
+}
+function renderCheckins(){
+  const due=dueCheckins().sort((a,b)=>a.c.due<b.c.due?-1:1);
+  const up=state.weddings.filter(w=>w.status==="active"&&visible(w)).flatMap(w=>w.checkins.filter(c=>!c.done&&c.due>today()).map(c=>({w,c}))).sort((a,b)=>a.c.due<b.c.due?-1:1).slice(0,8);
+  return `<div class="section-head"><div><h1>Pointages</h1><p class="muted">Ce qui est en retard d'abord, puis les prochains.</p></div></div>
+    <div class="card"><h2>En retard ou dus aujourd'hui (${due.length})</h2><div class="timeline">${due.length?due.map(x=>`<div class="tl late"><span class="d">${fmtDate(x.c.due)}</span><span><strong>${esc(x.w.couple)}</strong> · ${esc(x.c.label)}</span><button type="button" class="btn ghost small" data-open="${x.w.id}">Ouvrir</button></div>`).join(""):'<p class="muted">Rien en retard.</p>'}</div></div>
+    <div class="card"><h2>À venir</h2><div class="timeline">${up.map(x=>`<div class="tl"><span class="d">${fmtDate(x.c.due)}</span><span><strong>${esc(x.w.couple)}</strong> · ${esc(x.c.label)}</span><button type="button" class="btn ghost small" data-open="${x.w.id}">Ouvrir</button></div>`).join("")}</div></div>`;
+}
+function renderDone(){const l=state.weddings.filter(w=>w.status==="completed"&&visible(w));return `<div class="section-head"><div><h1>Mariages terminés</h1><p class="muted">Archive consultable, retours et frais de retard inclus.</p></div></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>Couple</th><th>Magasin</th><th>Cortège</th><th>Encaissé</th></tr></thead><tbody>${l.map(w=>`<tr class="click" data-open="${w.id}"><td class="num">${fmtDate(w.date)}</td><td><strong>${esc(w.couple)}</strong></td><td>${esc(w.store)}</td><td class="num">${w.members.length}</td><td class="num">${usd(w.members.reduce((s,m)=>s+total(m),0))}</td></tr>`).join("")||'<tr><td colspan="5" class="muted">Aucun mariage terminé.</td></tr>'}</tbody></table></div>`;}
+function renderSearch(){const q=query.toLowerCase();const hits=[];state.weddings.filter(visible).forEach(w=>{if(w.couple.toLowerCase().includes(q))hits.push({w,label:w.couple,sub:"mariage"});w.members.forEach(m=>{if(q&&m.name.toLowerCase().includes(q))hits.push({w,label:m.name,sub:m.role+" · "+w.couple});});});
+  return `<div class="section-head"><div><h1>Recherche</h1><p class="muted">Par couple ou par membre du cortège.</p></div></div><input id="q" value="${esc(query)}" placeholder="Nom du couple ou d'un membre…" style="width:100%"><div class="timeline">${q?hits.map(h=>`<div class="tl"><span class="d">${fmtDate(h.w.date)}</span><span><strong>${esc(h.label)}</strong> · ${esc(h.sub)}</span><button type="button" class="btn ghost small" data-open="${h.w.id}">Ouvrir</button></div>`).join("")||'<p class="muted">Aucun résultat.</p>':'<p class="muted">Tapez un nom.</p>'}</div>`;}
+function renderUsers(){return `<div class="section-head"><div><h1>Utilisateurs et rôles</h1><p class="muted">Quatre rôles. Le responsable de magasin ne voit que son magasin.</p></div></div><div class="tablewrap"><table><thead><tr><th>Nom</th><th>Rôle</th><th>Magasin</th><th></th></tr></thead><tbody>${state.users.map((u,i)=>`<tr><td>${esc(u.name)}</td><td><span class="tag info">${esc(u.role)}</span></td><td>${esc(u.store)}</td><td>${i>0?`<button type="button" class="btn ghost small" data-delu="${i}">Retirer</button>`:""}</td></tr>`).join("")}</tbody></table></div><form class="card form" id="uf"><div class="mrow"><input id="u-name" placeholder="Nom complet" required><select id="u-role">${ROLES.map(r=>`<option>${r[0]}</option>`).join("")}</select><select id="u-store"><option>Tous</option>${STORES.map(s=>`<option>${s}</option>`).join("")}</select><button class="btn primary small" type="submit">Inviter</button></div><p class="muted">En production, l'invitation part par e-mail via Supabase Auth.</p></form>`;}
+function renderCatalog(){return `<div class="section-head"><div><h1>Catalogue</h1><p class="muted">Les prix alimentent les brouillons Shopify. Garantie dommages fixe : ${usd(WAIVER)}.</p></div></div><div class="tablewrap"><table><thead><tr><th>Article</th><th>Prix (USD)</th></tr></thead><tbody>${state.catalog.map(c=>`<tr><td>${esc(c.name)}</td><td><input type="number" step="1" min="0" value="${c.price}" data-price="${c.id}" style="width:7rem"></td></tr>`).join("")}</tbody></table></div>`;}
+function renderSync(){const drafts=state.weddings.filter(w=>w.status==="active").flatMap(w=>w.members.map(m=>({w,m})));return `<div class="section-head"><div><h1>Synchronisation Shopify</h1><p class="muted">Le tracker est la seule saisie ; Shopify reflète, dans la minute, chaque changement.</p></div><button type="button" class="btn primary" id="run">Lancer la synchronisation</button></div>
+    <div class="sync"><span class="dot"></span><div><strong>Connecté à la boutique Shopify</strong> · dernière exécution ${esc(state.sync.lastRun)} · ${state.sync.runs} exécutions · ${state.sync.errors} erreur(s)</div></div>
+    <div class="tablewrap"><table><thead><tr><th>Brouillon</th><th>Membre</th><th>Mariage</th><th>Montant</th><th>État</th></tr></thead><tbody>${drafts.map(x=>`<tr><td class="num">${esc(x.m.shopify.draft)}</td><td>${esc(x.m.name)}</td><td>${esc(x.w.couple)} · ${fmtDate(x.w.date)}</td><td class="num">${usd(total(x.m))}</td><td><span class="tag ${x.m.shopify.state==="payé"?"ok":x.m.shopify.state==="commande"?"gold":"info"}">${x.m.shopify.state}</span></td></tr>`).join("")}</tbody></table></div>
+    <div class="two"><div class="card"><h2>E-mails envoyés (Resend, simulé)</h2><div class="notes">${state.emails.slice(0,6).map(e=>`<div class="note" style="border-color:var(--line)">${esc(e.subject)}<small>${esc(e.date)} · à ${esc(e.to)}</small></div>`).join("")||'<p class="muted">Aucun.</p>'}</div></div><div class="card"><h2>SMS envoyés (Twilio, simulé)</h2><div class="notes">${state.sms.slice(0,6).map(s=>`<div class="sms">${esc(s.text)}</div>`).join("")||'<p class="muted">Aucun.</p>'}</div></div></div>`;}
+
+/* ---------- shell ---------- */
+function render(){
+  if(!state.user){renderLogin();return;}
+  const due=dueCheckins().length;
+  const nav=[["dash","Tableau de bord"],["new","Nouveau mariage"],["checkins","Pointages",due],["done","Terminés"],["search","Recherche"]];
+  const adm=[["users","Utilisateurs"],["catalog","Catalogue"],["sync","Synchro Shopify"]];
+  const cur=page==="wedding"?"dash":page;
+  let content="";
+  if(page==="wedding"&&sel&&Wd(sel))content=renderWedding(Wd(sel));
+  else{content=({dash:renderDash,new:renderNew,checkins:renderCheckins,done:renderDone,search:renderSearch,users:renderUsers,catalog:renderCatalog,sync:renderSync})[page]();}
+  $("app").innerHTML=`<div class="shell"><aside class="side"><div class="wordmark">Mac &amp; Clay<small>Wedding Tracker</small></div><div class="lbl">Navigation</div>${nav.map(([k,l,n])=>`<button type="button" data-nav="${k}" aria-current="${cur===k}"><span>${l}</span>${n?`<span class="badge">${n}</span>`:""}</button>`).join("")}${canAdmin()?`<div class="lbl">Admin</div>${adm.map(([k,l])=>`<button type="button" data-nav="${k}" aria-current="${cur===k}"><span>${l}</span></button>`).join("")}`:""}<div class="me"><b>${esc(state.user.name)}</b>${esc(state.user.role)}<br><a href="#" id="logout">Se déconnecter</a> · <a href="#" id="reset">Réinitialiser</a></div></aside><main>${content}</main></div>`;
+  document.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>{page=b.dataset.nav;sel=null;render();});
+  $("logout").onclick=e=>{e.preventDefault();state.user=null;save();render();};
+  $("reset").onclick=e=>{e.preventDefault();const u=state.user;state=seed();state.user=u;save();page="dash";sel=null;render();toast("Données de démonstration réinitialisées");};
+  if(page==="dash")bindDash();else if(page==="new")bindNew();else if(page==="wedding"&&sel)bindWedding(Wd(sel));else if(page==="checkins"||page==="done")bindOpen();
+  else if(page==="search"){$("q").oninput=()=>{query=$("q").value;render();$("q").focus();$("q").setSelectionRange(query.length,query.length);};bindOpen();}
+  else if(page==="users"){document.querySelectorAll("[data-delu]").forEach(b=>b.onclick=()=>{state.users.splice(b.dataset.delu,1);save();render();});$("uf").onsubmit=e=>{e.preventDefault();state.users.push({name:$("u-name").value.trim(),role:$("u-role").value,store:$("u-store").value});save();render();toast("Invitation envoyée (simulé).");};}
+  else if(page==="catalog"){document.querySelectorAll("[data-price]").forEach(i=>i.onchange=()=>{cat(i.dataset.price).price=Math.max(0,parseFloat(i.value)||0);save();toast("Prix mis à jour : les brouillons Shopify seront reconstruits.");});}
+  else if(page==="sync"){$("run").onclick=()=>{const n=syncPass();render();toast(n?n+" brouillon(s) converti(s) en commande (mariage à 7 jours ou moins).":"Synchronisation terminée, rien à convertir.");};}
+}
+syncPass();
+render();
+})();
+</script>
+</body>
+</html>

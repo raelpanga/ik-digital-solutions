@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cimenterie du Fleuve · Démo Site Corporate</title>
+<meta name="description" content="Site de démonstration : entreprise industrielle fictive, bilingue, hébergement conforme au Code du numérique.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#F4F5F7;--surface:#FFFFFF;--surface-2:#E8EAEF;--ink:#141826;--ink-2:#4A5166;--ink-3:#7B8299;--line:#D6DAE3;--accent:#1F2A5A;--accent-soft:#E4E7F3;--on-accent:#FFFFFF;--ok:#1E7F48;--ok-soft:#DDF3E5;--warn:#8F6210;--warn-soft:#F8EDD3;--copper:#A84E27;--copper-soft:#F7E7DE;--radius:4px;--font:"Instrument Sans","Segoe UI",Arial,sans-serif;--display:"Bricolage Grotesque","Arial Narrow",Arial,sans-serif;--mono:"IBM Plex Mono",Consolas,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1017;--surface:#161923;--surface-2:#1E2230;--ink:#E9EBF1;--ink-2:#A8AEC0;--ink-3:#7E8598;--line:#2B3040;--accent:#93A3E8;--accent-soft:#1E2542;--on-accent:#0E1017;--ok:#4FCB84;--ok-soft:#163326;--warn:#E3B75C;--warn-soft:#3A2E12;--copper:#E08B5D;--copper-soft:#3A241A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1017;--surface:#161923;--surface-2:#1E2230;--ink:#E9EBF1;--ink-2:#A8AEC0;--ink-3:#7E8598;--line:#2B3040;--accent:#93A3E8;--accent-soft:#1E2542;--on-accent:#0E1017;--ok:#4FCB84;--ok-soft:#163326;--warn:#E3B75C;--warn-soft:#3A2E12;--copper:#E08B5D;--copper-soft:#3A241A;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.6;padding-inline:clamp(16px,4vw,40px);padding-block:0 0}
+h1,h2,h3{margin:0;font-family:var(--display);line-height:1.12;text-wrap:balance}
+h1{font-size:clamp(2rem,4.5vw,3.2rem);font-weight:800}h2{font-size:clamp(1.4rem,2.6vw,1.9rem)}h3{font-size:1.1rem}
+p{margin:0}p+p{margin-top:.8em}a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin-inline:auto}
+html[data-l="fr"] [lang="en"]{display:none!important}
+html[data-l="en"] [lang="fr"]{display:none!important}
+html:not([data-l]) [lang="en"]{display:none!important}
+.ikbar{margin-inline:calc(-1*clamp(16px,4vw,40px));background:var(--copper-soft);border-bottom:1px solid var(--line);padding:.45rem clamp(16px,4vw,40px);font-size:.82rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.ikbar strong{color:var(--copper)}.ikbar a{color:var(--ink-2)}
+.site-header{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:calc(-1*clamp(16px,4vw,40px));padding-inline:clamp(16px,4vw,40px)}
+.hrow{display:flex;justify-content:space-between;align-items:center;gap:1rem;min-height:64px;flex-wrap:wrap}
+.brand{display:grid;text-decoration:none;color:var(--ink);line-height:1}.brand b{font-family:var(--display);font-weight:800;font-size:1.2rem;letter-spacing:.01em}.brand small{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:.25rem}
+nav{display:flex;gap:1.2rem;overflow-x:auto;scrollbar-width:none}nav::-webkit-scrollbar{display:none}
+nav a{color:var(--ink-2);text-decoration:none;font-weight:500;font-size:.92rem;white-space:nowrap}nav a:hover{color:var(--ink)}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.lang button{font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;background:transparent;color:var(--ink-2);border:0;padding:.4rem .6rem;cursor:pointer}
+.lang button[aria-current="true"]{background:var(--ink);color:var(--bg)}
+@media (max-width:860px){.hrow{padding-block:.6rem}nav{order:3;width:100%}}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:0 0 .8rem}
+section{padding-block:clamp(44px,7vw,80px);border-top:1px solid var(--line)}
+section.hero{border-top:0;padding-block:clamp(48px,8vw,96px) clamp(40px,6vw,64px)}
+.hero-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:2.5rem;align-items:center}@media (max-width:860px){.hero-grid{grid-template-columns:1fr}}
+.lead{font-size:1.12rem;color:var(--ink-2);max-width:60ch;margin-top:1rem}
+.facts{display:grid;gap:.6rem;border-left:3px solid var(--accent);padding-left:1rem}
+.facts div{display:grid}.facts b{font-family:var(--mono);font-size:1.3rem;font-weight:500}.facts span{font-size:.85rem;color:var(--ink-3)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
+@media (max-width:860px){.grid-3{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem 1.3rem;display:grid;gap:.5rem;align-content:start}
+.tile p{color:var(--ink-2);font-size:.95rem}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:.7rem}
+.list li{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1.1rem}
+.list li small{display:block;color:var(--ink-3);font-size:.85rem}
+.list .mono{font-family:var(--mono);font-size:.82rem;color:var(--ink-2)}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font:inherit;font-weight:600;font-size:.9rem;padding:.6rem .95rem;border-radius:4px;border:1px solid transparent;cursor:pointer;text-decoration:none;line-height:1.2;white-space:nowrap}
+.btn.primary{background:var(--accent);color:var(--on-accent)}.btn.ghost{background:transparent;border-color:var(--ink-3);color:var(--ink)}.btn.small{padding:.4rem .7rem;font-size:.82rem}
+form.f{display:grid;gap:.9rem;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1.3rem}
+.field{display:grid;gap:.3rem;font-size:.88rem;font-weight:600}.field small{font-weight:400;color:var(--ink-3)}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:.6rem .7rem;width:100%}textarea{min-height:90px;resize:vertical}
+.ack{background:var(--ok-soft);border-left:3px solid var(--ok);padding:.8rem 1rem;border-radius:0 4px 4px 0;font-size:.92rem}
+.legal{max-width:70ch;display:grid;gap:1rem;font-size:.95rem;color:var(--ink-2)}.legal h3{color:var(--ink)}
+.legal dl{display:grid;grid-template-columns:auto 1fr;gap:.3rem 1rem;margin:0}.legal dt{font-family:var(--mono);font-size:.78rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}.legal dd{margin:0}
+footer{border-top:1px solid var(--line);padding-block:1.6rem 2.2rem;font-size:.85rem;color:var(--ink-3);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:60;background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 40px rgba(0,0,0,.25);border-radius:6px;padding:1rem 1.2rem;display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;max-width:1080px;margin-inline:auto;font-size:.9rem}
+.consent[hidden]{display:none}
+.overlay{position:fixed;inset:0;background:rgba(10,12,20,.55);display:grid;place-items:center;padding:16px;z-index:100}
+.dialog{background:var(--surface);color:var(--ink);border-radius:8px;max-width:440px;width:100%;padding:1.2rem;display:grid;gap:.8rem}
+.tag{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:.15rem .45rem;border-radius:3px;background:var(--copper-soft);color:var(--copper)}
+.hero-side{display:grid;gap:1.2rem}
+.hero-art{aspect-ratio:4/3;border-radius:12px;background:linear-gradient(160deg,var(--accent),color-mix(in srgb,var(--accent) 55%,#0b0f1c));position:relative;overflow:hidden}
+.hero-art svg{position:absolute;inset:0;width:100%;height:100%}
+.news-visual{height:96px;border-radius:6px;margin:-.2rem 0 .4rem;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 50%,#fff));position:relative;overflow:hidden}
+.news-visual::after{content:"";position:absolute;right:-20px;bottom:-30px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.2)}
+.news-visual.v2{background:linear-gradient(135deg,var(--copper),color-mix(in srgb,var(--copper) 50%,#fff))}
+.news-visual.v3{background:linear-gradient(135deg,#2E6B4A,#7FB894)}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;background:var(--accent);color:var(--on-accent);border-radius:12px;padding:clamp(1.3rem,3vw,2rem)}
+.values h3{color:var(--on-accent)}.values p{opacity:.85;font-size:.92rem}
+.values .ic{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.18);display:grid;place-items:center;margin-bottom:.6rem}
+.values .ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:860px){.values{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="ikbar"><span><strong>Démonstrateur IK Digital Solutions</strong> · entreprise fictive · contenu d'exemple</span><a href="../../index.html">← Retour au portfolio</a></div>
+
+<header class="site-header"><div class="wrap hrow">
+  <a class="brand" href="#accueil"><b>CIMENTERIE DU FLEUVE</b><small>Société anonyme · Kongo Central</small></a>
+  <nav aria-label="Navigation">
+    <a href="#activites"><span lang="fr">Activités</span><span lang="en">Activities</span></a>
+    <a href="#sites"><span lang="fr">Sites</span><span lang="en">Sites</span></a>
+    <a href="#actualites"><span lang="fr">Actualités</span><span lang="en">News</span></a>
+    <a href="#carrieres"><span lang="fr">Carrières</span><span lang="en">Careers</span></a>
+    <a href="#appels"><span lang="fr">Appels d'offres</span><span lang="en">Tenders</span></a>
+    <a href="#fournisseurs"><span lang="fr">Fournisseurs</span><span lang="en">Suppliers</span></a>
+    <a href="#legal"><span lang="fr">Mentions légales</span><span lang="en">Legal</span></a>
+  </nav>
+  <div class="lang" role="group" aria-label="Langue / Language"><button type="button" data-l="fr" aria-current="true">FR</button><button type="button" data-l="en" aria-current="false">EN</button></div>
+</div></header>
+
+<main class="wrap">
+  <section class="hero" id="accueil"><div class="hero-grid">
+    <div>
+      <p class="eyebrow"><span lang="fr">Ciment et matériaux · depuis 1974 (exemple)</span><span lang="en">Cement and materials · since 1974 (example)</span></p>
+      <h1><span lang="fr">Le ciment qui construit le Kongo Central et Kinshasa.</span><span lang="en">The cement that builds Kongo Central and Kinshasa.</span></h1>
+      <p class="lead"><span lang="fr">Producteur de ciment Portland et de granulats, livrés par route et par le fleuve. Ce site est une démonstration : l'entreprise et ses chiffres sont fictifs.</span><span lang="en">Producer of Portland cement and aggregates, delivered by road and river. This site is a demonstration: the company and its figures are fictitious.</span></p>
+      <div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.6rem"><a class="btn primary" href="#fournisseurs"><span lang="fr">Devenir fournisseur</span><span lang="en">Become a supplier</span></a><a class="btn ghost" href="#carrieres"><span lang="fr">Voir les postes ouverts</span><span lang="en">See open positions</span></a></div>
+    </div>
+    <div class="hero-side">
+    <div class="hero-art" aria-hidden="true"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><rect x="0" y="230" width="400" height="70" fill="rgba(0,0,0,.25)"/><rect x="40" y="90" width="46" height="150" rx="6" fill="rgba(255,255,255,.55)"/><rect x="96" y="70" width="46" height="170" rx="6" fill="rgba(255,255,255,.7)"/><rect x="152" y="110" width="46" height="130" rx="6" fill="rgba(255,255,255,.45)"/><rect x="40" y="82" width="158" height="12" rx="6" fill="rgba(255,255,255,.8)"/><rect x="230" y="150" width="130" height="90" rx="4" fill="rgba(255,255,255,.35)"/><rect x="250" y="60" width="16" height="95" fill="rgba(255,255,255,.6)"/><rect x="290" y="40" width="16" height="115" fill="rgba(255,255,255,.75)"/><circle cx="330" cy="70" r="26" fill="rgba(255,255,255,.18)"/><path d="M0 250 Q100 235 200 250 T400 250" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="3"/><path d="M0 270 Q100 255 200 270 T400 270" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="3"/></svg></div>
+    <div class="facts">
+      <div><b>1,2 Mt / <span lang="fr">an</span><span lang="en">yr</span></b><span lang="fr">capacité nominale (exemple)</span><span lang="en">nominal capacity (example)</span></div>
+      <div><b>2 <span lang="fr">usines</span><span lang="en">plants</span></b><span lang="fr">Lukala et Kimpese</span><span lang="en">Lukala and Kimpese</span></div>
+      <div><b>CEM I · CEM II</b><span lang="fr">normes NF EN 197-1</span><span lang="en">NF EN 197-1 standards</span></div>
+    </div>
+    </div>
+  </div></section>
+
+  <section id="activites">
+    <p class="eyebrow"><span lang="fr">Activités</span><span lang="en">Activities</span></p>
+    <h2><span lang="fr">Trois métiers, une logistique fluviale.</span><span lang="en">Three businesses, one river logistics chain.</span></h2>
+    <div class="grid-3" style="margin-top:1.6rem">
+      <div class="tile"><h3><span lang="fr">Ciment</span><span lang="en">Cement</span></h3><p><span lang="fr">Ciment Portland CEM I 42,5 et CEM II 32,5, en sacs de 50 kg et en vrac pour les centrales à béton.</span><span lang="en">Portland cement CEM I 42.5 and CEM II 32.5, in 50 kg bags and in bulk for concrete plants.</span></p></div>
+      <div class="tile"><h3><span lang="fr">Granulats</span><span lang="en">Aggregates</span></h3><p><span lang="fr">Sable, gravier et concassé calibrés pour les travaux routiers et le bâtiment.</span><span lang="en">Sand, gravel and crushed stone graded for road works and construction.</span></p></div>
+      <div class="tile"><h3><span lang="fr">Logistique</span><span lang="en">Logistics</span></h3><p><span lang="fr">Barges sur le fleuve Congo vers Kinshasa et Mbandaka, flotte routière vers Matadi et Boma.</span><span lang="en">Barges on the Congo River to Kinshasa and Mbandaka, road fleet to Matadi and Boma.</span></p></div>
+    </div>
+    <div class="values" style="margin-top:2rem">
+      <div><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/></svg></div><h3><span lang="fr">Sécurité d'abord</span><span lang="en">Safety first</span></h3><p><span lang="fr">Chaque poste commence par une inspection. Objectif : zéro accident avec arrêt.</span><span lang="en">Every shift starts with an inspection. Target: zero lost-time accidents.</span></p></div>
+      <div><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21c4-4 7-7.5 7-11a7 7 0 0 0-14 0c0 3.5 3 7 7 11z"/><path d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></div><h3><span lang="fr">Emploi local</span><span lang="en">Local jobs</span></h3><p><span lang="fr">Recrutement et sous-traitance en priorité dans le Kongo Central, conformément à la loi 17/001.</span><span lang="en">Hiring and subcontracting first in Kongo Central, in line with Law 17/001.</span></p></div>
+      <div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 20c4-8 8-12 16-16-2 8-6 12-14 14"/><path d="M4 20c2-3 4-5 7-7"/></svg></div><h3><span lang="fr">Environnement</span><span lang="en">Environment</span></h3><p><span lang="fr">Filtres à manches sur chaque ligne, suivi des poussières publié chaque trimestre.</span><span lang="en">Bag filters on every line, dust monitoring published quarterly.</span></p></div>
+    </div>
+  </section>
+
+  <section id="sites">
+    <p class="eyebrow">Sites</p>
+    <h2><span lang="fr">Où nous trouver</span><span lang="en">Where to find us</span></h2>
+    <ul class="list" style="margin-top:1.4rem">
+      <li><div><strong><span lang="fr">Usine de Lukala</span><span lang="en">Lukala plant</span></strong><small><span lang="fr">Four et broyage · Kongo Central · route nationale 1</span><span lang="en">Kiln and grinding · Kongo Central · national road 1</span></small></div><span class="mono">−5.51, 14.51</span></li>
+      <li><div><strong><span lang="fr">Usine de Kimpese</span><span lang="en">Kimpese plant</span></strong><small><span lang="fr">Broyage et ensachage</span><span lang="en">Grinding and bagging</span></small></div><span class="mono">−5.55, 14.44</span></li>
+      <li><div><strong><span lang="fr">Terminal fluvial de Kinshasa</span><span lang="en">Kinshasa river terminal</span></strong><small><span lang="fr">Port de Kinkole · dépôt et distribution</span><span lang="en">Kinkole port · depot and distribution</span></small></div><span class="mono">−4.32, 15.51</span></li>
+      <li><div><strong><span lang="fr">Siège social</span><span lang="en">Head office</span></strong><small><span lang="fr">Boulevard du 30 Juin, Gombe, Kinshasa (adresse fictive)</span><span lang="en">Boulevard du 30 Juin, Gombe, Kinshasa (fictitious address)</span></small></div><a class="btn ghost small" href="#legal"><span lang="fr">Contact</span><span lang="en">Contact</span></a></li>
+    </ul>
+  </section>
+
+  <section id="actualites">
+    <p class="eyebrow"><span lang="fr">Actualités</span><span lang="en">News</span></p>
+    <h2><span lang="fr">Dernières nouvelles</span><span lang="en">Latest news</span></h2>
+    <div class="grid-3" style="margin-top:1.6rem">
+      <article class="tile"><div class="news-visual" aria-hidden="true"></div><span class="mono" style="font-size:.78rem;color:var(--ink-3)">2026-09-02</span><h3><span lang="fr">Mise en service du nouveau filtre à manches à Lukala</span><span lang="en">New bag filter commissioned at Lukala</span></h3><p><span lang="fr">Les émissions de poussières de la ligne 2 passent sous les seuils recommandés.</span><span lang="en">Dust emissions from line 2 now fall below recommended thresholds.</span></p></article>
+      <article class="tile"><div class="news-visual v2" aria-hidden="true"></div><span class="mono" style="font-size:.78rem;color:var(--ink-3)">2026-08-14</span><h3><span lang="fr">Paiement des fournisseurs par virement et mobile money</span><span lang="en">Suppliers paid by transfer and mobile money</span></h3><p><span lang="fr">En prévision de la fin des paiements en espèces en devises au 9 avril 2027, tous nos règlements passent en électronique.</span><span lang="en">Ahead of the end of cash payments in foreign currency on 9 April 2027, all our settlements go electronic.</span></p></article>
+      <article class="tile"><div class="news-visual v3" aria-hidden="true"></div><span class="mono" style="font-size:.78rem;color:var(--ink-3)">2026-07-20</span><h3><span lang="fr">Campagne de recrutement d'électromécaniciens</span><span lang="en">Recruitment drive for electromechanics</span></h3><p><span lang="fr">Douze postes ouverts à Lukala et Kimpese, formation interne assurée.</span><span lang="en">Twelve positions open at Lukala and Kimpese, in-house training provided.</span></p></article>
+    </div>
+  </section>
+
+  <section id="carrieres">
+    <p class="eyebrow"><span lang="fr">Carrières</span><span lang="en">Careers</span></p>
+    <h2><span lang="fr">Postes ouverts</span><span lang="en">Open positions</span></h2>
+    <div class="grid-2" style="margin-top:1.4rem">
+      <ul class="list">
+        <li><div><strong><span lang="fr">Électromécanicien(ne) de four</span><span lang="en">Kiln electromechanic</span></strong><small>Lukala · CDI · <span lang="fr">réf.</span><span lang="en">ref.</span> RH-26-031</small></div><button type="button" class="btn ghost small" data-apply="RH-26-031"><span lang="fr">Postuler</span><span lang="en">Apply</span></button></li>
+        <li><div><strong><span lang="fr">Responsable HSE</span><span lang="en">HSE manager</span></strong><small>Kimpese · CDI · <span lang="fr">réf.</span><span lang="en">ref.</span> RH-26-034</small></div><button type="button" class="btn ghost small" data-apply="RH-26-034"><span lang="fr">Postuler</span><span lang="en">Apply</span></button></li>
+        <li><div><strong><span lang="fr">Comptable fournisseurs</span><span lang="en">Accounts payable accountant</span></strong><small>Kinshasa · CDD 12 <span lang="fr">mois</span><span lang="en">months</span> · <span lang="fr">réf.</span><span lang="en">ref.</span> RH-26-036</small></div><button type="button" class="btn ghost small" data-apply="RH-26-036"><span lang="fr">Postuler</span><span lang="en">Apply</span></button></li>
+      </ul>
+      <form class="f" id="f-apply">
+        <h3><span lang="fr">Candidature</span><span lang="en">Application</span></h3>
+        <label class="field"><span lang="fr">Poste</span><span lang="en">Position</span><select id="ap-ref"><option value="RH-26-031">RH-26-031</option><option value="RH-26-034">RH-26-034</option><option value="RH-26-036">RH-26-036</option></select></label>
+        <label class="field"><span lang="fr">Nom complet</span><span lang="en">Full name</span><input id="ap-name" required autocomplete="name"></label>
+        <label class="field"><span lang="fr">Téléphone</span><span lang="en">Phone</span><input id="ap-phone" type="tel" required autocomplete="tel" placeholder="+243"></label>
+        <label class="field">CV (PDF) <small><span lang="fr">5 Mo maximum</span><span lang="en">5 MB maximum</span></small><input id="ap-cv" type="file" accept="application/pdf"></label>
+        <label class="field" style="font-weight:400;grid-template-columns:auto 1fr;align-items:start;gap:.5rem"><input type="checkbox" id="ap-consent" required style="width:auto;margin-top:.3rem"><span><span lang="fr">J'accepte que mes données soient traitées pour ce recrutement, conformément à la politique de données ci-dessous.</span><span lang="en">I agree to my data being processed for this recruitment, as described in the data policy below.</span></span></label>
+        <div><button type="submit" class="btn primary"><span lang="fr">Envoyer ma candidature</span><span lang="en">Send my application</span></button></div>
+        <div id="ap-out"></div>
+      </form>
+    </div>
+  </section>
+
+  <section id="appels">
+    <p class="eyebrow"><span lang="fr">Appels d'offres</span><span lang="en">Tenders</span></p>
+    <h2><span lang="fr">Consultations en cours</span><span lang="en">Open tenders</span></h2>
+    <ul class="list" style="margin-top:1.4rem">
+      <li><div><strong><span lang="fr">Transport routier de ciment en sacs, Lukala → Kinshasa</span><span lang="en">Road transport of bagged cement, Lukala → Kinshasa</span></strong><small>AO-2026-11 · <span lang="fr">clôture</span><span lang="en">closes</span> 2026-10-15</small></div><button type="button" class="btn ghost small" data-dl="AO-2026-11"><span lang="fr">Dossier (PDF)</span><span lang="en">Documents (PDF)</span></button></li>
+      <li><div><strong><span lang="fr">Fourniture de pièces d'usure pour broyeur à boulets</span><span lang="en">Supply of wear parts for ball mill</span></strong><small>AO-2026-12 · <span lang="fr">clôture</span><span lang="en">closes</span> 2026-10-30</small></div><button type="button" class="btn ghost small" data-dl="AO-2026-12"><span lang="fr">Dossier (PDF)</span><span lang="en">Documents (PDF)</span></button></li>
+      <li><div><strong><span lang="fr">Restauration collective, usine de Kimpese</span><span lang="en">Canteen services, Kimpese plant</span></strong><small>AO-2026-13 · <span lang="fr">clôture</span><span lang="en">closes</span> 2026-11-08</small></div><button type="button" class="btn ghost small" data-dl="AO-2026-13"><span lang="fr">Dossier (PDF)</span><span lang="en">Documents (PDF)</span></button></li>
+    </ul>
+  </section>
+
+  <section id="fournisseurs">
+    <p class="eyebrow"><span lang="fr">Fournisseurs</span><span lang="en">Suppliers</span></p>
+    <h2><span lang="fr">Référencement fournisseur</span><span lang="en">Supplier registration</span></h2>
+    <div class="grid-2" style="margin-top:1.4rem">
+      <div class="legal"><p><span lang="fr">Les entreprises de droit congolais sont invitées à se référencer. Conformément à la loi 17/001 sur la sous-traitance, les prestations éligibles sont réservées en priorité aux entreprises à capitaux majoritairement congolais.</span><span lang="en">Companies incorporated in the DRC are invited to register. In line with Law 17/001 on subcontracting, eligible services are reserved first for companies with majority Congolese capital.</span></p><p><span lang="fr">Après envoi, vous recevez un accusé de réception avec un numéro de dossier. Le service achats répond sous dix jours ouvrés.</span><span lang="en">After submission you receive an acknowledgement with a file number. Procurement replies within ten working days.</span></p></div>
+      <form class="f" id="f-sup">
+        <label class="field"><span lang="fr">Raison sociale</span><span lang="en">Company name</span><input id="su-name" required autocomplete="organization"></label>
+        <label class="field">RCCM <input id="su-rccm" required placeholder="CD/KNG/RCCM/…"></label>
+        <label class="field"><span lang="fr">Domaine</span><span lang="en">Category</span><select id="su-cat"><option>Transport &amp; logistique</option><option>Maintenance industrielle</option><option>Fournitures &amp; consommables</option><option>Services (restauration, sécurité, nettoyage)</option><option>Informatique &amp; télécoms</option></select></label>
+        <label class="field"><span lang="fr">Contact (téléphone ou e-mail)</span><span lang="en">Contact (phone or e-mail)</span><input id="su-contact" required></label>
+        <label class="field" style="font-weight:400;grid-template-columns:auto 1fr;align-items:start;gap:.5rem"><input type="checkbox" id="su-consent" required style="width:auto;margin-top:.3rem"><span><span lang="fr">J'accepte le traitement de ces données pour le référencement fournisseur.</span><span lang="en">I agree to this data being processed for supplier registration.</span></span></label>
+        <div><button type="submit" class="btn primary"><span lang="fr">Envoyer la demande</span><span lang="en">Send request</span></button></div>
+        <div id="su-out"></div>
+      </form>
+    </div>
+  </section>
+
+  <section id="legal">
+    <p class="eyebrow"><span lang="fr">Mentions légales et données</span><span lang="en">Legal notice and data</span></p>
+    <h2><span lang="fr">Conformité au Code du numérique</span><span lang="en">Digital Code compliance</span></h2>
+    <div class="legal" style="margin-top:1.4rem">
+      <dl>
+        <dt><span lang="fr">Éditeur</span><span lang="en">Publisher</span></dt><dd>Cimenterie du Fleuve SA (<span lang="fr">société fictive</span><span lang="en">fictitious company</span>)</dd>
+        <dt>RCCM</dt><dd>CD/KNG/RCCM/26-B-00000 (<span lang="fr">exemple</span><span lang="en">example</span>)</dd>
+        <dt>ID Nat</dt><dd>01-000-N00000X (<span lang="fr">exemple</span><span lang="en">example</span>)</dd>
+        <dt><span lang="fr">Hébergement</span><span lang="en">Hosting</span></dt><dd><span lang="fr">Serveurs situés à Kinshasa, République démocratique du Congo, dans un centre de données certifié Tier III, conformément à l'obligation d'hébergement local de l'Ordonnance-loi 23/010.</span><span lang="en">Servers located in Kinshasa, Democratic Republic of the Congo, in a Tier III certified data center, as required by the local hosting obligation of Ordinance-Law 23/010.</span></dd>
+        <dt><span lang="fr">Déclaration</span><span lang="en">Declaration</span></dt><dd><span lang="fr">Traitements de données personnelles (candidatures, référencement fournisseurs) déclarés auprès de l'ARPTC sous le n° DCL-2026-0000 (exemple).</span><span lang="en">Personal-data processing (applications, supplier registration) declared to ARPTC under no. DCL-2026-0000 (example).</span></dd>
+      </dl>
+      <h3><span lang="fr">Politique de données</span><span lang="en">Data policy</span></h3>
+      <p><span lang="fr">Nous collectons uniquement les données saisies dans les formulaires de ce site : nom, téléphone, e-mail, CV et informations d'entreprise. Elles servent exclusivement au recrutement et au référencement fournisseurs. Elles sont conservées douze mois après la clôture du dossier, puis supprimées. Elles ne sont ni vendues ni transférées hors du pays, sauf copies de sauvegarde chiffrées.</span><span lang="en">We collect only the data entered in this site's forms: name, phone, e-mail, CV and company details. It is used exclusively for recruitment and supplier registration. It is kept twelve months after the file is closed, then deleted. It is neither sold nor transferred outside the country, except as encrypted backup copies.</span></p>
+      <p><span lang="fr">Vous pouvez demander l'accès, la rectification ou la suppression de vos données en écrivant à donnees@cimenterie-du-fleuve.example (adresse fictive).</span><span lang="en">You may request access to, correction or deletion of your data by writing to donnees@cimenterie-du-fleuve.example (fictitious address).</span></p>
+      <h3>Cookies</h3>
+      <p><span lang="fr">Ce site n'utilise que des témoins techniques : votre choix de langue et votre réponse à ce bandeau. Aucun traceur publicitaire.</span><span lang="en">This site uses only technical cookies: your language choice and your answer to this banner. No advertising trackers.</span></p>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap"><span>© 2026 Cimenterie du Fleuve SA · <span lang="fr">société fictive, site de démonstration</span><span lang="en">fictitious company, demonstration site</span></span><span><span lang="fr">Conçu, hébergé et supervisé par</span><span lang="en">Designed, hosted and monitored by</span> <a href="../../index.html">IK Digital Solutions</a></span></footer>
+
+<div class="consent" id="consent" role="region" aria-label="Cookies">
+  <span><span lang="fr">Ce site utilise uniquement des témoins techniques (langue, consentement). Conformément au Code du numérique, aucune donnée n'est collectée sans votre accord.</span><span lang="en">This site uses only technical cookies (language, consent). In line with the Digital Code, no data is collected without your consent.</span> <a href="#legal"><span lang="fr">En savoir plus</span><span lang="en">Learn more</span></a></span>
+  <span style="display:flex;gap:.6rem"><button type="button" class="btn ghost small" id="c-no"><span lang="fr">Refuser</span><span lang="en">Decline</span></button><button type="button" class="btn primary small" id="c-yes"><span lang="fr">Accepter</span><span lang="en">Accept</span></button></span>
+</div>
+<div id="modal"></div>
+
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const root=document.documentElement;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ref=p=>p+"-"+Math.random().toString(36).slice(2,7).toUpperCase();
+let l="fr";
+try{l=localStorage.getItem("cdf-lang")||l;}catch(e){}
+function setLang(x){l=x;root.setAttribute("data-l",x);root.setAttribute("lang",x);document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-current",b.dataset.l===x?"true":"false"));try{localStorage.setItem("cdf-lang",x);}catch(e){}}
+setLang(l);
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+const T=(fr,en)=>l==="fr"?fr:en;
+/* consent banner */
+let c=null;try{c=localStorage.getItem("cdf-consent");}catch(e){}
+if(c){$("consent").hidden=true;}
+$("c-yes").onclick=()=>{try{localStorage.setItem("cdf-consent","yes");}catch(e){}$("consent").hidden=true;};
+$("c-no").onclick=()=>{try{localStorage.setItem("cdf-consent","no");}catch(e){}$("consent").hidden=true;};
+/* apply buttons preselect */
+document.querySelectorAll("[data-apply]").forEach(b=>b.onclick=()=>{$("ap-ref").value=b.dataset.apply;$("ap-name").focus();});
+$("f-apply").onsubmit=e=>{e.preventDefault();const n=ref("CAND");$("ap-out").innerHTML=`<div class="ack">${esc(T("Candidature reçue. Numéro de dossier ","Application received. File number "))}<strong>${n}</strong>${esc(T(". Un SMS de confirmation a été envoyé au ",". A confirmation SMS was sent to "))}${esc($("ap-phone").value)}${esc(T(" (simulé).", " (simulated)."))}</div>`;};
+$("f-sup").onsubmit=e=>{e.preventDefault();const n=ref("FRS");$("su-out").innerHTML=`<div class="ack">${esc(T("Demande enregistrée. Numéro de dossier ","Request recorded. File number "))}<strong>${n}</strong>${esc(T(". Le service achats vous répond sous dix jours ouvrés (simulé).",". Procurement will reply within ten working days (simulated)."))}</div>`;};
+/* tender documents */
+document.querySelectorAll("[data-dl]").forEach(b=>b.onclick=()=>{$("modal").innerHTML=`<div class="overlay"><div class="dialog" role="dialog" aria-modal="true"><span class="tag">${esc(T("Démonstration","Demonstration"))}</span><h3>${esc(b.dataset.dl)}</h3><p style="color:var(--ink-2)">${esc(T("Sur le site réel, ce bouton télécharge le dossier de consultation en PDF, servi depuis l'hébergement à Kinshasa. Ici, le document n'existe pas : l'entreprise est fictive.","On the real site this button downloads the tender documents as a PDF, served from the Kinshasa hosting. Here the document does not exist: the company is fictitious."))}</p><div style="display:flex;justify-content:flex-end"><button type="button" class="btn primary" id="m-close">${esc(T("Fermer","Close"))}</button></div></div></div>`;$("m-close").onclick=()=>{$("modal").innerHTML="";};});
+})();
+</script>
+</body>
+</html>

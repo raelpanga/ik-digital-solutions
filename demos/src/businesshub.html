@@ -1,0 +1,277 @@
+<title>Pharmacie Lisanga · Démo BusinessHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#F2F6F4;--surface:#FFFFFF;--surface-2:#E6EEEB;--ink:#12201C;--ink-2:#46605A;--ink-3:#78908A;--line:#D2DDD9;--accent:#0F7B6C;--accent-soft:#DDF0EC;--on-accent:#FFFFFF;--ok:#1E7F48;--ok-soft:#DDF3E5;--warn:#8F6210;--warn-soft:#F8EDD3;--bad:#B3261E;--bad-soft:#F9E0DE;--copper:#A84E27;--copper-soft:#F7E7DE;--radius:6px;--font:"Instrument Sans","Segoe UI",Arial,sans-serif;--display:"Bricolage Grotesque","Arial Narrow",Arial,sans-serif;--mono:"IBM Plex Mono",Consolas,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1512;--surface:#141F1B;--surface-2:#1B2A25;--ink:#E5EEEA;--ink-2:#A3B7B0;--ink-3:#758C85;--line:#25362F;--accent:#4FC4B0;--accent-soft:#163530;--on-accent:#0D1512;--ok:#4FCB84;--ok-soft:#163326;--warn:#E3B75C;--warn-soft:#3A2E12;--bad:#F08A80;--bad-soft:#3B1A17;--copper:#E08B5D;--copper-soft:#3A241A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1512;--surface:#141F1B;--surface-2:#1B2A25;--ink:#E5EEEA;--ink-2:#A3B7B0;--ink-3:#758C85;--line:#25362F;--accent:#4FC4B0;--accent-soft:#163530;--on-accent:#0D1512;--ok:#4FCB84;--ok-soft:#163326;--warn:#E3B75C;--warn-soft:#3A2E12;--bad:#F08A80;--bad-soft:#3B1A17;--copper:#E08B5D;--copper-soft:#3A241A;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;padding-inline:clamp(16px,3vw,32px);padding-block:0 48px}
+h1,h2,h3{margin:0;font-family:var(--display);line-height:1.15;text-wrap:balance}
+h1{font-size:clamp(1.5rem,3.5vw,2.2rem)}h2{font-size:1.25rem}h3{font-size:1.05rem}
+p{margin:0}a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ikbar{margin-inline:calc(-1*clamp(16px,3vw,32px));background:var(--copper-soft);color:var(--ink);border-bottom:1px solid var(--line);padding:.45rem clamp(16px,3vw,32px);font-size:.82rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.ikbar strong{color:var(--copper)}.ikbar a{color:var(--ink-2)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding-block:1.1rem;border-bottom:1px solid var(--line)}
+.brand{display:grid}.brand span{font-family:var(--display);font-weight:700;font-size:1.35rem}.brand small{color:var(--ink-3);font-size:.8rem}
+.tools{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.tools label{font-size:.85rem;color:var(--ink-2);display:flex;align-items:center;gap:.4rem}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:.5rem .6rem}
+input[type=number]{width:6.5rem;font-family:var(--mono)}
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.tabs button{font:inherit;font-weight:600;font-size:.9rem;background:transparent;color:var(--ink-2);border:0;padding:.5rem .9rem;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font:inherit;font-weight:600;font-size:.9rem;padding:.55rem .9rem;border-radius:4px;border:1px solid transparent;cursor:pointer;text-decoration:none;line-height:1.2}
+.btn.primary{background:var(--accent);color:var(--on-accent)}.btn.ghost{background:transparent;border-color:var(--ink-3);color:var(--ink)}.btn.small{padding:.35rem .6rem;font-size:.82rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+main{padding-top:1.4rem;display:grid;gap:1.4rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem;display:grid;gap:.5rem;align-content:start}
+.price{font-family:var(--mono);font-weight:500}.price small{color:var(--ink-3);font-weight:400;display:block;font-size:.78rem}
+.stock{font-size:.8rem;color:var(--ink-3)}.stock.low{color:var(--warn)}.stock.out{color:var(--bad)}
+.shop{display:grid;grid-template-columns:1fr 320px;gap:1.4rem;align-items:start}
+@media (max-width:860px){.shop{grid-template-columns:1fr}}
+.cart{position:sticky;top:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem;display:grid;gap:.7rem}
+.cart-row{display:grid;grid-template-columns:1fr auto auto;gap:.6rem;align-items:center;font-size:.92rem}
+.cart-row .q{font-family:var(--mono)}.cart-total{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:.6rem;font-weight:600}
+.muted{color:var(--ink-3);font-size:.85rem}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1rem;display:grid;gap:.2rem}
+.kpi .l{font-size:.78rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono)}
+.kpi .v{font-family:var(--mono);font-size:1.5rem;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.92rem}
+th,td{text-align:left;padding:.6rem .8rem;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:500;background:var(--surface-2)}
+tr:last-child td{border-bottom:0}td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tag{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:.15rem .45rem;border-radius:3px}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}.tag.warn{background:var(--warn-soft);color:var(--warn)}.tag.info{background:var(--accent-soft);color:var(--accent)}.tag.sandbox{background:var(--copper-soft);color:var(--copper)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap}
+.inline-form{display:flex;gap:.6rem;flex-wrap:wrap;align-items:end}
+.inline-form label{display:grid;gap:.2rem;font-size:.8rem;color:var(--ink-2)}
+.overlay{position:fixed;inset:0;background:rgba(10,20,17,.55);display:grid;place-items:center;padding:16px;z-index:100}
+.dialog{background:var(--surface);color:var(--ink);border-radius:8px;max-width:440px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.35);overflow:hidden}
+.dlg-head{padding:1rem 1.2rem;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap}
+.dlg-body{padding:1.1rem 1.2rem;display:grid;gap:.9rem}
+.amount{font-family:var(--mono);font-size:1.6rem}.amount small{font-size:.9rem;color:var(--ink-3);display:block}
+fieldset{border:1px solid var(--line);border-radius:4px;padding:.6rem .8rem;display:flex;gap:.9rem;flex-wrap:wrap}legend{font-size:.8rem;color:var(--ink-3);padding-inline:.3rem}
+.radio{display:flex;gap:.35rem;align-items:center;font-size:.92rem}
+.field{display:grid;gap:.25rem;font-size:.85rem;color:var(--ink-2)}
+.dlg-actions{display:flex;justify-content:flex-end;gap:.6rem;flex-wrap:wrap}
+.progress{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:var(--accent);animation:fill 1.8s linear forwards}
+@keyframes fill{to{width:100%}}
+@media (prefers-reduced-motion:reduce){.progress i{animation:none;width:100%}}
+.sms{background:var(--surface-2);border-left:3px solid var(--ok);padding:.6rem .8rem;font-family:var(--mono);font-size:.82rem;white-space:pre-wrap}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:4px;font-size:.9rem;z-index:110}
+.wa-msg{background:var(--surface-2);padding:.8rem;border-radius:4px;font-size:.9rem;white-space:pre-wrap}
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:1.5rem;align-items:center;background:var(--accent);color:var(--on-accent);border-radius:14px;padding:clamp(1.4rem,4vw,2.8rem);overflow:hidden}
+.hero h1{font-size:clamp(1.7rem,3.8vw,2.6rem);color:var(--on-accent);letter-spacing:-.01em}
+.hero p{opacity:.88;max-width:48ch;margin-top:.6rem}
+.hero .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin:0 0 .7rem}
+.hero .cta{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.2rem}
+.hero .btn.light{background:var(--on-accent);color:var(--accent)}.hero .btn.outline{background:transparent;border-color:currentColor;color:var(--on-accent)}
+.hero svg{width:100%;height:auto;max-height:230px;display:block}
+@media (max-width:760px){.hero{grid-template-columns:1fr}.hero svg{max-height:150px}}
+.trust{display:flex;gap:1.4rem;flex-wrap:wrap;font-size:.86rem;color:var(--ink-2);padding:.9rem 0;border-bottom:1px solid var(--line)}
+.trust span{display:inline-flex;align-items:center;gap:.45rem}.trust i{width:.55rem;height:.55rem;border-radius:50%;background:var(--accent);display:inline-block}
+.catalog-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap;margin-top:1.4rem}
+.pv{height:120px;border-radius:8px;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:2.2rem;color:#fff;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 45%,#fff));position:relative;overflow:hidden}
+.pv::after{content:"";position:absolute;right:-30px;bottom:-40px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.18)}
+.pv small{position:absolute;left:10px;top:8px;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.card{padding:.75rem .75rem 1rem}
+.shop-foot{margin-top:2.4rem;border-top:1px solid var(--line);padding-top:1.3rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;font-size:.86rem;color:var(--ink-2)}
+.shop-foot strong{display:block;color:var(--ink);margin-bottom:.2rem}
+</style>
+<!-- /head -->
+
+<div class="ikbar"><span><strong>Démonstrateur IK Digital Solutions</strong> · entreprise fictive · données d'exemple · paiements simulés</span><a href="../../index.html">← Retour au portfolio</a></div>
+
+<header class="top">
+  <div class="brand"><span id="biz-name">Pharmacie Lisanga</span><small id="biz-sub">Exemple · Kinshasa, Gombe</small></div>
+  <div class="tools">
+    <label for="tpl">Modèle <select id="tpl"><option value="pharmacie">Pharmacie</option><option value="restaurant">Restaurant</option><option value="quincaillerie">Quincaillerie</option></select></label>
+    <div class="tabs" role="tablist" aria-label="Vue">
+      <button type="button" role="tab" data-view="shop" aria-selected="true">Boutique (client)</button>
+      <button type="button" role="tab" data-view="admin" aria-selected="false">Gérant</button>
+    </div>
+  </div>
+</header>
+
+<main id="view"></main>
+<div id="modal"></div>
+
+<script>
+(function(){
+"use strict";
+const RATE = 2850;
+const KEY = "ik-demo-businesshub-v1";
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtUsd = n => n.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2}) + " USD";
+const fmtCdf = n => Math.round(n*RATE).toLocaleString("fr-FR") + " CDF";
+const today = () => new Date().toISOString().slice(0,10);
+const now = () => new Date().toTimeString().slice(0,5);
+const mkRef = p => p + "-" + Math.random().toString(36).slice(2,8).toUpperCase();
+
+const TPL = {
+  pharmacie: { name:"Pharmacie Lisanga", sub:"Exemple · Kinshasa, Gombe", cat:"Pharmacie · Gombe", tag:"Vos médicaments, commandés depuis votre téléphone, livrés dans l'heure.", hours:"Ouverte 7 j/7, de 7 h à 22 h", zone:"Livraison à Gombe, Lingwala et Barumbu", addr:"Avenue de la Justice, Gombe", products:[
+    ["Paracétamol 500 mg · boîte de 20",1.5,120],["Amoxicilline 500 mg · 16 gélules",4,38],["Sels de réhydratation orale · sachet",0.5,200],["Moustiquaire imprégnée",6,14],["Thermomètre digital",5,7],["Vitamine C 1000 mg · 20 comprimés",3.5,0]]},
+  restaurant: { name:"Restaurant Mama Nzela", sub:"Exemple · Kinshasa, Bandal", cat:"Restaurant · Bandalungwa", tag:"La cuisine de chez nous, commandée en deux minutes, prête quand vous arrivez.", hours:"Du mardi au dimanche, de 11 h à 23 h", zone:"Sur place, à emporter, livraison à Bandal et Kasa-Vubu", addr:"Avenue Kasa-Vubu, Bandalungwa", products:[
+    ["Poulet à la moambe · riz",8,30],["Liboke de poisson · chikwangue",10,12],["Pondu · riz",5,40],["Brochettes de chèvre · x3",6,25],["Jus de bissap · 50 cl",1.5,60],["Eau minérale · 1,5 L",1,4]]},
+  quincaillerie: { name:"Quincaillerie Bokolo", sub:"Exemple · Lubumbashi, Kenya", cat:"Quincaillerie · Lubumbashi", tag:"Ciment, fer, tôles : vérifiez le stock avant de vous déplacer, payez par mobile money.", hours:"Du lundi au samedi, de 7 h à 18 h", zone:"Retrait au dépôt ou livraison par camion dans Lubumbashi", addr:"Route Kipushi, commune Kenya", products:[
+    ["Ciment · sac de 50 kg",12,300],["Tôle galvanisée · 3 m",18,45],["Fer à béton 12 mm · barre",9,150],["Peinture blanche · 20 L",45,9],["Clous 5 cm · kg",2.5,80],["Tuyau PVC 110 mm · 3 m",11,0]]}
+};
+
+function seed(){
+  const st = { tpl:"pharmacie", data:{} };
+  Object.keys(TPL).forEach(k=>{
+    const t = TPL[k];
+    const products = t.products.map((p,i)=>({id:k+"-"+(i+1),name:p[0],price:p[1],stock:p[2]}));
+    const orders = [
+      {id:mkRef("CMD"),date:today(),time:"08:42",phone:"+243 81 234 56 78",items:[{name:products[0].name,qty:2,price:products[0].price}],total:products[0].price*2,method:"M-Pesa",status:"livré",sample:true},
+      {id:mkRef("CMD"),date:today(),time:"09:15",phone:"+243 99 876 54 32",items:[{name:products[1].name,qty:1,price:products[1].price},{name:products[2].name,qty:3,price:products[2].price}],total:products[1].price+products[2].price*3,method:"Orange Money",status:"payé",sample:true}
+    ];
+    st.data[k] = { products, orders };
+  });
+  return st;
+}
+function load(){ try{ const s = localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){} return seed(); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+let state = load();
+let view = "shop";
+let cart = {};
+const $ = id => document.getElementById(id);
+const cur = () => state.data[state.tpl];
+
+function toast(msg){ const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2600); }
+
+function payModal(o){
+  const m = $("modal");
+  const ops = ["M-Pesa","Airtel Money","Orange Money"];
+  m.innerHTML = `<div class="overlay"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="pm-title">
+    <div class="dlg-head"><h2 id="pm-title">${esc(o.title)}</h2><span class="tag sandbox">Bac à sable · aucun argent réel</span></div>
+    <div class="dlg-body" id="pm-body">
+      <p class="amount">${fmtUsd(o.amount)}<small>≈ ${fmtCdf(o.amount)} au taux d'exemple de ${RATE.toLocaleString("fr-FR")} CDF/USD</small></p>
+      <fieldset><legend>Opérateur</legend>${ops.map((x,i)=>`<label class="radio"><input type="radio" name="op" value="${x}" ${i===0?"checked":""}> ${x}</label>`).join("")}</fieldset>
+      <label class="field">Numéro du client <input id="pm-phone" type="tel" value="+243 81 000 00 00"></label>
+      <div class="dlg-actions"><button type="button" class="btn ghost" id="pm-cancel">Annuler</button><button type="button" class="btn primary" id="pm-send">Envoyer la demande de paiement</button></div>
+    </div></div></div>`;
+  $("pm-cancel").onclick = () => { m.innerHTML=""; };
+  $("pm-send").onclick = () => {
+    const op = m.querySelector("input[name=op]:checked").value;
+    const phone = $("pm-phone").value.trim() || "+243 81 000 00 00";
+    $("pm-body").innerHTML = `<p>Demande envoyée au <strong class="mono">${esc(phone)}</strong> via <strong>${esc(op)}</strong>.</p><p class="muted">Le client confirme avec son code PIN sur son téléphone.</p><div class="progress"><i></i></div>`;
+    setTimeout(()=>{
+      const r = mkRef(op==="M-Pesa"?"MP":op==="Airtel Money"?"AM":"OM");
+      $("pm-body").innerHTML = `<p><span class="tag ok">Paiement reçu</span></p><p class="amount">${fmtUsd(o.amount)}<small>Réf. ${r} · ${esc(op)} · ${esc(phone)}</small></p>
+        <div><p class="muted" style="margin-bottom:.3rem">SMS envoyé au client (simulé)</p><div class="sms">${esc(o.biz)}: paiement de ${fmtUsd(o.amount)} recu. Ref ${r}. Merci.</div></div>
+        <div class="dlg-actions"><button type="button" class="btn primary" id="pm-close">Fermer</button></div>`;
+      $("pm-close").onclick = () => { m.innerHTML=""; o.onSuccess({op,phone,ref:r}); };
+    },1900);
+  };
+}
+
+function renderShop(){
+  const d = cur(), t = TPL[state.tpl];
+  const items = Object.keys(cart).map(id=>({p:d.products.find(p=>p.id===id),qty:cart[id]})).filter(x=>x.p&&x.qty>0);
+  const total = items.reduce((s,x)=>s+x.p.price*x.qty,0);
+  $("view").innerHTML = `<div class="shop">
+    <section>
+      <div class="hero">
+        <div><p class="eyebrow">${esc(t.cat)}</p><h1>${esc(t.tag)}</h1><p>${esc(t.hours)} · ${esc(t.zone)} · paiement M-Pesa, Airtel Money, Orange Money.</p>
+          <div class="cta"><a class="btn light" href="#catalogue">Voir le catalogue</a><button type="button" class="btn outline" id="wa-hero">Commander par WhatsApp</button></div></div>
+        <svg viewBox="0 0 320 210" aria-hidden="true"><rect x="22" y="30" width="150" height="150" rx="18" fill="rgba(255,255,255,.18)"/><circle cx="215" cy="95" r="70" fill="rgba(255,255,255,.14)"/><rect x="70" y="70" width="180" height="90" rx="14" fill="rgba(255,255,255,.35)"/><rect x="88" y="90" width="80" height="10" rx="5" fill="rgba(255,255,255,.7)"/><rect x="88" y="110" width="120" height="8" rx="4" fill="rgba(255,255,255,.45)"/><rect x="88" y="128" width="60" height="14" rx="7" fill="rgba(255,255,255,.9)"/><circle cx="262" cy="160" r="22" fill="rgba(255,255,255,.55)"/><path d="M252 160l7 7 13-14" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="trust"><span><i></i>Stock vérifié en temps réel</span><span><i></i>Reçu par SMS, sans e-mail</span><span><i></i>Prix en USD et en CDF</span><span><i></i>Commande en 3G</span></div>
+      <div class="catalog-head" id="catalogue"><h2>Catalogue</h2><p class="muted">${d.products.length} produits · mis à jour par le gérant</p></div>
+      <div class="grid" style="margin-top:.9rem">${d.products.map(p=>`<article class="card">
+        <div class="pv"><small>${esc(t.cat.split(" · ")[0])}</small>${esc(p.name.trim().charAt(0).toUpperCase())}</div>
+        <h3>${esc(p.name)}</h3>
+        <div class="price">${fmtUsd(p.price)}<small>${fmtCdf(p.price)}</small></div>
+        <div class="stock ${p.stock===0?"out":p.stock<10?"low":""}">${p.stock===0?"Rupture de stock":p.stock<10?"Plus que "+p.stock+" en stock":"En stock : "+p.stock}</div>
+        <div><button type="button" class="btn primary small" data-add="${p.id}" ${p.stock===0?"disabled":""}>Ajouter</button></div>
+      </article>`).join("")}</div>
+    </section>
+    <aside class="cart" aria-label="Panier">
+      <h2>Panier</h2>
+      ${items.length?items.map(x=>`<div class="cart-row"><span>${esc(x.p.name)}</span><span class="q"><button type="button" class="btn ghost small" data-dec="${x.p.id}" aria-label="Retirer un">−</button> ${x.qty} <button type="button" class="btn ghost small" data-inc="${x.p.id}" aria-label="Ajouter un">+</button></span><span class="price">${fmtUsd(x.p.price*x.qty)}</span></div>`).join(""):`<p class="muted">Votre panier est vide. Ajoutez un produit.</p>`}
+      <div class="cart-total"><span>Total</span><span class="price">${fmtUsd(total)}<small>${fmtCdf(total)}</small></span></div>
+      <button type="button" class="btn primary" id="pay" ${items.length?"":"disabled"}>Payer par mobile money</button>
+      <button type="button" class="btn ghost" id="wa" ${items.length?"":"disabled"}>Commander par WhatsApp</button>
+      <p class="muted">Le client reçoit un SMS de confirmation. Aucune adresse e-mail n'est demandée.</p>
+    </aside></div>
+    <footer class="shop-foot">
+      <div><strong>${esc(t.name)}</strong>${esc(t.addr)}<br>${esc(t.sub)}</div>
+      <div><strong>Horaires</strong>${esc(t.hours)}</div>
+      <div><strong>Commander</strong>WhatsApp · M-Pesa · Airtel Money · Orange Money</div>
+      <div><strong>Site réalisé par</strong><a href="../../index.html">IK Digital Solutions</a> · hébergé en RDC</div>
+    </footer>`;
+  const wh=$("wa-hero"); if(wh) wh.onclick=()=>{ if(items.length){ $("wa").click(); } else { document.getElementById("catalogue").scrollIntoView(); toast("Ajoutez d'abord un produit au panier."); } };
+  document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>{cart[b.dataset.add]=(cart[b.dataset.add]||0)+1;renderShop();});
+  document.querySelectorAll("[data-inc]").forEach(b=>b.onclick=()=>{cart[b.dataset.inc]++;renderShop();});
+  document.querySelectorAll("[data-dec]").forEach(b=>b.onclick=()=>{cart[b.dataset.dec]--;if(cart[b.dataset.dec]<=0)delete cart[b.dataset.dec];renderShop();});
+  $("pay").onclick = () => payModal({title:"Payer "+t.name, amount:total, biz:t.name, onSuccess:(r)=>{
+    const order = {id:mkRef("CMD"),date:today(),time:now(),phone:r.phone,items:items.map(x=>({name:x.p.name,qty:x.qty,price:x.p.price})),total,method:r.op,status:"payé"};
+    d.orders.unshift(order);
+    items.forEach(x=>{x.p.stock=Math.max(0,x.p.stock-x.qty);});
+    cart={}; save(); renderShop(); toast("Commande "+order.id+" enregistrée. Visible dans la vue Gérant.");
+  }});
+  $("wa").onclick = () => {
+    const msg = "Bonjour "+t.name+", je souhaite commander :\n"+items.map(x=>"- "+x.qty+" × "+x.p.name).join("\n")+"\nTotal : "+fmtUsd(total);
+    $("modal").innerHTML = `<div class="overlay"><div class="dialog" role="dialog" aria-modal="true"><div class="dlg-head"><h2>Message WhatsApp (simulé)</h2><span class="tag sandbox">Démo</span></div><div class="dlg-body"><p class="muted">Sur un vrai site, ce bouton ouvre WhatsApp avec ce message pré-rempli vers le numéro du commerce.</p><div class="wa-msg">${esc(msg)}</div><div class="dlg-actions"><button type="button" class="btn primary" id="wa-close">Fermer</button></div></div></div></div>`;
+    $("wa-close").onclick=()=>{$("modal").innerHTML="";};
+  };
+}
+
+function renderAdmin(){
+  const d = cur(), t = TPL[state.tpl];
+  const todays = d.orders.filter(o=>o.date===today());
+  const revenue = todays.reduce((s,o)=>s+o.total,0);
+  const count = {}; todays.forEach(o=>o.items.forEach(i=>{count[i.name]=(count[i.name]||0)+i.qty;}));
+  const top = Object.keys(count).sort((a,b)=>count[b]-count[a])[0] || "—";
+  $("view").innerHTML = `
+    <div class="section-head"><div><h1>Tableau de bord · ${esc(t.name)}</h1><p class="muted">Ce que le gérant voit chaque matin. Les lignes marquées « exemple » sont des données de démonstration.</p></div><button type="button" class="btn ghost small" id="reset">Réinitialiser la démo</button></div>
+    <div class="kpis">
+      <div class="kpi"><span class="l">Commandes du jour</span><span class="v">${todays.length}</span></div>
+      <div class="kpi"><span class="l">Encaissé aujourd'hui</span><span class="v">${fmtUsd(revenue)}</span><span class="muted">${fmtCdf(revenue)}</span></div>
+      <div class="kpi"><span class="l">Produit le plus demandé</span><span class="v" style="font-size:1rem">${esc(top)}</span></div>
+      <div class="kpi"><span class="l">Ruptures</span><span class="v">${d.products.filter(p=>p.stock===0).length}</span></div>
+    </div>
+    <section><div class="section-head"><h2>Commandes</h2></div>
+    <div class="tablewrap" style="margin-top:.6rem"><table><thead><tr><th>N°</th><th>Heure</th><th>Client</th><th>Articles</th><th>Montant</th><th>Paiement</th><th>Statut</th><th></th></tr></thead><tbody>
+    ${d.orders.length?d.orders.map(o=>`<tr><td class="num">${esc(o.id)}${o.sample?' <span class="tag info">exemple</span>':""}</td><td class="num">${esc(o.time)}</td><td class="num">${esc(o.phone)}</td><td>${o.items.map(i=>i.qty+" × "+esc(i.name)).join("<br>")}</td><td class="num">${fmtUsd(o.total)}</td><td>${esc(o.method)}</td><td><span class="tag ${o.status==="livré"?"ok":"warn"}">${esc(o.status)}</span></td><td>${o.status!=="livré"?`<button type="button" class="btn ghost small" data-deliver="${o.id}">Marquer livré</button>`:""}</td></tr>`).join(""):`<tr><td colspan="8" class="muted">Aucune commande. Passez-en une depuis la vue Boutique.</td></tr>`}
+    </tbody></table></div></section>
+    <section><div class="section-head"><h2>Produits et stock</h2><p class="muted">Modifiez un prix ou un stock : la boutique change immédiatement.</p></div>
+    <div class="tablewrap" style="margin-top:.6rem"><table><thead><tr><th>Produit</th><th>Prix (USD)</th><th>Stock</th><th></th></tr></thead><tbody>
+    ${d.products.map(p=>`<tr><td>${esc(p.name)}</td><td><input type="number" step="0.5" min="0" value="${p.price}" data-price="${p.id}" aria-label="Prix"></td><td><input type="number" step="1" min="0" value="${p.stock}" data-stock="${p.id}" aria-label="Stock"></td><td><button type="button" class="btn ghost small" data-del="${p.id}">Retirer</button></td></tr>`).join("")}
+    </tbody></table></div>
+    <form class="inline-form" id="addp" style="margin-top:.8rem">
+      <label>Nouveau produit <input id="np-name" required placeholder="Nom du produit"></label>
+      <label>Prix USD <input id="np-price" type="number" step="0.5" min="0" value="1" required></label>
+      <label>Stock <input id="np-stock" type="number" step="1" min="0" value="10" required></label>
+      <button class="btn primary small" type="submit">Ajouter</button>
+    </form></section>`;
+  document.querySelectorAll("[data-deliver]").forEach(b=>b.onclick=()=>{const o=d.orders.find(x=>x.id===b.dataset.deliver);o.status="livré";save();renderAdmin();});
+  document.querySelectorAll("[data-price]").forEach(i=>i.onchange=()=>{const p=d.products.find(x=>x.id===i.dataset.price);p.price=Math.max(0,parseFloat(i.value)||0);save();toast("Prix mis à jour");});
+  document.querySelectorAll("[data-stock]").forEach(i=>i.onchange=()=>{const p=d.products.find(x=>x.id===i.dataset.stock);p.stock=Math.max(0,parseInt(i.value,10)||0);save();toast("Stock mis à jour");});
+  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{d.products=d.products.filter(x=>x.id!==b.dataset.del);save();renderAdmin();});
+  $("addp").onsubmit = e => { e.preventDefault(); d.products.push({id:state.tpl+"-"+Date.now(),name:$("np-name").value.trim(),price:parseFloat($("np-price").value)||0,stock:parseInt($("np-stock").value,10)||0}); save(); renderAdmin(); };
+  $("reset").onclick = () => { state = seed(); state.tpl = $("tpl").value; cart={}; save(); renderAdmin(); toast("Données de démonstration réinitialisées"); };
+}
+
+function render(){
+  const t = TPL[state.tpl];
+  $("biz-name").textContent = t.name; $("biz-sub").textContent = t.sub;
+  document.title = t.name + " · Démo BusinessHub";
+  document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected", b.dataset.view===view ? "true":"false"));
+  if(view==="shop") renderShop(); else renderAdmin();
+}
+
+$("tpl").value = state.tpl;
+$("tpl").onchange = () => { state.tpl = $("tpl").value; cart={}; save(); render(); };
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{view=b.dataset.view;render();});
+render();
+})();
+</script>

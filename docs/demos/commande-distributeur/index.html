@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Distribution Mokili · Démo Commande & Encaissement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#F3F5F9;--surface:#FFFFFF;--surface-2:#E9EDF4;--ink:#131829;--ink-2:#4B5570;--ink-3:#7B849E;--line:#D7DDE9;--accent:#1D3EB5;--accent-soft:#E3E9FB;--on-accent:#FFFFFF;--ok:#1E7F48;--ok-soft:#DDF3E5;--warn:#8F6210;--warn-soft:#F8EDD3;--bad:#B3261E;--bad-soft:#F9E0DE;--copper:#A84E27;--copper-soft:#F7E7DE;--radius:6px;--font:"Instrument Sans","Segoe UI",Arial,sans-serif;--display:"Bricolage Grotesque","Arial Narrow",Arial,sans-serif;--mono:"IBM Plex Mono",Consolas,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1120;--surface:#151A2B;--surface-2:#1C2236;--ink:#E8EBF3;--ink-2:#A6AEC5;--ink-3:#7C859F;--line:#29304A;--accent:#7A93F2;--accent-soft:#1C2547;--on-accent:#0D1120;--ok:#4FCB84;--ok-soft:#163326;--warn:#E3B75C;--warn-soft:#3A2E12;--bad:#F08A80;--bad-soft:#3B1A17;--copper:#E08B5D;--copper-soft:#3A241A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1120;--surface:#151A2B;--surface-2:#1C2236;--ink:#E8EBF3;--ink-2:#A6AEC5;--ink-3:#7C859F;--line:#29304A;--accent:#7A93F2;--accent-soft:#1C2547;--on-accent:#0D1120;--ok:#4FCB84;--ok-soft:#163326;--warn:#E3B75C;--warn-soft:#3A2E12;--bad:#F08A80;--bad-soft:#3B1A17;--copper:#E08B5D;--copper-soft:#3A241A;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;padding-inline:clamp(16px,3vw,32px);padding-block:0 48px}
+h1,h2,h3{margin:0;font-family:var(--display);line-height:1.15;text-wrap:balance}
+h1{font-size:clamp(1.5rem,3.5vw,2.2rem)}h2{font-size:1.25rem}h3{font-size:1.05rem}
+p{margin:0}a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ikbar{margin-inline:calc(-1*clamp(16px,3vw,32px));background:var(--copper-soft);border-bottom:1px solid var(--line);padding:.45rem clamp(16px,3vw,32px);font-size:.82rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.ikbar strong{color:var(--copper)}.ikbar a{color:var(--ink-2)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding-block:1.1rem;border-bottom:1px solid var(--line)}
+.brand{display:grid}.brand span{font-family:var(--display);font-weight:700;font-size:1.35rem}.brand small{color:var(--ink-3);font-size:.8rem}
+.tools{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+select,input{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:.5rem .6rem}
+input[type=number]{width:6rem;font-family:var(--mono)}
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.tabs button{font:inherit;font-weight:600;font-size:.9rem;background:transparent;color:var(--ink-2);border:0;padding:.5rem .9rem;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.switch{display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;user-select:none}
+.switch i{width:40px;height:22px;border-radius:11px;background:var(--ink-3);position:relative;transition:background .15s}
+.switch i::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+.switch.on i{background:var(--ok)}.switch.on i::after{left:21px}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font:inherit;font-weight:600;font-size:.9rem;padding:.55rem .9rem;border-radius:4px;border:1px solid transparent;cursor:pointer;text-decoration:none;line-height:1.2}
+.btn.primary{background:var(--accent);color:var(--on-accent)}.btn.ghost{background:transparent;border-color:var(--ink-3);color:var(--ink)}.btn.small{padding:.35rem .6rem;font-size:.82rem}.btn.danger{background:var(--bad-soft);color:var(--bad)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+main{padding-top:1.4rem;display:grid;gap:1.4rem}
+.muted{color:var(--ink-3);font-size:.85rem}
+.banner{background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn);padding:.7rem 1rem;border-radius:0 4px 4px 0;font-size:.9rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center}
+.banner.ok{background:var(--ok-soft);border-color:var(--ok)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1rem;display:grid;gap:.2rem}
+.kpi .l{font-size:.75rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono)}
+.kpi .v{font-family:var(--mono);font-size:1.5rem;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.92rem}
+th,td{text-align:left;padding:.6rem .8rem;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:500;background:var(--surface-2)}
+tr:last-child td{border-bottom:0}td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.rupture td{background:var(--bad-soft)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:.15rem .45rem;border-radius:3px;white-space:nowrap}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}.tag.warn{background:var(--warn-soft);color:var(--warn)}.tag.bad{background:var(--bad-soft);color:var(--bad)}.tag.info{background:var(--accent-soft);color:var(--accent)}.tag.sandbox{background:var(--copper-soft);color:var(--copper)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap}
+.check{font-family:var(--mono);color:var(--ok)}.cross{font-family:var(--mono);color:var(--ink-3)}
+.overlay{position:fixed;inset:0;background:rgba(10,14,30,.55);display:grid;place-items:center;padding:16px;z-index:100}
+.dialog{background:var(--surface);color:var(--ink);border-radius:8px;max-width:440px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.35);overflow:hidden}
+.dlg-head{padding:1rem 1.2rem;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap}
+.dlg-body{padding:1.1rem 1.2rem;display:grid;gap:.9rem}
+.amount{font-family:var(--mono);font-size:1.6rem}.amount small{font-size:.9rem;color:var(--ink-3);display:block}
+fieldset{border:1px solid var(--line);border-radius:4px;padding:.6rem .8rem;display:flex;gap:.9rem;flex-wrap:wrap}legend{font-size:.8rem;color:var(--ink-3);padding-inline:.3rem}
+.radio{display:flex;gap:.35rem;align-items:center;font-size:.92rem}
+.field{display:grid;gap:.25rem;font-size:.85rem;color:var(--ink-2)}
+.dlg-actions{display:flex;justify-content:flex-end;gap:.6rem;flex-wrap:wrap}
+.progress{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:var(--accent);animation:fill 1.8s linear forwards}
+@keyframes fill{to{width:100%}}
+@media (prefers-reduced-motion:reduce){.progress i{animation:none;width:100%}}
+.sms{background:var(--surface-2);border-left:3px solid var(--ok);padding:.6rem .8rem;font-family:var(--mono);font-size:.82rem;white-space:pre-wrap}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:4px;font-size:.9rem;z-index:110}
+.qty{width:4.5rem}
+.welcome{display:grid;grid-template-columns:1.3fr 1fr;gap:1.4rem;align-items:center;background:var(--accent);color:var(--on-accent);border-radius:14px;padding:clamp(1.3rem,3.5vw,2.4rem);overflow:hidden}
+.welcome h1{color:var(--on-accent);font-size:clamp(1.5rem,3.4vw,2.2rem)}
+.welcome p{opacity:.88;margin-top:.5rem;max-width:50ch}
+.welcome .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin:0 0 .6rem}
+.welcome .stats{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.welcome .stat{background:rgba(255,255,255,.16);border-radius:10px;padding:.8rem .9rem;display:grid;gap:.1rem}
+.welcome .stat b{font-family:var(--mono);font-size:1.4rem;font-weight:500}.welcome .stat span{font-size:.78rem;opacity:.85}
+@media (max-width:760px){.welcome{grid-template-columns:1fr}}
+.promo{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--copper-soft);border-left:4px solid var(--copper);padding:.8rem 1rem;border-radius:0 8px 8px 0;font-size:.92rem}
+.promo strong{color:var(--copper)}
+.pt{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 45%,#fff));color:#fff;font-family:var(--display);font-weight:700;font-size:.95rem;margin-right:.6rem;vertical-align:middle}
+.pname{display:inline-flex;align-items:center}
+.dist-foot{margin-top:2.2rem;border-top:1px solid var(--line);padding-top:1.2rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.85rem;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<div class="ikbar"><span><strong>Démonstrateur IK Digital Solutions</strong> · entreprise fictive · données d'exemple · paiements simulés</span><a href="../../index.html">← Retour au portfolio</a></div>
+
+<header class="top">
+  <div class="brand"><span>Distribution Mokili</span><small>Exemple · dépôt de Limete, Kinshasa · boissons et biens de consommation</small></div>
+  <div class="tools">
+    <button type="button" class="switch on" id="net" aria-pressed="true"><i></i><span>Réseau : en ligne</span></button>
+    <div class="tabs" role="tablist" aria-label="Rôle">
+      <button type="button" role="tab" data-view="retail" aria-selected="true">Détaillant</button>
+      <button type="button" role="tab" data-view="rep" aria-selected="false">Commercial</button>
+      <button type="button" role="tab" data-view="dist" aria-selected="false">Distributeur</button>
+    </div>
+  </div>
+</header>
+
+<main id="view"></main>
+<div id="modal"></div>
+
+<script>
+(function(){
+"use strict";
+const KEY="ik-demo-distributeur-v1";
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtUsd=n=>n.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" USD";
+const today=()=>new Date().toISOString().slice(0,10);
+const now=()=>new Date().toTimeString().slice(0,5);
+const mkRef=p=>p+"-"+Math.random().toString(36).slice(2,8).toUpperCase();
+const $=id=>document.getElementById(id);
+
+const RETAILERS=[{id:"r1",name:"Alimentation Chez Maman Louise",zone:"Kalamu"},{id:"r2",name:"Dépôt Kimbanseke Centre",zone:"Kimbanseke"},{id:"r3",name:"Boutique Ngaliema 24h",zone:"Ngaliema"}];
+
+function seed(){
+  const products=[
+    {id:"p1",name:"Bière blonde 72 cl · casier de 12",price:14,stock:240},
+    {id:"p2",name:"Soda cola 30 cl · casier de 24",price:11,stock:180},
+    {id:"p3",name:"Eau minérale 1,5 L · pack de 6",price:4.5,stock:0},
+    {id:"p4",name:"Jus d'ananas 1 L · carton de 12",price:16,stock:35},
+    {id:"p5",name:"Farine de maïs 25 kg · sac",price:19,stock:60},
+    {id:"p6",name:"Huile végétale 5 L · bidon",price:12.5,stock:8}
+  ];
+  const orders=[
+    {id:mkRef("BC"),date:today(),time:"07:50",retailer:"r1",items:[{id:"p1",qty:10},{id:"p2",qty:5}],total:14*10+11*5,status:"livrée",paid:{op:"Airtel Money",ref:"AM-EX0001"},sample:true},
+    {id:mkRef("BC"),date:today(),time:"08:35",retailer:"r2",items:[{id:"p5",qty:12}],total:19*12,status:"validée",paid:null,sample:true},
+    {id:mkRef("BC"),date:today(),time:"09:10",retailer:"r3",items:[{id:"p4",qty:3},{id:"p6",qty:2}],total:16*3+12.5*2,status:"en attente",paid:null,sample:true}
+  ];
+  return {rate:2850,products,orders,queue:[]};
+}
+function load(){try{const s=localStorage.getItem(KEY);if(s)return JSON.parse(s);}catch(e){}return seed();}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+let state=load(), view="retail", online=true, retailer="r1", draft={};
+const P=id=>state.products.find(p=>p.id===id);
+const R=id=>RETAILERS.find(r=>r.id===id);
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
+
+function payModal(o){
+  const m=$("modal"),ops=["M-Pesa","Airtel Money","Orange Money"];
+  m.innerHTML=`<div class="overlay"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="pm-title"><div class="dlg-head"><h2 id="pm-title">${esc(o.title)}</h2><span class="tag sandbox">Bac à sable · aucun argent réel</span></div><div class="dlg-body" id="pm-body">
+    <p class="amount">${fmtUsd(o.amount)}<small>≈ ${Math.round(o.amount*state.rate).toLocaleString("fr-FR")} CDF au taux du jour saisi par le distributeur (${state.rate.toLocaleString("fr-FR")})</small></p>
+    <fieldset><legend>Opérateur</legend>${ops.map((x,i)=>`<label class="radio"><input type="radio" name="op" value="${x}" ${i===0?"checked":""}> ${x}</label>`).join("")}</fieldset>
+    <label class="field">Numéro du détaillant <input id="pm-phone" type="tel" value="+243 82 000 00 00"></label>
+    <div class="dlg-actions"><button type="button" class="btn ghost" id="pm-cancel">Annuler</button><button type="button" class="btn primary" id="pm-send">Payer</button></div></div></div></div>`;
+  $("pm-cancel").onclick=()=>{m.innerHTML="";};
+  $("pm-send").onclick=()=>{
+    const op=m.querySelector("input[name=op]:checked").value, phone=$("pm-phone").value.trim()||"+243 82 000 00 00";
+    $("pm-body").innerHTML=`<p>Demande envoyée au <strong>${esc(phone)}</strong> via <strong>${esc(op)}</strong>.</p><p class="muted">Confirmation par code PIN sur le téléphone.</p><div class="progress"><i></i></div>`;
+    setTimeout(()=>{const r=mkRef(op==="M-Pesa"?"MP":op==="Airtel Money"?"AM":"OM");
+      $("pm-body").innerHTML=`<p><span class="tag ok">Paiement reçu</span></p><p class="amount">${fmtUsd(o.amount)}<small>Réf. ${r} · ${esc(op)}</small></p><div><p class="muted" style="margin-bottom:.3rem">SMS envoyé au détaillant (simulé)</p><div class="sms">Distribution Mokili: paiement de ${fmtUsd(o.amount)} recu pour la commande ${esc(o.orderId)}. Ref ${r}. Livraison en preparation.</div></div><div class="dlg-actions"><button type="button" class="btn primary" id="pm-close">Fermer</button></div>`;
+      $("pm-close").onclick=()=>{m.innerHTML="";o.onSuccess({op,ref:r});};},1900);
+  };
+}
+
+function netBanner(){
+  if(online) return state.queue.length?`<div class="banner ok">Réseau revenu. ${state.queue.length} commande(s) en attente locale vont être synchronisées. <button type="button" class="btn primary small" id="sync">Synchroniser maintenant</button></div>`:"";
+  return `<div class="banner">Mode hors ligne (simulé) : vos commandes sont enregistrées sur le téléphone et partiront dès que le réseau revient. En file locale : <strong>${state.queue.length}</strong>.</div>`;
+}
+function bindSync(){const b=$("sync");if(b)b.onclick=()=>{state.queue.forEach(o=>state.orders.unshift(o));state.queue=[];save();render();toast("Synchronisation terminée");};}
+
+function renderRetail(){
+  const my=state.orders.filter(o=>o.retailer===retailer);
+  const lines=Object.keys(draft).map(id=>({p:P(id),qty:draft[id]})).filter(x=>x.p&&x.qty>0);
+  const total=lines.reduce((s,x)=>s+x.p.price*x.qty,0);
+  const month=state.orders.filter(o=>o.retailer===retailer&&o.status!=="refusée");
+  const last=my.find(o=>o.status==="livrée");
+  $("view").innerHTML=`${netBanner()}
+    <div class="welcome">
+      <div><p class="eyebrow">Espace détaillant · ${esc(R(retailer).zone)}</p><h1>Bonjour, ${esc(R(retailer).name)}</h1><p>Commandez ce dont vous avez besoin, vérifiez le stock du dépôt avant de commander, et payez par mobile money quand la commande est validée.</p></div>
+      <div class="stats"><div class="stat"><b>${month.length}</b><span>commandes ce mois</span></div><div class="stat"><b>${fmtUsd(month.reduce((s,o)=>s+o.total,0))}</b><span>montant commandé</span></div><div class="stat"><b>${last?esc(last.time):"—"}</b><span>dernière livraison</span></div><div class="stat"><b>${state.products.filter(p=>p.stock>0).length}/${state.products.length}</b><span>produits disponibles</span></div></div>
+    </div>
+    <div class="promo"><span><strong>Cette semaine</strong> · casier de 24 sodas à 10,50 USD au lieu de 11 USD à partir de 10 casiers (exemple de promotion).</span><label class="muted">Je suis <select id="ret">${RETAILERS.map(r=>`<option value="${r.id}" ${r.id===retailer?"selected":""}>${esc(r.name)} · ${esc(r.zone)}</option>`).join("")}</select></label></div>
+    <div class="section-head"><h2>Catalogue du dépôt</h2><p class="muted">Stock en temps réel · prix en USD, converti au taux du jour</p></div>
+    <div class="tablewrap"><table><thead><tr><th>Produit</th><th>Prix unitaire</th><th>Stock dépôt</th><th>Quantité</th></tr></thead><tbody>
+    ${state.products.map(p=>`<tr class="${p.stock===0?"rupture":""}"><td><span class="pname"><span class="pt">${esc(p.name.split(" ").slice(0,2).map(w=>w.charAt(0)).join("").toUpperCase())}</span>${esc(p.name)}</span></td><td class="num">${fmtUsd(p.price)}</td><td>${p.stock===0?'<span class="tag bad">rupture</span>':p.stock<20?`<span class="tag warn">${p.stock} restants</span>`:`<span class="tag ok">${p.stock}</span>`}</td><td><input class="qty" type="number" min="0" max="${p.stock}" value="${draft[p.id]||0}" data-q="${p.id}" ${p.stock===0?"disabled":""} aria-label="Quantité ${esc(p.name)}"></td></tr>`).join("")}
+    </tbody></table></div>
+    <div class="section-head"><p class="amount">${fmtUsd(total)}<small>${lines.length} ligne(s)</small></p><button type="button" class="btn primary" id="order" ${lines.length?"":"disabled"}>Envoyer la commande</button></div>
+    <section><h2>Mes commandes</h2><div class="tablewrap" style="margin-top:.6rem"><table><thead><tr><th>N°</th><th>Heure</th><th>Montant</th><th>Statut</th><th></th></tr></thead><tbody>
+    ${my.length?my.map(o=>`<tr><td class="num">${esc(o.id)}${o.sample?' <span class="tag info">exemple</span>':""}</td><td class="num">${esc(o.time)}</td><td class="num">${fmtUsd(o.total)}</td><td>${statusTag(o)}</td><td>${o.status==="validée"&&!o.paid?`<button type="button" class="btn primary small" data-pay="${o.id}">Payer par mobile money</button>`:""}</td></tr>`).join(""):`<tr><td colspan="5" class="muted">Aucune commande pour ce détaillant.</td></tr>`}
+    </tbody></table></div></section>
+    <footer class="dist-foot"><span>Distribution Mokili · dépôt de Limete, Kinshasa · commandes 6 h – 18 h</span><span>Plateforme réalisée par <a href="../../index.html">IK Digital Solutions</a></span></footer>`;
+  bindSync();
+  $("ret").onchange=()=>{retailer=$("ret").value;draft={};renderRetail();};
+  document.querySelectorAll("[data-q]").forEach(i=>i.onchange=()=>{draft[i.dataset.q]=Math.max(0,Math.min(parseInt(i.value,10)||0,P(i.dataset.q).stock));renderRetail();});
+  $("order").onclick=()=>{
+    const o={id:mkRef("BC"),date:today(),time:now(),retailer,items:lines.map(x=>({id:x.p.id,qty:x.qty})),total,status:"en attente",paid:null};
+    if(online){state.orders.unshift(o);toast("Commande "+o.id+" envoyée au commercial.");}else{state.queue.push(o);toast("Pas de réseau : commande gardée sur le téléphone.");}
+    draft={};save();renderRetail();
+  };
+  document.querySelectorAll("[data-pay]").forEach(b=>b.onclick=()=>{const o=state.orders.find(x=>x.id===b.dataset.pay);payModal({title:"Payer la commande "+o.id,amount:o.total,orderId:o.id,onSuccess:r=>{o.paid=r;o.status="payée";save();renderRetail();}});});
+}
+function statusTag(o){const m={"en attente":"warn","validée":"info","payée":"ok","livrée":"ok","refusée":"bad"};return `<span class="tag ${m[o.status]||"info"}">${esc(o.status)}</span>`;}
+
+function renderRep(){
+  const pending=state.orders.filter(o=>o.status==="en attente");
+  $("view").innerHTML=`${netBanner()}
+    <div class="section-head"><div><h1>Validation des commandes</h1><p class="muted">Vue du commercial de secteur. Il vérifie le stock avant de valider ; le détaillant est prévenu par SMS.</p></div></div>
+    <div class="tablewrap"><table><thead><tr><th>N°</th><th>Détaillant</th><th>Articles</th><th>Montant</th><th>Stock</th><th></th></tr></thead><tbody>
+    ${pending.length?pending.map(o=>{const short=o.items.filter(i=>P(i.id).stock<i.qty);return `<tr><td class="num">${esc(o.id)}</td><td>${esc(R(o.retailer).name)}<br><span class="muted">${esc(R(o.retailer).zone)}</span></td><td>${o.items.map(i=>i.qty+" × "+esc(P(i.id).name)).join("<br>")}</td><td class="num">${fmtUsd(o.total)}</td><td>${short.length?'<span class="tag bad">insuffisant</span>':'<span class="tag ok">disponible</span>'}</td><td style="white-space:nowrap"><button type="button" class="btn primary small" data-ok="${o.id}" ${short.length?"disabled":""}>Valider</button> <button type="button" class="btn danger small" data-no="${o.id}">Refuser</button></td></tr>`;}).join(""):`<tr><td colspan="6" class="muted">Rien à valider. Passez une commande depuis la vue Détaillant.</td></tr>`}
+    </tbody></table></div>`;
+  bindSync();
+  document.querySelectorAll("[data-ok]").forEach(b=>b.onclick=()=>{const o=state.orders.find(x=>x.id===b.dataset.ok);o.status="validée";o.items.forEach(i=>{P(i.id).stock-=i.qty;});save();renderRep();toast("Validée. SMS envoyé au détaillant (simulé) : commande "+o.id+" validée, à payer.");});
+  document.querySelectorAll("[data-no]").forEach(b=>b.onclick=()=>{const o=state.orders.find(x=>x.id===b.dataset.no);o.status="refusée";save();renderRep();});
+}
+
+function renderDist(){
+  const t=state.orders.filter(o=>o.date===today());
+  const collected=t.filter(o=>o.paid).reduce((s,o)=>s+o.total,0);
+  const unpaid=t.filter(o=>o.status==="validée"&&!o.paid).reduce((s,o)=>s+o.total,0);
+  $("view").innerHTML=`${netBanner()}
+    <div class="section-head"><div><h1>Tableau de bord du distributeur</h1><p class="muted">Rapprochement automatique : commande, paiement, livraison. Plus de cahier le soir.</p></div>
+    <label class="muted">Taux du jour (CDF / USD) <input type="number" id="rate" value="${state.rate}" step="10"></label></div>
+    <div class="kpis">
+      <div class="kpi"><span class="l">Commandes du jour</span><span class="v">${t.length}</span></div>
+      <div class="kpi"><span class="l">Encaissé (mobile money)</span><span class="v">${fmtUsd(collected)}</span></div>
+      <div class="kpi"><span class="l">Validé, non payé</span><span class="v">${fmtUsd(unpaid)}</span></div>
+      <div class="kpi"><span class="l">Produits en rupture</span><span class="v">${state.products.filter(p=>p.stock===0).length}</span></div>
+    </div>
+    <section><h2>Rapprochement du jour</h2><div class="tablewrap" style="margin-top:.6rem"><table><thead><tr><th>N°</th><th>Détaillant</th><th>Montant</th><th>Commande</th><th>Paiement</th><th>Livraison</th><th></th></tr></thead><tbody>
+    ${t.length?t.map(o=>`<tr><td class="num">${esc(o.id)}${o.sample?' <span class="tag info">exemple</span>':""}</td><td>${esc(R(o.retailer).name)}</td><td class="num">${fmtUsd(o.total)}</td><td>${o.status==="refusée"?'<span class="cross">refusée</span>':o.status==="en attente"?'<span class="cross">en attente</span>':'<span class="check">✓ validée</span>'}</td><td>${o.paid?`<span class="check">✓ ${esc(o.paid.op)}</span><br><span class="muted">${esc(o.paid.ref)}</span>`:'<span class="cross">—</span>'}</td><td>${o.status==="livrée"?'<span class="check">✓ livrée</span>':'<span class="cross">—</span>'}</td><td>${o.status==="payée"?`<button type="button" class="btn ghost small" data-deliver="${o.id}">Marquer livrée</button>`:""}</td></tr>`).join(""):`<tr><td colspan="7" class="muted">Aucune commande aujourd'hui.</td></tr>`}
+    </tbody></table></div></section>
+    <section><div class="section-head"><h2>Stock du dépôt</h2><button type="button" class="btn ghost small" id="reset">Réinitialiser la démo</button></div><div class="tablewrap" style="margin-top:.6rem"><table><thead><tr><th>Produit</th><th>Prix (USD)</th><th>Stock</th><th>État</th></tr></thead><tbody>
+    ${state.products.map(p=>`<tr class="${p.stock===0?"rupture":""}"><td>${esc(p.name)}</td><td><input type="number" step="0.5" min="0" value="${p.price}" data-price="${p.id}" aria-label="Prix"></td><td><input type="number" step="1" min="0" value="${p.stock}" data-stock="${p.id}" aria-label="Stock"></td><td>${p.stock===0?'<span class="tag bad">rupture</span>':p.stock<20?'<span class="tag warn">faible</span>':'<span class="tag ok">ok</span>'}</td></tr>`).join("")}
+    </tbody></table></div></section>`;
+  bindSync();
+  $("rate").onchange=()=>{state.rate=Math.max(1,parseInt($("rate").value,10)||2850);save();toast("Taux mis à jour");};
+  document.querySelectorAll("[data-deliver]").forEach(b=>b.onclick=()=>{const o=state.orders.find(x=>x.id===b.dataset.deliver);o.status="livrée";save();renderDist();});
+  document.querySelectorAll("[data-price]").forEach(i=>i.onchange=()=>{P(i.dataset.price).price=Math.max(0,parseFloat(i.value)||0);save();});
+  document.querySelectorAll("[data-stock]").forEach(i=>i.onchange=()=>{P(i.dataset.stock).stock=Math.max(0,parseInt(i.value,10)||0);save();renderDist();});
+  $("reset").onclick=()=>{state=seed();draft={};save();renderDist();toast("Données de démonstration réinitialisées");};
+}
+
+function render(){
+  document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",b.dataset.view===view?"true":"false"));
+  ({retail:renderRetail,rep:renderRep,dist:renderDist})[view]();
+}
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{view=b.dataset.view;render();});
+$("net").onclick=()=>{online=!online;$("net").classList.toggle("on",online);$("net").setAttribute("aria-pressed",online?"true":"false");$("net").querySelector("span").textContent=online?"Réseau : en ligne":"Réseau : hors ligne";render();};
+render();
+})();
+</script>
+</body>
+</html>
