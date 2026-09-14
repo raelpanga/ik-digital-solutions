@@ -206,6 +206,8 @@ fs.copyFileSync(path.join(__dirname, "assets", "style.css"), path.join(OUT, "ass
 fs.copyFileSync(path.join(__dirname, "assets", "site.js"), path.join(OUT, "assets", "site.js"));
 fs.copyFileSync(path.join(__dirname, "assets", "favicon.svg"), path.join(OUT, "assets", "favicon.svg"));
 fs.writeFileSync(path.join(OUT, ".nojekyll"), "");
+const argCname = process.argv.indexOf("--cname");
+if (argCname > -1) { fs.writeFileSync(path.join(OUT, "CNAME"), process.argv[argCname + 1].trim() + "\n"); console.log("wrote CNAME " + process.argv[argCname + 1]); }
 
 const pages = [];
 const home = { fr: "index.html", en: "en/index.html" };
