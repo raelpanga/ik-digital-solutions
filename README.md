@@ -2,8 +2,8 @@
 
 A real static website: HTML, CSS and JavaScript pages generated from one content file,
 hosted publicly on GitHub Pages. French first, with a full English copy of every page.
-Three client projects in production and seven demo applications, each demo a page of
-the same site. No sign-in anywhere.
+Three client projects in production and seven demonstrations, including three bilingual
+multi-page sites. No sign-in anywhere.
 
 **Public site:** https://raelpanga.github.io/ik-digital-solutions/
 **Repository:** https://github.com/raelpanga/ik-digital-solutions
@@ -13,19 +13,22 @@ the same site. No sign-in anywhere.
 | Page | French | English |
 |---|---|---|
 | Home (services, proofs, projects, method, compliance, pricing, contact) | `index.html` | `en/index.html` |
-| One page per project (8) | `projets/<slug>.html` | `en/projects/<slug>.html` |
-| Demo applications (7, French only) | `demos/<slug>/` | same |
+| One page per project (10) | `projets/<slug>.html` | `en/projects/<slug>.html` |
+| Single-page demo applications (5, French only) | `demos/<slug>/` | same |
 | Kando Ressources mining site (16 pages, bilingual) | `demos/kando-ressources/` | `demos/kando-ressources/en/` |
+| Cimenterie du Fleuve site (18 pages, bilingual) | `demos/site-corporate/` | `demos/site-corporate/en/` |
+| Kimia Express delivery site (18 pages, bilingual) | `demos/kimia-express/` | `demos/kimia-express/en/` |
 
-Demo pages: `kimia-express` (delivery site, replaced the pharmacy demo), `ndala-beauty`
+Demo routes: `kimia-express` (bilingual delivery site, replaced the pharmacy demo), `ndala-beauty`
 (skincare shop, replaced the school demo), `commande-distributeur`, `portail-sous-traitant`,
-`site-corporate`, `genos-rentals`, `macclay-wedding-tracker`. The two replaced demo
+`site-corporate`, `kando-ressources`, `genos-rentals`, `macclay-wedding-tracker`. The replaced demo
 sources are kept in `demos/archive/` and are not published.
 
 Images for the demos live in `demos/assets/<slug>/` and are copied to
-`docs/demos/assets/`. Kimia uses the project's SVG illustration set plus freely licensed
-photos from Wikimedia Commons (credits in the page footer; originals in
-`demos/assets/kimia/raw/`, which is ignored by git). Ndala uses the SVG set only, with
+`docs/demos/assets/`. The new Kimia site copies photos from `demos/sites/kimia/img/`
+and recolours the project's SVG illustrations into `docs/demos/kimia-express/img/`.
+Photo credits appear in each page footer; `raw/` originals are ignored by git.
+Ndala uses the SVG set only, with
 labels translated to French and four extra jars generated to match.
 
 Every demo uses fictitious data and simulated payments, SMS, e-mails and Shopify, and says
@@ -41,6 +44,7 @@ sites show, and link to the real production address as a secondary button.
 | `assets/style.css`, `assets/site.js`, `assets/favicon.svg` | Stylesheet, page script (live metrics, contact form), icon. Copied into `docs/assets/`. |
 | `shots/` | Screenshots used on the cards. Copied into `docs/shots/`. |
 | `demos/src/<slug>.html` | Demo sources (head + body fragment). Wrapped into `docs/demos/<slug>/index.html`. |
+| `demos/sites/<name>/` | Bilingual demo generators and assets; public route mapping in `build.js`. |
 | `docs/` | The generated site. GitHub Pages serves this folder. Do not edit by hand. |
 | `check.js` | Syntax-checks inline scripts: `node check.js demos/src/*.html`. |
 | `tojpg.js` | Converts a PNG screenshot to JPEG through headless Chrome. |
@@ -48,8 +52,8 @@ sites show, and link to the real production address as a secondary button.
 
 ## Updating the site
 
-1. Edit `assets/content.js` (or a demo in `demos/src/`).
-2. Run `node build.js --base-url https://raelpanga.github.io/ik-digital-solutions/`.
+1. Edit `assets/content.js`, a demo in `demos/src/`, or a multi-page site in `demos/sites/`.
+2. Run `node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com` for the current custom domain.
 3. Commit and push:
 
 ```bash
@@ -64,6 +68,7 @@ GitHub Pages republishes within about a minute.
 
 Copy a project object in `assets/content.js`. Fields: `slug`, `status` ("client" or
 "demo"), `demoUrl` (a relative demo path like `demos/x/` or an external URL), optional
+`demoUrls` (language-specific demo URLs, for example `{ fr: "demos/x/", en: "demos/x/en/" }`),
 `liveUrl` (production address, shown as a secondary button), `color`, `domain`, optional
 `shotExt`, `openLabel`, `note`, `s3Label`, then `stack`, `timeline`, `price`, `monthly`,
 and `fr` / `en` blocks with `title`, `sector`, `tagline`, `problem`, `built`, `congo`,
@@ -111,6 +116,14 @@ git add -A && git commit -m "Custom domain" && git push
 Larger demos that need several pages live in `demos/sites/<name>/` with their own
 generator, run automatically by `build.js`:
 
+- `demos/sites/kimia/` — **Kimia Express**, a fictitious delivery company serving 12
+  DRC cities. `build-kimia.js`, `content.js`, `lib.js` and `pages-1.js` through
+  `pages-3.js` generate 18 pages under the existing `docs/demos/kimia-express/`
+  route: home, send, track, pricing, business, network, couriers, help and about,
+  in French and English (`en/`). Each language switch opens the equivalent page.
+  `style.css`, `site.js`, generated `data.js`, photos and recoloured illustrations
+  accompany the pages. The portfolio's English project page opens the English demo.
+  The old single-page source is retained at `demos/archive/kimia-express-v1.html`.
 - `demos/sites/kando/` — **Kando Ressources SA**, a fictitious copper-cobalt producer in
   Lualaba. `content.js` holds all text (FR + EN), figures, leaders, news, jobs, documents
   and photo credits; `build-kando.js` generates 16 pages (8 French at the root, 8 English

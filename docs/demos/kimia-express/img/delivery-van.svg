@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+<rect width="800" height="500" fill="#DDEFE6"/>
+<rect x="0" y="380" width="800" height="120" fill="#C9E3D6"/>
+<rect x="130" y="150" width="440" height="220" rx="14" fill="#0E5A43"/>
+<path d="M570 200h100l60 80v90H570z" fill="#0E5A43"/>
+<path d="M590 215h70l45 60h-115z" fill="#BFE3D1"/>
+<rect x="160" y="230" width="380" height="36" rx="6" fill="#FF6A1A"/>
+<text x="350" y="257" text-anchor="middle" font-family="Arial,sans-serif" font-weight="800" font-size="24" fill="#10201A" letter-spacing="2">KIMIA EXPRESS</text>
+<circle cx="240" cy="380" r="46" fill="#10201A"/><circle cx="240" cy="380" r="18" fill="#fff"/>
+<circle cx="630" cy="380" r="46" fill="#10201A"/><circle cx="630" cy="380" r="18" fill="#fff"/>
+<path d="M60 250h-40M70 290h-60M60 330h-50" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+</svg>

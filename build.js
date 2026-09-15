@@ -23,7 +23,10 @@ const wa = msg => "https://wa.me/" + C.whatsapp + "?text=" + encodeURIComponent(
 const list = items => "<ul>" + items.map(i => "<li>" + esc(i) + "</li>").join("") + "</ul>";
 const chips = items => '<div class="chips">' + items.map(i => '<span class="chip">' + esc(i) + "</span>").join("") + "</div>";
 const isExt = u => /^https?:/i.test(u || "");
-const demoHref = (p, base) => !p.demoUrl ? null : isExt(p.demoUrl) ? p.demoUrl : base + p.demoUrl;
+const demoHref = (p, base, lang) => {
+  const url = p.demoUrls?.[lang] || p.demoUrl;
+  return !url ? null : isExt(url) ? url : base + url;
+};
 const projHref = (lang, slug) => (lang === "fr" ? "projets/" : "projects/") + slug + ".html";
 const rm = d => { if (fs.existsSync(d)) fs.rmSync(d, { recursive: true, force: true }); };
 const mk = d => fs.mkdirSync(d, { recursive: true });
@@ -156,7 +159,7 @@ function projectBody(p, lang, base) {
     '<div class="kv"><dt>' + esc(J.price) + '</dt><dd class="mono">' + esc(p.price[lang]) + "</dd></div>" +
     '<div class="kv"><dt>' + esc(J.monthly) + '</dt><dd class="mono">' + esc(p.monthly[lang]) + "</dd></div></dl>" +
     '<div class="actions">' +
-    (on ? '<a class="btn btn-primary" href="' + esc(demoHref(p, base)) + '"' + (isExt(p.demoUrl) ? ' target="_blank" rel="noopener"' : "") + ">" + esc(p.openLabel ? p.openLabel[lang] : (isClient ? J.openSite : J.openDemo)) + (isExt(p.demoUrl) ? " ↗" : " →") + "</a>" : "") +
+    (on ? '<a class="btn btn-primary" href="' + esc(demoHref(p, base, lang)) + '"' + (isExt(p.demoUrl) ? ' target="_blank" rel="noopener"' : "") + ">" + esc(p.openLabel ? p.openLabel[lang] : (isClient ? J.openSite : J.openDemo)) + (isExt(p.demoUrl) ? " ↗" : " →") + "</a>" : "") +
     (p.liveUrl ? '<a class="btn btn-outline" href="' + esc(p.liveUrl) + '" target="_blank" rel="noopener">' + esc(J.liveLink) + " ↗</a>" : "") +
     (isClient ? "" : '<a class="btn btn-wa" href="' + esc(wa(askMsg)) + '" target="_blank" rel="noopener">' + waIcon() + esc(J.askDemo) + "</a>") +
     (on || isClient ? "" : '<p class="hint">' + esc(J.demoHint) + "</p>") +
@@ -240,7 +243,7 @@ if (fs.existsSync(sitesDir)) {
   for (const s of fs.readdirSync(sitesDir)) {
     const gen = path.join(sitesDir, s, "build-" + s + ".js");
     if (!fs.existsSync(gen)) continue;
-    const SITE_SLUGS = { kando: "kando-ressources", fleuve: "site-corporate" };
+    const SITE_SLUGS = { kando: "kando-ressources", fleuve: "site-corporate", kimia: "kimia-express" };
     const slug = SITE_SLUGS[s] || s;
     const n = require(gen).build(path.join(OUT, "demos", slug), { portfolioHome: "../../index.html" });
     console.log("site " + slug + ": " + n + " pages");

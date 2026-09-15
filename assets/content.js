@@ -674,31 +674,32 @@ window.KDS = {
       slug: "kimia-express",
       status: "demo",
       demoUrl: "demos/kimia-express/",
-      color: "#1D4ED8",
+      demoUrls: { fr: "demos/kimia-express/", en: "demos/kimia-express/en/" },
+      color: "#0E5A43",
       domain: "kimia-express.cd",
-      stack: ["HTML / CSS / JS", "Estimateur de prix", "Suivi de colis", "MTN MoMo · Airtel Money", "SMS", "Cloudflare", "Hébergement local"],
+      stack: ["HTML / CSS / JS", "FR / EN · 18 pages", "M-Pesa · Orange Money · Airtel Money (démo)", "Cloudflare", "Hébergement local"],
       timeline: { fr: "3 à 5 semaines", en: "3 to 5 weeks" },
       price: { fr: "à partir de 2 500 USD", en: "from 2,500 USD" },
       monthly: { fr: "80 à 150 USD / mois", en: "80 to 150 USD / month" },
       fr: {
         title: "Kimia Express",
-        sector: "Livraison et logistique · Kinshasa et Pointe-Noire",
-        tagline: "Site de livraison express avec estimateur de prix instantané, réservation de collecte, paiement mobile money et suivi de colis en direct.",
+        sector: "Livraison et logistique · 12 villes de RDC",
+        tagline: "Site bilingue de livraison express : 18 pages, réservation de collecte, suivi de colis, tarifs et réseau de points relais en RDC. Données et paiements simulés.",
         problem: [
           "Une société de coursiers reçoit ses commandes par appels et messages WhatsApp, donne ses prix de tête, et ses clients rappellent trois fois pour savoir où est leur colis. Les entreprises qui expédient tous les jours veulent un compte, des tarifs dégressifs et une facture mensuelle.",
-          "Il fallait un site qui vende le service en une page, donne un prix avant la réservation, encaisse par mobile money et réponde tout seul à la question « où est mon colis ? »."
+          "Il fallait un site bilingue qui présente les services, les tarifs, le réseau et les parcours d’envoi et de suivi de colis."
         ],
         built: [
-          "Page d'accueil avec estimateur de prix : départ, arrivée, taille du colis et vitesse donnent un prix et un délai immédiats",
-          "Réservation de collecte avec paiement MTN MoMo, Airtel Money ou espèces, confirmation par SMS et numéro de suivi",
-          "Suivi de colis avec chronologie : collecté, parti du dépôt, en transit, en cours de livraison, livré",
-          "Quatre services illustrés, grille tarifaire, carte de couverture des six villes, questions fréquentes",
-          "Formulaire de devis pour les entreprises et espace recrutement des coursiers"
+          "18 pages : neuf en français et neuf en anglais, avec changement de langue vers la page équivalente",
+          "Accueil, envoi de colis, suivi et tarifs ; parcours de démonstration sans paiement réel",
+          "Réseau de 12 villes et 28 agences et points relais fictifs en RDC",
+          "Pages entreprises, coursiers, aide et contact, et à propos",
+          "Identité vert et orange, photographies locales et illustrations adaptées"
         ],
         congo: [
-          "Page unique et légère, photos compressées : lisible en 3G, même sur un téléphone d'entrée de gamme",
+          "Pages statiques adaptées au mobile, photos compressées et navigation en français et en anglais",
           "Paiement mobile money et espèces au coursier, sans carte bancaire obligatoire",
-          "SMS de confirmation et de suivi pour les clients sans application",
+          "Parcours de confirmation et de suivi simulés, sans application à installer",
           "Prix en francs, délais réalistes par ville, adaptable à Lubumbashi ou Goma en changeant une liste"
         ],
         deploy: [
@@ -716,23 +717,23 @@ window.KDS = {
       },
       en: {
         title: "Kimia Express",
-        sector: "Delivery and logistics · Kinshasa and Pointe-Noire",
-        tagline: "Express delivery site with an instant price estimator, pickup booking, mobile money payment and live parcel tracking.",
+        sector: "Delivery and logistics · 12 DRC cities",
+        tagline: "Bilingual express delivery site: 18 pages, pickup booking, parcel tracking, pricing and a DRC relay network. Simulated data and payments.",
         problem: [
           "A courier company takes orders by phone and WhatsApp, quotes prices from memory, and customers call three times to ask where their parcel is. Businesses that ship every day want an account, volume rates and a monthly invoice.",
-          "The site had to sell the service on one page, give a price before booking, collect by mobile money and answer \"where is my parcel?\" on its own."
+          "The site needed to present services, pricing, the network and parcel booking and tracking journeys in French and English."
         ],
         built: [
-          "Home page with a price estimator: origin, destination, parcel size and speed give an immediate price and delivery time",
-          "Pickup booking with MTN MoMo, Airtel Money or cash, SMS confirmation and a tracking number",
-          "Parcel tracking with a timeline: picked up, departed hub, in transit, out for delivery, delivered",
-          "Four illustrated services, pricing table, six-city coverage map, FAQ",
-          "Business quote form and courier recruitment tile"
+          "18 pages: nine in French and nine in English, with language links to the equivalent page",
+          "Home, parcel booking, tracking and pricing; demonstration journeys without real payments",
+          "Network of 12 cities and 28 fictitious offices and relay points in the DRC",
+          "Business, couriers, help and contact, and about pages",
+          "Green and orange identity, local photography and adapted illustrations"
         ],
         congo: [
-          "One light page with compressed photos: readable on 3G, even on an entry-level phone",
+          "Mobile-friendly static pages, compressed photos and French and English navigation",
           "Mobile money and cash to the courier, no bank card required",
-          "SMS confirmation and tracking for customers without the app",
+          "Simulated confirmation and tracking journeys, with no app to install",
           "Prices in francs, realistic delivery times per city, adaptable to Lubumbashi or Goma by changing one list"
         ],
         deploy: [
