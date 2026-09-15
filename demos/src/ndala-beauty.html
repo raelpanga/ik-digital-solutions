@@ -93,6 +93,13 @@
 
   .botan { border-radius:18px; overflow:hidden; margin-top:2rem; }
   .botan img { width:100%; height:auto; }
+  .ingr { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-top:2rem; }
+  .ingr figure { margin:0; border-radius:14px; overflow:hidden; aspect-ratio:4/3; position:relative; background:var(--bg); }
+  .ingr img { width:100%; height:100%; object-fit:cover; }
+  .ingr figcaption { position:absolute; left:0; right:0; bottom:0; padding:1.3rem .9rem .7rem; background:linear-gradient(transparent,rgba(31,35,32,.82)); color:#fff; font-size:.85rem; font-weight:600; }
+  .ingr figcaption small { display:block; font-weight:400; opacity:.85; font-size:.76rem; }
+  @media (max-width:1000px) { .ingr { grid-template-columns:1fr 1fr; } }
+  @media (max-width:600px) { .ingr { grid-template-columns:1fr; } }
 
   .reviews { background:var(--bg); }
   .rv { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; }
@@ -200,7 +207,7 @@
       <a href="#coffret" class="btn btn-white">Composer un coffret, −15 %</a>
     </div>
     <div class="hero-art" aria-hidden="true">
-      <img src="../assets/ndala/hero-bottle.svg" alt="">
+      <img src="../assets/ndala/baobab.jpg" alt="Baobab, l'arbre dont nous pressons l'huile">
       <div class="hero-badge">4,8 ★ sur 1 240 avis (exemple)</div>
     </div>
   </div>
@@ -290,7 +297,12 @@
       </div>
       <a href="#boutique" class="btn btn-dark">Commencer</a>
     </div>
-    <div class="botan" id="ingredients"><img src="../assets/ndala/botanicals.svg" alt="Baobab, moringa, karité, marula : nos quatre ingrédients" loading="lazy"></div>
+    <div class="ingr" id="ingredients">
+      <figure><img src="../assets/ndala/baobab.jpg" alt="Baobab" loading="lazy"><figcaption>Baobab<small>Huile pressée à froid, riche en oméga</small></figcaption></figure>
+      <figure><img src="../assets/ndala/moringa.jpg" alt="Feuilles de moringa" loading="lazy"><figcaption>Moringa<small>Feuilles nettoyantes et antioxydantes</small></figcaption></figure>
+      <figure><img src="../assets/ndala/shea.jpg" alt="Beurre de karité" loading="lazy"><figcaption>Karité<small>Beurre brut, hydratation profonde</small></figcaption></figure>
+      <figure><img src="../assets/ndala/hibiscus.jpg" alt="Fleur d'hibiscus" loading="lazy"><figcaption>Hibiscus<small>Tonique équilibrant, vitamine C</small></figcaption></figure>
+    </div>
   </div>
 </section>
 
@@ -318,7 +330,7 @@
       <span>© 2026 Ndala SARL · Kinshasa · Confidentialité · Conditions (entreprise fictive)</span>
       <div class="pay"><span>MTN MoMo</span><span>Airtel Money</span><span>VISA</span><span>Mastercard</span><span>Paiement à la livraison</span></div>
     </div>
-    <p class="credits">Boutique de démonstration réalisée par <a href="../../index.html" style="text-decoration:underline">IK Digital Solutions</a>. Illustrations : jeu d'images du projet.</p>
+    <p class="credits">Boutique de démonstration réalisée par <a href="../../index.html" style="text-decoration:underline">IK Digital Solutions</a>. Illustrations : jeu d'images du projet. Photos via Wikimedia Commons : baobab par <a href="https://commons.wikimedia.org/wiki/File:Baobab_(Adansonia_digitata),_parque_nacional_de_Tarangire,_Tanzania,_2024-05-24,_DD_78.jpg" rel="noopener">Diego Delso</a> (CC BY-SA 4.0) ; moringa par <a href="https://commons.wikimedia.org/wiki/File:Moringa_leaves_with_dew_drops_in_morning_light.jpg" rel="noopener">Navaneethpp</a> (CC BY-SA 4.0) ; karité par <a href="https://commons.wikimedia.org/wiki/File:M%C3%A9lange_du_Beurre_de_karit%C3%A9_et_huiles_essentielles_dans_une_boite_pour_massage_02.jpg" rel="noopener">Adoscam</a> (CC BY-SA 4.0) ; hibiscus par <a href="https://commons.wikimedia.org/wiki/File:Red_Hibiscus_Flower_1.jpg" rel="noopener">Brahmavadini</a> (CC BY 4.0).</p>
   </div>
 </footer>
 

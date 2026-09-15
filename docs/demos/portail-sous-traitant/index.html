@@ -69,11 +69,15 @@ tr:last-child td{border-bottom:0}td.num{font-family:var(--mono);font-variant-num
 .tag.ok{background:var(--ok-soft);color:var(--ok)}.tag.warn{background:var(--warn-soft);color:var(--warn)}.tag.bad{background:var(--bad-soft);color:var(--bad)}.tag.info{background:var(--accent-soft);color:var(--accent)}
 .section-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:4px;font-size:.9rem;z-index:110}
-.apphead{background:var(--accent);color:var(--on-accent);border-radius:16px;padding:1.3rem 1.3rem 1.1rem;display:grid;gap:.9rem;position:relative;overflow:hidden}
+.apphead{background:linear-gradient(rgba(24,18,10,.5),rgba(24,18,10,.8)),url('../assets/mining/haul.jpg') center/cover;color:#fff;border-radius:16px;padding:1.3rem 1.3rem 1.1rem;display:grid;gap:.9rem;position:relative;overflow:hidden}
+.mgr-hero{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:21/7;background:var(--surface-2)}
+.mgr-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.mgr-hero span{position:absolute;left:0;right:0;bottom:0;padding:1.3rem 1rem .7rem;background:linear-gradient(transparent,rgba(24,18,10,.85));color:#fff;font-size:.85rem;font-weight:600}
+.credits{font-size:.74rem;color:var(--ink-3);line-height:1.5;margin-top:1rem}.credits a{color:var(--ink-2)}
 .apphead::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.14)}
 .apphead .who{display:flex;justify-content:space-between;align-items:center;gap:.8rem}
 .apphead .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
-.apphead h1{color:var(--on-accent);font-size:1.5rem}
+.apphead h1{color:#fff;font-size:1.5rem}
 .apphead .av{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-family:var(--display);font-weight:700}
 .apphead .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;position:relative}
 .apphead .m{background:rgba(255,255,255,.16);border-radius:10px;padding:.6rem .7rem;display:grid;gap:.05rem}
@@ -229,6 +233,7 @@ function renderMgr(){
   $("view").innerHTML=`${netBanner()}
     <div class="section-head"><div><h1>Tableau de bord du responsable</h1><p class="muted">Ce que le donneur d'ordre demandera à la prochaine réunion HSE, déjà prêt. Les lignes « exemple » sont des données de démonstration.</p></div>
     <div style="display:flex;gap:.6rem;flex-wrap:wrap"><button type="button" class="btn primary small" id="pdf">Exporter le rapport (PDF)</button><button type="button" class="btn ghost small" id="reset">Réinitialiser la démo</button></div></div>
+    <div class="mgr-hero"><img src="../assets/mining/repair.jpg" alt="Camion de mine en maintenance dans un atelier" loading="lazy"><span>Atelier de maintenance · chaque équipement est inspecté avant le démarrage du poste</span></div>
     <div class="kpis">
       <div class="kpi ${open.length?"bad":""}"><span class="l">Incidents ouverts</span><span class="v">${open.length}</span></div>
       <div class="kpi ${late.length?"warn":""}"><span class="l">Inspections en retard (> 7 j)</span><span class="v">${late.length}</span></div>
@@ -243,7 +248,8 @@ function renderMgr(){
     </tbody></table></div></section>
     <section><h2>Dossier de conformité · contrat Kolwezi</h2><div class="tablewrap" style="margin-top:.6rem"><table><thead><tr><th>Document</th><th>Référence</th><th>Expire le</th><th>Reste</th><th>État</th></tr></thead><tbody>
     ${state.docs.map(d=>{const n=daysUntil(d.exp);return `<tr><td>${esc(d.name)}</td><td class="num">${esc(d.ref)}</td><td class="num">${fmtDate(d.exp)}</td><td class="num">${n<0?"expiré depuis "+(-n)+" j":n+" j"}</td><td>${n<0?'<span class="tag bad">expiré</span>':n<=30?'<span class="tag warn">à renouveler</span>':'<span class="tag ok">valide</span>'}</td></tr>`;}).join("")}
-    </tbody></table></div></section>`;
+    </tbody></table></div></section>
+    <p class="credits">Application de démonstration réalisée par <a href="../../index.html">IK Digital Solutions</a>. Photos via Wikimedia Commons : chargement d'un camion par <a href="https://commons.wikimedia.org/wiki/File:Belaz_haul_truck_and_a_Hitachi_mining_excavator.jpg" rel="noopener">Sandrerro</a> (CC BY-SA 3.0) ; atelier par <a href="https://commons.wikimedia.org/wiki/File:Haul_truck_under_repair_at_Brockman_4,_September_2018.jpg" rel="noopener">Calistemon</a> (CC BY-SA 4.0).</p>`;
   bindSync();
   document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>{state.incidents.find(i=>i.id===b.dataset.close).status="clôturé";save();renderMgr();});
   $("reset").onclick=()=>{state=seed();save();renderMgr();toast("Données de démonstration réinitialisées");};

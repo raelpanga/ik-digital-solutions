@@ -65,13 +65,18 @@ footer{border-top:1px solid var(--line);padding-block:1.6rem 2.2rem;font-size:.8
 .tag{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:.15rem .45rem;border-radius:3px;background:var(--copper-soft);color:var(--copper)}
 .hero-side{display:grid;gap:1.2rem}
 .hero-art{aspect-ratio:4/3;border-radius:12px;background:linear-gradient(160deg,var(--accent),color-mix(in srgb,var(--accent) 55%,#0b0f1c));position:relative;overflow:hidden}
-.hero-art svg{position:absolute;inset:0;width:100%;height:100%}
+.hero-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.news-visual img{width:100%;height:100%;object-fit:cover;display:block}
+.sitephoto{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:21/8;margin-top:1.4rem;background:var(--surface-2)}
+.sitephoto img{width:100%;height:100%;object-fit:cover;display:block}
+.sitephoto span{position:absolute;left:0;right:0;bottom:0;padding:1.3rem 1rem .7rem;background:linear-gradient(transparent,rgba(20,24,38,.85));color:#fff;font-size:.85rem}
+.credits{font-size:.74rem;color:var(--ink-3);line-height:1.5;padding-bottom:1.5rem}.credits a{color:var(--ink-2)}
 .news-visual{height:96px;border-radius:6px;margin:-.2rem 0 .4rem;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 50%,#fff));position:relative;overflow:hidden}
 .news-visual::after{content:"";position:absolute;right:-20px;bottom:-30px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.2)}
 .news-visual.v2{background:linear-gradient(135deg,var(--copper),color-mix(in srgb,var(--copper) 50%,#fff))}
 .news-visual.v3{background:linear-gradient(135deg,#2E6B4A,#7FB894)}
-.values{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;background:var(--accent);color:var(--on-accent);border-radius:12px;padding:clamp(1.3rem,3vw,2rem)}
-.values h3{color:var(--on-accent)}.values p{opacity:.85;font-size:.92rem}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;background:linear-gradient(rgba(24,32,70,.86),rgba(24,32,70,.92)),url('../assets/corp/plant-night.jpg') center/cover;color:#fff;border-radius:12px;padding:clamp(1.3rem,3vw,2rem)}
+.values h3{color:#fff}.values p{opacity:.88;font-size:.92rem}
 .values .ic{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.18);display:grid;place-items:center;margin-bottom:.6rem}
 .values .ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 @media (max-width:860px){.values{grid-template-columns:1fr}}
@@ -103,7 +108,7 @@ footer{border-top:1px solid var(--line);padding-block:1.6rem 2.2rem;font-size:.8
       <div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.6rem"><a class="btn primary" href="#fournisseurs"><span lang="fr">Devenir fournisseur</span><span lang="en">Become a supplier</span></a><a class="btn ghost" href="#carrieres"><span lang="fr">Voir les postes ouverts</span><span lang="en">See open positions</span></a></div>
     </div>
     <div class="hero-side">
-    <div class="hero-art" aria-hidden="true"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><rect x="0" y="230" width="400" height="70" fill="rgba(0,0,0,.25)"/><rect x="40" y="90" width="46" height="150" rx="6" fill="rgba(255,255,255,.55)"/><rect x="96" y="70" width="46" height="170" rx="6" fill="rgba(255,255,255,.7)"/><rect x="152" y="110" width="46" height="130" rx="6" fill="rgba(255,255,255,.45)"/><rect x="40" y="82" width="158" height="12" rx="6" fill="rgba(255,255,255,.8)"/><rect x="230" y="150" width="130" height="90" rx="4" fill="rgba(255,255,255,.35)"/><rect x="250" y="60" width="16" height="95" fill="rgba(255,255,255,.6)"/><rect x="290" y="40" width="16" height="115" fill="rgba(255,255,255,.75)"/><circle cx="330" cy="70" r="26" fill="rgba(255,255,255,.18)"/><path d="M0 250 Q100 235 200 250 T400 250" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="3"/><path d="M0 270 Q100 255 200 270 T400 270" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="3"/></svg></div>
+    <div class="hero-art"><img src="../assets/corp/plant-day.jpg" alt="Cimenterie, tours de préchauffage (photo d'illustration)"></div>
     <div class="facts">
       <div><b>1,2 Mt / <span lang="fr">an</span><span lang="en">yr</span></b><span lang="fr">capacité nominale (exemple)</span><span lang="en">nominal capacity (example)</span></div>
       <div><b>2 <span lang="fr">usines</span><span lang="en">plants</span></b><span lang="fr">Lukala et Kimpese</span><span lang="en">Lukala and Kimpese</span></div>
@@ -130,6 +135,7 @@ footer{border-top:1px solid var(--line);padding-block:1.6rem 2.2rem;font-size:.8
   <section id="sites">
     <p class="eyebrow">Sites</p>
     <h2><span lang="fr">Où nous trouver</span><span lang="en">Where to find us</span></h2>
+    <div class="sitephoto"><img src="../assets/corp/matadi.jpg" alt="" loading="lazy"><span><span lang="fr">Port de Matadi et fleuve Congo de nuit · point de départ de nos barges (photo d'illustration)</span><span lang="en">Matadi harbour and the Congo River at night · where our barges depart (illustrative photo)</span></span></div>
     <ul class="list" style="margin-top:1.4rem">
       <li><div><strong><span lang="fr">Usine de Lukala</span><span lang="en">Lukala plant</span></strong><small><span lang="fr">Four et broyage · Kongo Central · route nationale 1</span><span lang="en">Kiln and grinding · Kongo Central · national road 1</span></small></div><span class="mono">−5.51, 14.51</span></li>
       <li><div><strong><span lang="fr">Usine de Kimpese</span><span lang="en">Kimpese plant</span></strong><small><span lang="fr">Broyage et ensachage</span><span lang="en">Grinding and bagging</span></small></div><span class="mono">−5.55, 14.44</span></li>
@@ -142,9 +148,9 @@ footer{border-top:1px solid var(--line);padding-block:1.6rem 2.2rem;font-size:.8
     <p class="eyebrow"><span lang="fr">Actualités</span><span lang="en">News</span></p>
     <h2><span lang="fr">Dernières nouvelles</span><span lang="en">Latest news</span></h2>
     <div class="grid-3" style="margin-top:1.6rem">
-      <article class="tile"><div class="news-visual" aria-hidden="true"></div><span class="mono" style="font-size:.78rem;color:var(--ink-3)">2026-09-02</span><h3><span lang="fr">Mise en service du nouveau filtre à manches à Lukala</span><span lang="en">New bag filter commissioned at Lukala</span></h3><p><span lang="fr">Les émissions de poussières de la ligne 2 passent sous les seuils recommandés.</span><span lang="en">Dust emissions from line 2 now fall below recommended thresholds.</span></p></article>
-      <article class="tile"><div class="news-visual v2" aria-hidden="true"></div><span class="mono" style="font-size:.78rem;color:var(--ink-3)">2026-08-14</span><h3><span lang="fr">Paiement des fournisseurs par virement et mobile money</span><span lang="en">Suppliers paid by transfer and mobile money</span></h3><p><span lang="fr">En prévision de la fin des paiements en espèces en devises au 9 avril 2027, tous nos règlements passent en électronique.</span><span lang="en">Ahead of the end of cash payments in foreign currency on 9 April 2027, all our settlements go electronic.</span></p></article>
-      <article class="tile"><div class="news-visual v3" aria-hidden="true"></div><span class="mono" style="font-size:.78rem;color:var(--ink-3)">2026-07-20</span><h3><span lang="fr">Campagne de recrutement d'électromécaniciens</span><span lang="en">Recruitment drive for electromechanics</span></h3><p><span lang="fr">Douze postes ouverts à Lukala et Kimpese, formation interne assurée.</span><span lang="en">Twelve positions open at Lukala and Kimpese, in-house training provided.</span></p></article>
+      <article class="tile"><div class="news-visual"><img src="../assets/corp/zambia.jpg" alt="" loading="lazy"></div><span class="mono" style="font-size:.78rem;color:var(--ink-3)">2026-09-02</span><h3><span lang="fr">Mise en service du nouveau filtre à manches à Lukala</span><span lang="en">New bag filter commissioned at Lukala</span></h3><p><span lang="fr">Les émissions de poussières de la ligne 2 passent sous les seuils recommandés.</span><span lang="en">Dust emissions from line 2 now fall below recommended thresholds.</span></p></article>
+      <article class="tile"><div class="news-visual"><img src="../assets/corp/bags.jpg" alt="" loading="lazy"></div><span class="mono" style="font-size:.78rem;color:var(--ink-3)">2026-08-14</span><h3><span lang="fr">Paiement des fournisseurs par virement et mobile money</span><span lang="en">Suppliers paid by transfer and mobile money</span></h3><p><span lang="fr">En prévision de la fin des paiements en espèces en devises au 9 avril 2027, tous nos règlements passent en électronique.</span><span lang="en">Ahead of the end of cash payments in foreign currency on 9 April 2027, all our settlements go electronic.</span></p></article>
+      <article class="tile"><div class="news-visual"><img src="../assets/corp/fishermen.jpg" alt="" loading="lazy"></div><span class="mono" style="font-size:.78rem;color:var(--ink-3)">2026-07-20</span><h3><span lang="fr">Campagne de recrutement d'électromécaniciens</span><span lang="en">Recruitment drive for electromechanics</span></h3><p><span lang="fr">Douze postes ouverts à Lukala et Kimpese, formation interne assurée.</span><span lang="en">Twelve positions open at Lukala and Kimpese, in-house training provided.</span></p></article>
     </div>
   </section>
 
@@ -218,6 +224,7 @@ footer{border-top:1px solid var(--line);padding-block:1.6rem 2.2rem;font-size:.8
 </main>
 
 <footer class="wrap"><span>© 2026 Cimenterie du Fleuve SA · <span lang="fr">société fictive, site de démonstration</span><span lang="en">fictitious company, demonstration site</span></span><span><span lang="fr">Conçu, hébergé et supervisé par</span><span lang="en">Designed, hosted and monitored by</span> <a href="../../index.html">IK Digital Solutions</a></span></footer>
+<p class="credits wrap"><span lang="fr">Photos d'illustration via Wikimedia Commons : </span><span lang="en">Illustrative photos via Wikimedia Commons: </span><a href="https://commons.wikimedia.org/wiki/File:Hoping_Taiwan-Cement-Corporation-Hoping-Plant-02.jpg" rel="noopener">CEphoto, Uwe Aranas</a> (CC BY-SA 3.0) · <a href="https://commons.wikimedia.org/wiki/File:Cimenterie_Jbal_Ressas_la_nuit.jpg" rel="noopener">Smailtn</a> (CC BY-SA 4.0) · <a href="https://commons.wikimedia.org/wiki/File:Zambia_-Directing_traffic_outside_the_cement_factory.jpg" rel="noopener">Thatlowdownwoman</a> (CC BY-SA 4.0) · <a href="https://commons.wikimedia.org/wiki/File:Matadi_harbour_%26_Congo_river_by_night_(20626303603).jpg" rel="noopener">MONUSCO Photos</a> (CC BY-SA 2.0) · <a href="https://commons.wikimedia.org/wiki/File:Portland_Cement_Bags.jpg" rel="noopener">KVDP</a> (<span lang="fr">domaine public</span><span lang="en">public domain</span>) · <a href="https://commons.wikimedia.org/wiki/File:Fishermen_of_the_Congo_Basin_3.jpg" rel="noopener">Cethuyghe</a> (CC BY-SA 4.0).</p>
 
 <div class="consent" id="consent" role="region" aria-label="Cookies">
   <span><span lang="fr">Ce site utilise uniquement des témoins techniques (langue, consentement). Conformément au Code du numérique, aucune donnée n'est collectée sans votre accord.</span><span lang="en">This site uses only technical cookies (language, consent). In line with the Digital Code, no data is collected without your consent.</span> <a href="#legal"><span lang="fr">En savoir plus</span><span lang="en">Learn more</span></a></span>

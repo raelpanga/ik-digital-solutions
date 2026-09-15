@@ -848,7 +848,7 @@ window.KDS = {
           "Avis clients, bandeau ingrédients, inscription à la lettre d'information"
         ],
         congo: [
-          "Illustrations vectorielles légères au lieu de photos lourdes : la page reste rapide en 3G",
+          "Illustrations vectorielles et photos compressées : la page reste rapide en 3G",
           "Mobile money et paiement à la livraison, sans carte bancaire obligatoire",
           "SMS de confirmation pour les clientes sans e-mail",
           "Prix en francs, livraison en 1 à 2 jours dans les grandes villes, adaptable à Lubumbashi en changeant les zones"
@@ -882,7 +882,7 @@ window.KDS = {
           "Customer reviews, ingredients banner, newsletter sign-up"
         ],
         congo: [
-          "Light vector illustrations instead of heavy photos: the page stays fast on 3G",
+          "Vector illustrations and compressed photos: the page stays fast on 3G",
           "Mobile money and cash on delivery, no bank card required",
           "SMS confirmation for customers without e-mail",
           "Prices in francs, delivery in 1 to 2 days in major cities, adaptable to Lubumbashi by changing the zones"

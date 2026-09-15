@@ -203,8 +203,7 @@ rm(OUT); mk(OUT);
 copyDir(path.join(__dirname, "shots"), path.join(OUT, "shots"));
 if (fs.existsSync(path.join(__dirname, "demos", "assets"))) {
   copyDir(path.join(__dirname, "demos", "assets"), path.join(OUT, "demos", "assets"));
-  const raw = path.join(OUT, "demos", "assets", "kimia", "raw");
-  rm(raw);
+  for (const d of fs.readdirSync(path.join(OUT, "demos", "assets"))) { rm(path.join(OUT, "demos", "assets", d, "raw")); }
 }
 mk(path.join(OUT, "assets"));
 fs.copyFileSync(path.join(__dirname, "assets", "style.css"), path.join(OUT, "assets", "style.css"));

@@ -75,6 +75,13 @@ fieldset{border:1px solid var(--line);border-radius:4px;padding:.6rem .8rem;disp
 .pt{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 45%,#fff));color:#fff;font-family:var(--display);font-weight:700;font-size:.95rem;margin-right:.6rem;vertical-align:middle}
 .pname{display:inline-flex;align-items:center}
 .dist-foot{margin-top:2.2rem;border-top:1px solid var(--line);padding-top:1.2rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.85rem;color:var(--ink-3)}
+.dist-foot .credits{width:100%;font-size:.74rem;line-height:1.5}.dist-foot .credits a{color:var(--ink-2)}
+.welcome{position:relative}.welcome::before{content:"";position:absolute;inset:0;background:url('../assets/distrib/crates.jpg') center/cover;opacity:.22}.welcome>*{position:relative}
+.pstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.pstrip figure{margin:0;border-radius:10px;overflow:hidden;aspect-ratio:16/9;position:relative;background:var(--surface-2)}
+.pstrip img{width:100%;height:100%;object-fit:cover;display:block}
+.pstrip figcaption{position:absolute;left:0;right:0;bottom:0;padding:1rem .8rem .5rem;background:linear-gradient(transparent,rgba(13,17,32,.82));color:#fff;font-size:.8rem;font-weight:600}
+@media (max-width:700px){.pstrip{grid-template-columns:1fr}}
 </style>
 <!-- /head -->
 
@@ -166,6 +173,11 @@ function renderRetail(){
       <div class="stats"><div class="stat"><b>${month.length}</b><span>commandes ce mois</span></div><div class="stat"><b>${fmtUsd(month.reduce((s,o)=>s+o.total,0))}</b><span>montant commandé</span></div><div class="stat"><b>${last?esc(last.time):"—"}</b><span>dernière livraison</span></div><div class="stat"><b>${state.products.filter(p=>p.stock>0).length}/${state.products.length}</b><span>produits disponibles</span></div></div>
     </div>
     <div class="promo"><span><strong>Cette semaine</strong> · casier de 24 sodas à 10,50 USD au lieu de 11 USD à partir de 10 casiers (exemple de promotion).</span><label class="muted">Je suis <select id="ret">${RETAILERS.map(r=>`<option value="${r.id}" ${r.id===retailer?"selected":""}>${esc(r.name)} · ${esc(r.zone)}</option>`).join("")}</select></label></div>
+    <div class="pstrip">
+      <figure><img src="../assets/distrib/softdrinks.jpg" alt="Livraison de boissons en ville" loading="lazy"><figcaption>Livraison en tournée, du dépôt au détaillant</figcaption></figure>
+      <figure><img src="../assets/distrib/market.jpg" alt="Marché à Kinshasa" loading="lazy"><figcaption>Nos détaillants, du marché à la boutique</figcaption></figure>
+      <figure><img src="../assets/distrib/shop.jpg" alt="Devanture d'une boutique à Kinshasa" loading="lazy"><figcaption>Kinshasa, Kalamu · Ngaliema · Kimbanseke</figcaption></figure>
+    </div>
     <div class="section-head"><h2>Catalogue du dépôt</h2><p class="muted">Stock en temps réel · prix en USD, converti au taux du jour</p></div>
     <div class="tablewrap"><table><thead><tr><th>Produit</th><th>Prix unitaire</th><th>Stock dépôt</th><th>Quantité</th></tr></thead><tbody>
     ${state.products.map(p=>`<tr class="${p.stock===0?"rupture":""}"><td><span class="pname"><span class="pt">${esc(p.name.split(" ").slice(0,2).map(w=>w.charAt(0)).join("").toUpperCase())}</span>${esc(p.name)}</span></td><td class="num">${fmtUsd(p.price)}</td><td>${p.stock===0?'<span class="tag bad">rupture</span>':p.stock<20?`<span class="tag warn">${p.stock} restants</span>`:`<span class="tag ok">${p.stock}</span>`}</td><td><input class="qty" type="number" min="0" max="${p.stock}" value="${draft[p.id]||0}" data-q="${p.id}" ${p.stock===0?"disabled":""} aria-label="Quantité ${esc(p.name)}"></td></tr>`).join("")}
@@ -174,7 +186,7 @@ function renderRetail(){
     <section><h2>Mes commandes</h2><div class="tablewrap" style="margin-top:.6rem"><table><thead><tr><th>N°</th><th>Heure</th><th>Montant</th><th>Statut</th><th></th></tr></thead><tbody>
     ${my.length?my.map(o=>`<tr><td class="num">${esc(o.id)}${o.sample?' <span class="tag info">exemple</span>':""}</td><td class="num">${esc(o.time)}</td><td class="num">${fmtUsd(o.total)}</td><td>${statusTag(o)}</td><td>${o.status==="validée"&&!o.paid?`<button type="button" class="btn primary small" data-pay="${o.id}">Payer par mobile money</button>`:""}</td></tr>`).join(""):`<tr><td colspan="5" class="muted">Aucune commande pour ce détaillant.</td></tr>`}
     </tbody></table></div></section>
-    <footer class="dist-foot"><span>Distribution Mokili · dépôt de Limete, Kinshasa · commandes 6 h – 18 h</span><span>Plateforme réalisée par <a href="../../index.html">IK Digital Solutions</a></span></footer>`;
+    <footer class="dist-foot"><span>Distribution Mokili · dépôt de Limete, Kinshasa · commandes 6 h – 18 h</span><span>Plateforme réalisée par <a href="../../index.html">IK Digital Solutions</a></span><span class="credits">Photos via Wikimedia Commons : casiers par <a href="https://commons.wikimedia.org/wiki/File:Beer_crates_stacked.jpg" rel="noopener">Ei'eke</a> (CC BY-SA 4.0) ; livraison de boissons par <a href="https://commons.wikimedia.org/wiki/File:Street_Delivery_of_Soft_Drinks.jpg" rel="noopener">Bigkotech</a> (CC BY-SA 4.0) ; marché de Kinshasa par <a href="https://commons.wikimedia.org/wiki/File:Kinshasa_Farmers%27_Market.jpg" rel="noopener">OussamaHamama</a> (CC BY-SA 4.0) ; boutique à Kinshasa par <a href="https://commons.wikimedia.org/wiki/File:2007_Kinshasa_2127406497.jpg" rel="noopener">Irene2005</a> (CC BY 2.0).</span></footer>`;
   bindSync();
   $("ret").onchange=()=>{retailer=$("ret").value;draft={};renderRetail();};
   document.querySelectorAll("[data-q]").forEach(i=>i.onchange=()=>{draft[i.dataset.q]=Math.max(0,Math.min(parseInt(i.value,10)||0,P(i.dataset.q).stock));renderRetail();});
