@@ -590,79 +590,81 @@ window.KDS = {
       }
     },
     {
-      slug: "businesshub",
+      slug: "kimia-express",
       status: "demo",
-      demoUrl: "demos/businesshub/",
-      color: "#0F7B6C",
-      domain: "pharmacie-lisanga.cd",
-      stack: ["React", "PWA hors ligne", "Node.js", "PostgreSQL", "Cloudflare", "Docker", "Agrégateur mobile money", "Uptime Kuma"],
-      timeline: { fr: "3 à 6 semaines", en: "3 to 6 weeks" },
-      price: { fr: "à partir de 900 USD", en: "from 900 USD" },
-      monthly: { fr: "40 à 80 USD / mois", en: "40 to 80 USD / month" },
+      demoUrl: "demos/kimia-express/",
+      color: "#1D4ED8",
+      domain: "kimia-express.cg",
+      stack: ["HTML / CSS / JS", "Estimateur de prix", "Suivi de colis", "MTN MoMo · Airtel Money", "SMS", "Cloudflare", "Hébergement local"],
+      timeline: { fr: "3 à 5 semaines", en: "3 to 5 weeks" },
+      price: { fr: "à partir de 2 500 USD", en: "from 2,500 USD" },
+      monthly: { fr: "80 à 150 USD / mois", en: "80 to 150 USD / month" },
       fr: {
-        title: "BusinessHub",
-        sector: "Commerce et services · PME",
-        tagline: "Site, catalogue et commandes pour une PME qui n'a jamais eu de présence en ligne.",
+        title: "Kimia Express",
+        sector: "Livraison et logistique · Brazzaville et Pointe-Noire",
+        tagline: "Site de livraison express avec estimateur de prix instantané, réservation de collecte, paiement mobile money et suivi de colis en direct.",
         problem: [
-          "Une pharmacie, un restaurant ou une quincaillerie de Kinshasa vit du bouche-à-oreille et du téléphone. Le client doit se déplacer pour savoir ce qui est en stock. Le gérant note les commandes dans un cahier et ne sait pas quel produit se vend.",
-          "Les solutions étrangères coûtent en dollars par mois, exigent une connexion stable et n'acceptent pas le mobile money."
+          "Une société de coursiers reçoit ses commandes par appels et messages WhatsApp, donne ses prix de tête, et ses clients rappellent trois fois pour savoir où est leur colis. Les entreprises qui expédient tous les jours veulent un compte, des tarifs dégressifs et une facture mensuelle.",
+          "Il fallait un site qui vende le service en une page, donne un prix avant la réservation, encaisse par mobile money et réponde tout seul à la question « où est mon colis ? »."
         ],
         built: [
-          "Site vitrine et catalogue produits, modifiable par le gérant sans coder",
-          "Commande par WhatsApp ou paiement direct M-Pesa, Airtel Money, Orange Money",
-          "Tableau de bord : commandes du jour, clients, factures, produits les plus demandés",
-          "SMS de confirmation au client, sans adresse e-mail",
-          "Trois modèles prêts : pharmacie, restaurant, quincaillerie"
+          "Page d'accueil avec estimateur de prix : départ, arrivée, taille du colis et vitesse donnent un prix et un délai immédiats",
+          "Réservation de collecte avec paiement MTN MoMo, Airtel Money ou espèces, confirmation par SMS et numéro de suivi",
+          "Suivi de colis avec chronologie : collecté, parti du dépôt, en transit, en cours de livraison, livré",
+          "Quatre services illustrés, grille tarifaire, carte de couverture des six villes, questions fréquentes",
+          "Formulaire de devis pour les entreprises et espace recrutement des coursiers"
         ],
         congo: [
-          "Chaque page pèse moins de 300 Ko : lisible en 3G en moins de trois secondes",
-          "Le tableau de bord fonctionne hors ligne et se synchronise au retour du réseau",
-          "Interface en français, libellés lingala possibles",
-          "Prix affichés en USD et en CDF"
+          "Page unique et légère, photos compressées : lisible en 3G, même sur un téléphone d'entrée de gamme",
+          "Paiement mobile money et espèces au coursier, sans carte bancaire obligatoire",
+          "SMS de confirmation et de suivi pour les clients sans application",
+          "Prix en francs, délais réalistes par ville, adaptable à Kinshasa, Lubumbashi ou Goma en changeant une liste"
         ],
         deploy: [
-          "Hébergement à Kinshasa, Cloudflare devant le site pour le cache et la protection",
-          "Conteneurs Docker, mise en ligne sans interruption, retour arrière en une commande",
-          "Sauvegarde chiffrée chaque nuit, copie hors du pays, restauration testée"
+          "Site statique servi depuis un hébergement local, Cloudflare devant pour le cache et la protection",
+          "Mise en ligne par pipeline automatisé, retour arrière immédiat",
+          "Passerelle mobile money et SMS branchées côté serveur en production",
+          "Sauvegarde chiffrée chaque nuit"
         ],
         monitor: [
-          "Sonde de disponibilité toutes les 60 secondes, publiée sur la page d'état",
-          "Suivi des erreurs et du temps de réponse",
-          "Alerte WhatsApp et SMS à notre équipe en cas de panne",
-          "Rapport mensuel : disponibilité, incidents, corrections effectuées"
+          "Sonde toutes les 60 secondes sur le site et sur la passerelle de paiement",
+          "Suivi des réservations en échec et des SMS non délivrés",
+          "Alerte WhatsApp et SMS à notre équipe",
+          "Rapport mensuel de disponibilité"
         ]
       },
       en: {
-        title: "BusinessHub",
-        sector: "Retail and services · SMEs",
-        tagline: "Site, catalogue and orders for an SME that has never been online.",
+        title: "Kimia Express",
+        sector: "Delivery and logistics · Brazzaville and Pointe-Noire",
+        tagline: "Express delivery site with an instant price estimator, pickup booking, mobile money payment and live parcel tracking.",
         problem: [
-          "A pharmacy, a restaurant or a hardware store in Kinshasa lives on word of mouth and the phone. Customers must travel to know what is in stock. The manager writes orders in a notebook and does not know which product sells.",
-          "Foreign platforms cost dollars per month, need a stable connection and do not accept mobile money."
+          "A courier company takes orders by phone and WhatsApp, quotes prices from memory, and customers call three times to ask where their parcel is. Businesses that ship every day want an account, volume rates and a monthly invoice.",
+          "The site had to sell the service on one page, give a price before booking, collect by mobile money and answer \"where is my parcel?\" on its own."
         ],
         built: [
-          "Brochure site and product catalogue, editable by the manager without code",
-          "Ordering via WhatsApp or direct payment with M-Pesa, Airtel Money, Orange Money",
-          "Dashboard: today's orders, customers, invoices, best-selling products",
-          "SMS confirmation to the customer, no e-mail needed",
-          "Three ready templates: pharmacy, restaurant, hardware store"
+          "Home page with a price estimator: origin, destination, parcel size and speed give an immediate price and delivery time",
+          "Pickup booking with MTN MoMo, Airtel Money or cash, SMS confirmation and a tracking number",
+          "Parcel tracking with a timeline: picked up, departed hub, in transit, out for delivery, delivered",
+          "Four illustrated services, pricing table, six-city coverage map, FAQ",
+          "Business quote form and courier recruitment tile"
         ],
         congo: [
-          "Every page under 300 KB: readable on 3G in under three seconds",
-          "The dashboard works offline and syncs when the network returns",
-          "French interface, Lingala labels possible",
-          "Prices shown in USD and CDF"
+          "One light page with compressed photos: readable on 3G, even on an entry-level phone",
+          "Mobile money and cash to the courier, no bank card required",
+          "SMS confirmation and tracking for customers without the app",
+          "Prices in francs, realistic delivery times per city, adaptable to Kinshasa, Lubumbashi or Goma by changing one list"
         ],
         deploy: [
-          "Hosted in Kinshasa, Cloudflare in front for caching and protection",
-          "Docker containers, zero-downtime release, one-command rollback",
-          "Encrypted nightly backup, off-country copy, restore tested"
+          "Static site served from local hosting, Cloudflare in front for caching and protection",
+          "Automated release pipeline, immediate rollback",
+          "Mobile money and SMS gateways connected server-side in production",
+          "Encrypted nightly backup"
         ],
         monitor: [
-          "Availability probe every 60 seconds, published on the status page",
-          "Error and response-time tracking",
-          "WhatsApp and SMS alert to our team on outage",
-          "Monthly report: availability, incidents, fixes made"
+          "Probe every 60 seconds on the site and on the payment gateway",
+          "Tracking of failed bookings and undelivered SMS",
+          "WhatsApp and SMS alert to our team",
+          "Monthly availability report"
         ]
       }
     },
@@ -821,79 +823,81 @@ window.KDS = {
       }
     },
     {
-      slug: "portail-scolaire",
+      slug: "ndala-beauty",
       status: "demo",
-      demoUrl: "demos/portail-scolaire/",
-      color: "#4338CA",
-      domain: "parents.cs-elikya.cd",
-      stack: ["React", "PWA", "Node.js", "PostgreSQL", "Cloudflare", "Docker", "Agrégateur mobile money", "Passerelle SMS", "Uptime Kuma"],
-      timeline: { fr: "6 à 10 semaines", en: "6 to 10 weeks" },
-      price: { fr: "à partir de 4 000 USD", en: "from 4,000 USD" },
-      monthly: { fr: "100 à 250 USD / mois", en: "100 to 250 USD / month" },
+      demoUrl: "demos/ndala-beauty/",
+      color: "#2F6B4F",
+      domain: "ndala.cg",
+      stack: ["HTML / CSS / JS", "Panier et code promo", "MTN MoMo · Airtel Money", "SMS", "Cloudflare", "Hébergement local"],
+      timeline: { fr: "4 à 6 semaines", en: "4 to 6 weeks" },
+      price: { fr: "à partir de 2 500 USD", en: "from 2,500 USD" },
+      monthly: { fr: "80 à 150 USD / mois", en: "80 to 150 USD / month" },
       fr: {
-        title: "Portail Scolaire & Frais",
-        sector: "Écoles privées et universités",
-        tagline: "Les parents paient les frais par mobile money, reçoivent un reçu par SMS, et le directeur voit les impayés chaque matin.",
+        title: "Ndala Beauty",
+        sector: "Commerce en ligne · cosmétiques naturels, Brazzaville",
+        tagline: "Boutique en ligne de soins naturels avec catalogue filtrable, panier, remise coffret, code promo et paiement mobile money.",
         problem: [
-          "Dans une école privée, les frais sont collectés en espèces au secrétariat, avec des reçus manuscrits. Les parents ne savent pas ce qu'ils doivent, le directeur ne sait pas qui a payé, et l'argent liquide circule dans l'établissement.",
-          "Les communications passent par des papiers dans les cartables."
+          "Une marque de cosmétiques vend sur Instagram et WhatsApp : les prix se négocient en message privé, les commandes se perdent, et chaque paiement est vérifié à la main sur le téléphone du gérant. Impossible de proposer des coffrets, des codes promo ou des recharges sans tout expliquer à chaque cliente.",
+          "Il fallait une boutique qui présente la marque, laisse la cliente composer son panier, applique les remises toute seule et encaisse par mobile money avant l'expédition."
         ],
         built: [
-          "Paiement des frais par M-Pesa, Airtel Money, Orange Money, avec reçu SMS automatique",
-          "Échéancier par élève, paiements partiels acceptés, relances SMS avant échéance",
-          "Tableau de bord du directeur : encaissements du jour, impayés par classe",
-          "Bulletins, horaires et annonces consultables par les parents",
-          "Annonces envoyées par WhatsApp et SMS"
+          "Page d'accueil avec héros, promesses de service, catégories illustrées et best-sellers",
+          "Catalogue avec filtres par catégorie et par prix, tri, recherche par produit ou ingrédient, favoris",
+          "Panier latéral avec quantités, seuil de livraison offerte, remise coffret automatique dès trois produits et code promo",
+          "Paiement MTN MoMo, Airtel Money, carte ou à la livraison, avec référence de commande et SMS de confirmation",
+          "Avis clients, bandeau ingrédients, inscription à la lettre d'information"
         ],
         congo: [
-          "Les parents sans smartphone reçoivent tout par SMS",
-          "Montants en USD et en CDF",
-          "Le secrétariat travaille hors ligne en cas de coupure et synchronise ensuite",
-          "Interface en français, notifications en français ou lingala"
+          "Illustrations vectorielles légères au lieu de photos lourdes : la page reste rapide en 3G",
+          "Mobile money et paiement à la livraison, sans carte bancaire obligatoire",
+          "SMS de confirmation pour les clientes sans e-mail",
+          "Prix en francs, livraison en 1 à 2 jours dans les grandes villes, adaptable à Kinshasa en changeant les zones"
         ],
         deploy: [
-          "Hébergement à Kinshasa, Cloudflare devant le portail",
-          "Conteneurs Docker, base PostgreSQL, passerelle SMS locale",
-          "Sauvegarde chiffrée chaque nuit, copie hors du pays, restauration testée"
+          "Site statique servi depuis un hébergement local, Cloudflare devant pour le cache et la protection",
+          "Mise en ligne par pipeline automatisé, retour arrière immédiat",
+          "Passerelle mobile money et SMS branchées côté serveur en production",
+          "Sauvegarde chiffrée chaque nuit"
         ],
         monitor: [
-          "Sonde toutes les 60 secondes sur le portail et sur la passerelle de paiement",
-          "Suivi des SMS non délivrés et des paiements en attente",
+          "Sonde toutes les 60 secondes sur la boutique et sur la passerelle de paiement",
+          "Suivi des paniers abandonnés et des paiements en échec",
           "Alerte WhatsApp et SMS à notre équipe",
-          "Rapport mensuel de disponibilité et d'incidents"
+          "Rapport mensuel de disponibilité et de ventes"
         ]
       },
       en: {
-        title: "School Portal & Fees",
-        sector: "Private schools and universities",
-        tagline: "Parents pay fees by mobile money, get an SMS receipt, and the head sees unpaid balances every morning.",
+        title: "Ndala Beauty",
+        sector: "E-commerce · natural skincare, Brazzaville",
+        tagline: "Natural skincare online shop with a filterable catalogue, bag, set discount, promo code and mobile money payment.",
         problem: [
-          "In a private school, fees are collected in cash at the office, with handwritten receipts. Parents do not know what they owe, the head does not know who has paid, and cash moves around the building.",
-          "Communication travels as paper in school bags."
+          "A skincare brand sells on Instagram and WhatsApp: prices are negotiated in private messages, orders get lost, and every payment is checked by hand on the owner's phone. Sets, promo codes and refills are impossible to offer without explaining everything to each customer.",
+          "The brand needed a shop that presents the products, lets the customer build a bag, applies discounts on its own and collects by mobile money before shipping."
         ],
         built: [
-          "Fee payment by M-Pesa, Airtel Money, Orange Money, with automatic SMS receipt",
-          "Payment schedule per pupil, partial payments accepted, SMS reminders before due dates",
-          "Head's dashboard: today's collections, unpaid balances by class",
-          "Report cards, timetables and announcements visible to parents",
-          "Announcements sent by WhatsApp and SMS"
+          "Home page with hero, service promises, illustrated categories and bestsellers",
+          "Catalogue with category and price filters, sorting, search by product or ingredient, wishlist",
+          "Side bag with quantities, free-delivery threshold, automatic set discount from three products and a promo code",
+          "Payment by MTN MoMo, Airtel Money, card or on delivery, with an order reference and SMS confirmation",
+          "Customer reviews, ingredients banner, newsletter sign-up"
         ],
         congo: [
-          "Parents without a smartphone receive everything by SMS",
-          "Amounts in USD and CDF",
-          "The office works offline during a cut and syncs afterwards",
-          "French interface, notifications in French or Lingala"
+          "Light vector illustrations instead of heavy photos: the page stays fast on 3G",
+          "Mobile money and cash on delivery, no bank card required",
+          "SMS confirmation for customers without e-mail",
+          "Prices in francs, delivery in 1 to 2 days in major cities, adaptable to Kinshasa by changing the zones"
         ],
         deploy: [
-          "Hosted in Kinshasa, Cloudflare in front of the portal",
-          "Docker containers, PostgreSQL database, local SMS gateway",
-          "Encrypted nightly backup, off-country copy, restore tested"
+          "Static site served from local hosting, Cloudflare in front for caching and protection",
+          "Automated release pipeline, immediate rollback",
+          "Mobile money and SMS gateways connected server-side in production",
+          "Encrypted nightly backup"
         ],
         monitor: [
-          "Probe every 60 seconds on the portal and on the payment gateway",
-          "Tracking of undelivered SMS and pending payments",
+          "Probe every 60 seconds on the shop and on the payment gateway",
+          "Tracking of abandoned bags and failed payments",
           "WhatsApp and SMS alert to our team",
-          "Monthly availability and incident report"
+          "Monthly availability and sales report"
         ]
       }
     },

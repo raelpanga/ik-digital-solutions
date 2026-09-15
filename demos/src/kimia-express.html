@@ -1,0 +1,486 @@
+<title>Kimia Express · Livraison le jour même au Congo</title>
+<meta name="description" content="Démonstrateur : site de livraison express avec estimateur de prix, réservation de collecte simulée et suivi de colis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --white:#fff; --bg:#f5f7fb; --ink:#14213d; --mute:#5f6b85; --line:#e3e8f0; --brand:#1d4ed8; --brand-dark:#1e3fae; --brand-light:#e8eefc; --yellow:#f7b500; --green:#16a34a; --copper:#A84E27; --copper-soft:#F7E7DE; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Plus Jakarta Sans',sans-serif; color:var(--ink); background:var(--white); font-size:15px; line-height:1.6; }
+  h1,h2,h3 { font-weight:800; line-height:1.15; letter-spacing:-0.01em; }
+  a { color:inherit; text-decoration:none; }
+  button,input,select { font-family:inherit; }
+  button { cursor:pointer; }
+  img { max-width:100%; display:block; }
+  .wrap { max-width:1240px; margin:0 auto; padding:0 2rem; }
+  .ikbar { background:var(--copper-soft); border-bottom:1px solid var(--line); padding:.45rem 2rem; font-size:.82rem; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ikbar strong { color:var(--copper); } .ikbar a { color:var(--mute); text-decoration:underline; }
+
+  header { background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:40; }
+  .nav { display:flex; align-items:center; height:70px; gap:2.5rem; }
+  .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.25rem; }
+  .logo i { width:34px; height:34px; background:var(--brand); border-radius:9px; position:relative; }
+  .logo i::after { content:''; position:absolute; left:8px; top:12px; width:18px; height:10px; background:var(--yellow); border-radius:2px; clip-path:polygon(0 0,70% 0,100% 40%,100% 100%,0 100%); }
+  .menu { display:flex; gap:1.8rem; font-size:.9rem; font-weight:600; color:var(--mute); }
+  .menu a:hover { color:var(--ink); }
+  .nav-r { margin-left:auto; display:flex; gap:.8rem; align-items:center; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; padding:.75rem 1.4rem; border-radius:10px; font-weight:700; font-size:.9rem; border:1px solid transparent; transition:all .2s; }
+  .btn-brand { background:var(--brand); color:#fff; } .btn-brand:hover { background:var(--brand-dark); }
+  .btn-ghost { border-color:var(--line); background:#fff; } .btn-ghost:hover { border-color:var(--ink); }
+  .btn-yellow { background:var(--yellow); color:var(--ink); } .btn-yellow:hover { background:#e3a600; }
+
+  .hero { background:var(--bg); padding:4rem 0 3rem; position:relative; overflow:hidden; }
+  .hero .wrap { display:grid; grid-template-columns:1.05fr 1fr; gap:3rem; align-items:center; position:relative; }
+  .hero h1 { font-size:clamp(2.4rem,4.6vw,3.6rem); margin-bottom:1rem; }
+  .hero h1 span { color:var(--brand); }
+  .hero p { color:var(--mute); font-size:1.08rem; max-width:48ch; margin-bottom:1.6rem; }
+  .stats { display:flex; gap:2rem; margin-top:2rem; }
+  .stats div b { display:block; font-size:1.5rem; font-weight:800; }
+  .stats div span { font-size:.82rem; color:var(--mute); }
+  .hero-art { position:absolute; right:-40px; bottom:-30px; width:380px; opacity:.9; pointer-events:none; }
+  @media (max-width:1240px) { .hero-art { display:none; } }
+
+  .panel { background:#fff; border:1px solid var(--line); border-radius:16px; padding:1.5rem; box-shadow:0 10px 30px rgba(20,33,61,.06); }
+  .tabs { display:flex; background:var(--bg); border-radius:10px; padding:4px; margin-bottom:1.2rem; }
+  .tabs button { flex:1; border:none; background:none; padding:.6rem; border-radius:8px; font-weight:700; font-size:.88rem; color:var(--mute); }
+  .tabs button.on { background:#fff; color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,.08); }
+  .pane { display:none; } .pane.on { display:block; }
+  .field { margin-bottom:.9rem; }
+  .field label { display:block; font-size:.8rem; font-weight:600; color:var(--mute); margin-bottom:.35rem; }
+  .field input,.field select { width:100%; border:1px solid var(--line); border-radius:10px; padding:.7rem .9rem; font-size:.92rem; background:#fff; outline:none; }
+  .field input:focus,.field select:focus { border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-light); }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+  .est { background:var(--bg); border-radius:12px; padding:1rem 1.1rem; display:flex; justify-content:space-between; align-items:center; margin:.4rem 0 1rem; }
+  .est small { display:block; color:var(--mute); font-size:.78rem; }
+  .est b { font-size:1.4rem; font-weight:800; }
+  .est .eta { text-align:right; font-size:.85rem; font-weight:600; color:var(--green); }
+  .full { width:100%; }
+  .track-out { margin-top:1rem; border-top:1px solid var(--line); padding-top:1rem; display:none; }
+  .track-out.on { display:block; }
+  .track-out .id { font-weight:700; margin-bottom:.6rem; }
+  .tl { list-style:none; }
+  .tl li { position:relative; padding-left:1.6rem; padding-bottom:.9rem; font-size:.88rem; color:var(--mute); }
+  .tl li::before { content:''; position:absolute; left:5px; top:6px; width:10px; height:10px; border-radius:50%; background:var(--line); }
+  .tl li::after { content:''; position:absolute; left:9px; top:18px; bottom:0; width:2px; background:var(--line); }
+  .tl li:last-child::after { display:none; }
+  .tl li.done { color:var(--ink); } .tl li.done::before { background:var(--green); }
+  .tl li.now::before { background:var(--brand); box-shadow:0 0 0 4px var(--brand-light); }
+  .tl li b { display:block; font-weight:600; }
+  .err { color:#c0392b; font-size:.8rem; min-height:1.1em; }
+
+  .partners { border-bottom:1px solid var(--line); padding:1.4rem 0; }
+  .partners .wrap { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; font-size:.82rem; color:var(--mute); }
+  .logos { display:flex; gap:2rem; flex-wrap:wrap; }
+  .logos span { font-weight:800; color:#b3bccd; font-size:1rem; letter-spacing:.02em; }
+
+  .photos { display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:1rem; padding:2.5rem 0 0; }
+  .ph { position:relative; border-radius:16px; overflow:hidden; aspect-ratio:4/3; background:var(--bg); }
+  .ph img { width:100%; height:100%; object-fit:cover; }
+  .ph.tall { grid-row:span 1; }
+  .ph span { position:absolute; left:0; right:0; bottom:0; padding:1.4rem 1rem .8rem; background:linear-gradient(transparent,rgba(20,33,61,.85)); color:#fff; font-size:.85rem; font-weight:600; }
+  @media (max-width:1000px) { .photos { grid-template-columns:1fr 1fr; } .photos .ph:first-child { grid-column:1/-1; aspect-ratio:16/9; } }
+  @media (max-width:600px) { .photos { grid-template-columns:1fr; } }
+
+  section { padding:4.5rem 0; }
+  .head { text-align:center; max-width:620px; margin:0 auto 2.5rem; }
+  .head h2 { font-size:2.1rem; margin-bottom:.6rem; }
+  .head p { color:var(--mute); }
+
+  .services { display:grid; grid-template-columns:repeat(4,1fr); gap:1.2rem; }
+  .svc { border:1px solid var(--line); border-radius:14px; overflow:hidden; transition:border-color .2s; display:flex; flex-direction:column; }
+  .svc:hover { border-color:var(--brand); }
+  .svc .pic { aspect-ratio:8/5; background:var(--bg); overflow:hidden; }
+  .svc .pic img,.svc .pic svg { width:100%; height:100%; object-fit:cover; display:block; }
+  .svc .body { padding:1.2rem 1.4rem 1.4rem; }
+  .svc h3 { font-size:1.05rem; margin-bottom:.4rem; }
+  .svc p { font-size:.88rem; color:var(--mute); margin-bottom:.8rem; }
+  .svc .from { font-weight:700; font-size:.88rem; }
+  .svc .from small { color:var(--mute); font-weight:500; }
+
+  .how { background:var(--bg); }
+  .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; }
+  .step { background:#fff; border-radius:14px; padding:1.5rem; border:1px solid var(--line); }
+  .step .n { width:34px; height:34px; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.9rem; margin-bottom:.9rem; }
+  .step h3 { font-size:1rem; margin-bottom:.3rem; }
+  .step p { font-size:.88rem; color:var(--mute); }
+
+  .cover .wrap { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
+  .cover h2 { font-size:2.1rem; margin-bottom:.8rem; }
+  .cover p { color:var(--mute); margin-bottom:1.4rem; }
+  .cities { display:grid; grid-template-columns:1fr 1fr; gap:.5rem 1.5rem; font-size:.92rem; }
+  .cities li { list-style:none; padding:.5rem 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; }
+  .cities li span { color:var(--mute); font-size:.82rem; }
+  .cities li.soon { color:var(--mute); }
+  .mapwrap { display:grid; gap:1rem; }
+  .map { background:var(--brand-light); border-radius:16px; aspect-ratio:1.6; position:relative; overflow:hidden; }
+  .map .land { position:absolute; left:22%; top:8%; width:56%; height:84%; background:#fff; border-radius:48% 52% 40% 60% / 55% 45% 55% 45%; }
+  .pin { position:absolute; width:14px; height:14px; background:var(--brand); border-radius:50%; border:3px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,.2); }
+  .pin.big { width:20px; height:20px; background:var(--yellow); }
+  .pin span { position:absolute; left:20px; top:-4px; font-size:.75rem; font-weight:700; white-space:nowrap; }
+  .riverphoto { border-radius:16px; overflow:hidden; aspect-ratio:16/8; position:relative; }
+  .riverphoto img { width:100%; height:100%; object-fit:cover; }
+  .riverphoto span { position:absolute; left:0; right:0; bottom:0; padding:1.4rem 1rem .8rem; background:linear-gradient(transparent,rgba(20,33,61,.85)); color:#fff; font-size:.82rem; }
+
+  .pricing { background:var(--bg); }
+  .tablewrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; background:#fff; border-radius:14px; overflow:hidden; border:1px solid var(--line); font-size:.92rem; min-width:640px; }
+  th,td { padding:.95rem 1.2rem; text-align:left; border-bottom:1px solid var(--line); }
+  th { background:var(--ink); color:#fff; font-weight:600; font-size:.85rem; }
+  tr:last-child td { border-bottom:none; }
+  td b { font-weight:700; }
+  td .tag { font-size:.72rem; background:#e6f6ec; color:var(--green); padding:2px 8px; border-radius:999px; font-weight:700; margin-left:6px; }
+  .pnote { font-size:.82rem; color:var(--mute); margin-top:.8rem; }
+
+  .biz { background:var(--ink); color:#fff; border-radius:20px; padding:3rem; display:grid; grid-template-columns:1.2fr 1fr; gap:3rem; align-items:center; position:relative; overflow:hidden; }
+  .biz::before { content:''; position:absolute; inset:0; background:url('../assets/kimia/port.jpg') center/cover; opacity:.18; }
+  .biz > * { position:relative; }
+  .biz h2 { font-size:2rem; margin-bottom:.8rem; }
+  .biz p { color:#b7c0d6; margin-bottom:1.4rem; max-width:50ch; }
+  .biz ul { list-style:none; margin-bottom:1.6rem; }
+  .biz li { padding:.3rem 0; color:#dfe5f1; font-size:.92rem; }
+  .biz li::before { content:'✓'; color:var(--yellow); font-weight:800; margin-right:10px; }
+  .bizcard { background:#fff; color:var(--ink); border-radius:14px; padding:1.5rem; }
+  .bizcard h3 { font-size:1.05rem; margin-bottom:.9rem; }
+
+  .faq { max-width:760px; margin:0 auto; }
+  .q { border-bottom:1px solid var(--line); }
+  .q button { width:100%; background:none; border:none; text-align:left; padding:1.1rem 0; font-weight:700; font-size:.98rem; display:flex; justify-content:space-between; align-items:center; }
+  .q button::after { content:'+'; font-size:1.3rem; color:var(--mute); font-weight:400; }
+  .q.on button::after { content:'−'; }
+  .q .a { display:none; color:var(--mute); padding-bottom:1.1rem; font-size:.92rem; }
+  .q.on .a { display:block; }
+
+  .drive .wrap { display:grid; grid-template-columns:1fr 1fr; gap:1.4rem; }
+  .dtile { border-radius:16px; padding:2.5rem; position:relative; overflow:hidden; min-height:320px; display:flex; flex-direction:column; justify-content:flex-end; }
+  .dtile h2 { font-size:1.7rem; margin-bottom:.5rem; }
+  .dtile p { color:var(--mute); margin-bottom:1.2rem; }
+  .d1 { background:#14213d; color:#fff; }
+  .d1::before { content:''; position:absolute; inset:0; background:url('../assets/kimia/courier.jpg') center 30%/cover; opacity:.55; }
+  .d1::after { content:''; position:absolute; inset:0; background:linear-gradient(transparent 20%,rgba(20,33,61,.95)); }
+  .d1 > * { position:relative; } .d1 p { color:#dfe5f1; }
+  .d2 { background:var(--brand-light); }
+  .d2 .art { position:absolute; right:-10px; top:-10px; width:46%; opacity:.95; }
+  .d2 > * { position:relative; }
+  .apps { display:flex; gap:.6rem; flex-wrap:wrap; }
+  .apps span { border:1px solid var(--ink); border-radius:8px; padding:.5rem .9rem; font-size:.82rem; font-weight:700; background:#fff; }
+
+  footer { border-top:1px solid var(--line); padding:3.5rem 0 1.5rem; }
+  .fg { display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:2.5rem; margin-bottom:2.5rem; }
+  .fg h4 { font-weight:700; font-size:.88rem; margin-bottom:.9rem; }
+  .fg p,.fg li { font-size:.88rem; color:var(--mute); list-style:none; margin-bottom:.45rem; }
+  .fb { border-top:1px solid var(--line); padding-top:1.2rem; display:flex; justify-content:space-between; font-size:.8rem; color:var(--mute); flex-wrap:wrap; gap:1rem; }
+  .credits { font-size:.74rem; color:var(--mute); margin-top:.8rem; line-height:1.5; }
+  .credits a { text-decoration:underline; }
+
+  .toast { position:fixed; bottom:1.5rem; left:50%; transform:translate(-50%,16px); background:var(--ink); color:#fff; padding:.75rem 1.2rem; border-radius:10px; font-size:.88rem; opacity:0; transition:all .2s; pointer-events:none; z-index:100; max-width:90vw; text-align:center; }
+  .toast.show { opacity:1; transform:translate(-50%,0); }
+
+  .overlay { position:fixed; inset:0; background:rgba(20,33,61,.6); display:grid; place-items:center; padding:16px; z-index:90; }
+  .dialog { background:#fff; border-radius:16px; max-width:480px; width:100%; padding:1.6rem; box-shadow:0 30px 60px rgba(0,0,0,.35); }
+  .dialog h3 { font-size:1.2rem; margin-bottom:.3rem; }
+  .dialog .sub { color:var(--mute); font-size:.88rem; margin-bottom:1rem; }
+  .sandbox { display:inline-block; font-size:.72rem; background:var(--copper-soft); color:var(--copper); padding:2px 8px; border-radius:999px; font-weight:700; margin-bottom:.8rem; }
+  .pay { display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; margin-bottom:1rem; }
+  .pay label { border:1px solid var(--line); border-radius:10px; padding:.6rem .5rem; text-align:center; font-size:.82rem; font-weight:700; cursor:pointer; }
+  .pay input { display:none; } .pay label:has(input:checked) { border-color:var(--brand); background:var(--brand-light); }
+  .progress { height:6px; background:var(--bg); border-radius:3px; overflow:hidden; margin:1rem 0; } .progress i { display:block; height:100%; width:0; background:var(--brand); animation:fill 1.6s linear forwards; }
+  @keyframes fill { to { width:100%; } }
+  .sms { background:var(--bg); border-left:3px solid var(--green); padding:.6rem .8rem; font-family:Consolas,monospace; font-size:.8rem; white-space:pre-wrap; margin:.8rem 0; }
+  .actions { display:flex; justify-content:flex-end; gap:.6rem; }
+
+  @media (max-width:1000px) {
+    .hero .wrap,.cover .wrap,.biz,.drive .wrap { grid-template-columns:1fr; }
+    .services,.steps { grid-template-columns:repeat(2,1fr); } .fg { grid-template-columns:1fr 1fr; }
+    .menu { display:none; }
+  }
+  @media (max-width:600px) {
+    .services,.steps,.fg,.cities,.row2,.pay { grid-template-columns:1fr; }
+    .stats { flex-wrap:wrap; gap:1.2rem; } table { font-size:.82rem; } th,td { padding:.7rem; }
+    .biz,.dtile { padding:1.8rem; } .nav-r .btn-ghost { display:none; } .wrap { padding:0 1rem; } .ikbar { padding:.45rem 1rem; }
+  }
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } html { scroll-behavior:auto; } .progress i { width:100%; } }
+</style>
+<!-- /head -->
+<div class="ikbar"><span><strong>Démonstrateur IK Digital Solutions</strong> · entreprise fictive · réservation, paiement et SMS simulés · photos sous licence libre (crédits en bas de page)</span><a href="../../index.html">← Retour au portfolio</a></div>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#"><i></i>Kimia Express</a>
+    <nav class="menu"><a href="#services">Services</a><a href="#tarifs">Tarifs</a><a href="#couverture">Couverture</a><a href="#entreprises">Entreprises</a><a href="#faq">Aide</a></nav>
+    <div class="nav-r"><a href="#envoyer" class="btn btn-ghost" onclick="setTab('track')">Suivre un colis</a><a href="#envoyer" class="btn btn-brand" onclick="setTab('send')">Envoyer un colis</a></div>
+  </div>
+</header>
+
+<section class="hero" id="envoyer">
+  <div class="wrap">
+    <div>
+      <h1>Livraison le jour même à Brazzaville. <span>Le lendemain</span> à Pointe-Noire.</h1>
+      <p>Réservez un coursier en moins d'une minute, payez par MoMo ou par carte, et suivez votre colis en direct de la collecte jusqu'à la porte. Documents, colis, repas et commandes e-commerce.</p>
+      <div><a href="#services" class="btn btn-ghost">Voir les services</a> <a href="#entreprises" class="btn btn-yellow" style="margin-left:.5rem">Comptes entreprises</a></div>
+      <div class="stats">
+        <div><b>310 000+</b><span>livraisons effectuées (exemple)</span></div>
+        <div><b>98,4 %</b><span>à l'heure sur 30 jours (exemple)</span></div>
+        <div><b>6 villes</b><span>et ça continue</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="tabs"><button class="on" data-t="send" onclick="setTab('send')">Envoyer un colis</button><button data-t="track" onclick="setTab('track')">Suivre un colis</button></div>
+
+      <div class="pane on" id="pane-send">
+        <div class="row2">
+          <div class="field"><label for="from">Départ</label><select id="from"><option value="bzv">Brazzaville</option><option value="pnr">Pointe-Noire</option><option value="dol">Dolisie</option><option value="nka">Nkayi</option><option value="oyo">Oyo</option><option value="oue">Ouesso</option></select></div>
+          <div class="field"><label for="to">Arrivée</label><select id="to"><option value="bzv">Brazzaville</option><option value="pnr" selected>Pointe-Noire</option><option value="dol">Dolisie</option><option value="nka">Nkayi</option><option value="oyo">Oyo</option><option value="oue">Ouesso</option></select></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="size">Taille du colis</label><select id="size"><option value="1">Enveloppe / documents</option><option value="2" selected>Petit (jusqu'à 5 kg)</option><option value="3">Moyen (jusqu'à 15 kg)</option><option value="4">Grand (jusqu'à 30 kg)</option></select></div>
+          <div class="field"><label for="speed">Vitesse</label><select id="speed"><option value="std">Standard</option><option value="exp">Express</option></select></div>
+        </div>
+        <div class="est"><div><small>Prix estimé</small><b id="price">—</b></div><div class="eta" id="eta"></div></div>
+        <button class="btn btn-brand full" onclick="book()">Réserver la collecte</button>
+        <p style="font-size:.78rem;color:var(--mute);margin-top:.7rem;text-align:center">Collecte sous 45 minutes à Brazzaville et Pointe-Noire. Paiement après la collecte.</p>
+      </div>
+
+      <div class="pane" id="pane-track">
+        <div class="field"><label for="tn">Numéro de suivi</label><input id="tn" placeholder="KX-2026-000000" value="KX-2026-418207"></div>
+        <div class="err" id="terr"></div>
+        <button class="btn btn-brand full" onclick="track()">Suivre</button>
+        <div class="track-out" id="tout"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="partners"><div class="wrap"><span>La confiance de 1 200+ entreprises (exemples)</span><div class="logos"><span>MTN</span><span>Jumia</span><span>Casino</span><span>Bralico</span><span>Pharmacie Mavré</span><span>Ndala</span></div></div></div>
+
+<div class="wrap photos">
+  <div class="ph"><img src="../assets/kimia/courier2.jpg" alt="Coursier à moto, gilet réfléchissant, Brazzaville de nuit" loading="lazy"><span>Nos coursiers, Brazzaville</span></div>
+  <div class="ph"><img src="../assets/kimia/corniche.jpg" alt="La Corniche de Brazzaville le long du fleuve Congo" loading="lazy"><span>La Corniche, vers Kinshasa</span></div>
+  <div class="ph"><img src="../assets/kimia/delivery-van.svg" alt="Utilitaire Kimia Express" loading="lazy"><span>Nos utilitaires intercités</span></div>
+</div>
+
+<section id="services">
+  <div class="wrap">
+    <div class="head"><h2>Tout ce qui doit bouger</h2><p>Quatre services, une application, un seul numéro de suivi.</p></div>
+    <div class="services">
+      <div class="svc"><div class="pic"><img src="../assets/kimia/courier-motorbike.svg" alt="" loading="lazy"></div><div class="body"><h3>Coursier urbain</h3><p>Documents et colis partout à Brazzaville ou Pointe-Noire en quelques heures. À moto ou en utilitaire.</p><div class="from">À partir de 1 500 FCFA <small>· 2 à 4 heures</small></div></div></div>
+      <div class="svc"><div class="pic"><img src="../assets/kimia/delivery-van.svg" alt="" loading="lazy"></div><div class="body"><h3>Intercité</h3><p>Brazzaville–Pointe-Noire dans la nuit ; Dolisie, Nkayi, Oyo et Ouesso sous 2 jours. Assuré jusqu'à 500 000 FCFA.</p><div class="from">À partir de 4 500 FCFA <small>· le lendemain</small></div></div></div>
+      <div class="svc"><div class="pic"><img src="../assets/kimia/moto.jpg" alt="" loading="lazy"></div><div class="body"><h3>Repas et courses</h3><p>Restaurants, marchés et pharmacies livrés chauds ou froids en moins de 40 minutes dans le centre-ville.</p><div class="from">À partir de 1 000 FCFA <small>· 25 à 40 min</small></div></div></div>
+      <div class="svc"><div class="pic"><img src="../assets/kimia/parcel-box.svg" alt="" loading="lazy"></div><div class="body"><h3>Logistique e-commerce</h3><p>Nous stockons, emballons et expédions vos commandes, encaissons à la livraison et vous payons chaque semaine. API et tableau de bord.</p><div class="from">À partir de 900 FCFA <small>· par commande</small></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="wrap">
+    <div class="head"><h2>Comment ça marche</h2><p>De la réservation à la signature en quatre étapes.</p></div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Réservez</h3><p>Indiquez le départ, l'arrivée et la taille du colis sur le site ou l'application. Le prix est connu d'avance.</p></div>
+      <div class="step"><div class="n">2</div><h3>Collecte</h3><p>Un coursier arrive sous 45 minutes en ville, ou au créneau choisi pour l'intercité.</p></div>
+      <div class="step"><div class="n">3</div><h3>Suivez</h3><p>Suivez le colis en direct sur la carte. SMS et WhatsApp à chaque étape.</p></div>
+      <div class="step"><div class="n">4</div><h3>Livré</h3><p>Le destinataire signe sur le téléphone du coursier. Photo de preuve de livraison dans votre compte.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cover" id="couverture">
+  <div class="wrap">
+    <div class="mapwrap">
+      <div class="map" aria-hidden="true">
+        <div class="land"></div>
+        <div class="pin big" style="left:62%;top:70%"><span>Brazzaville</span></div>
+        <div class="pin big" style="left:30%;top:74%"><span>Pointe-Noire</span></div>
+        <div class="pin" style="left:42%;top:66%"><span>Dolisie</span></div>
+        <div class="pin" style="left:50%;top:70%"><span>Nkayi</span></div>
+        <div class="pin" style="left:58%;top:44%"><span>Oyo</span></div>
+        <div class="pin" style="left:52%;top:22%"><span>Ouesso</span></div>
+      </div>
+      <div class="riverphoto"><img src="../assets/kimia/corniche.jpg" alt="" loading="lazy"><span>Brazzaville, Corniche sud · Kinshasa sur l'autre rive, prochaine étape du réseau</span></div>
+    </div>
+    <div>
+      <h2>Six villes, un seul réseau</h2>
+      <p>Couverture complète le jour même à Brazzaville et Pointe-Noire, camions quotidiens sur la N1, et navettes régulières vers le nord, Oyo et Ouesso.</p>
+      <ul class="cities">
+        <li>Brazzaville <span>Le jour même</span></li>
+        <li>Pointe-Noire <span>Le jour même</span></li>
+        <li>Dolisie <span>Le lendemain</span></li>
+        <li>Nkayi <span>Le lendemain</span></li>
+        <li>Oyo <span>2 jours</span></li>
+        <li>Ouesso <span>2 jours</span></li>
+        <li class="soon">Owando <span>Bientôt · T4 2026</span></li>
+        <li class="soon">Kinshasa (traversée du fleuve) <span>Bientôt · 2027</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="tarifs">
+  <div class="wrap">
+    <div class="head"><h2>Des tarifs simples</h2><p>Aucun frais caché. Le prix affiché à la réservation est celui que vous payez.</p></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Colis</th><th>En ville</th><th>Brazzaville ↔ Pointe-Noire</th><th>Autres villes</th></tr></thead>
+      <tbody>
+        <tr><td><b>Enveloppe / documents</b></td><td>1 500 FCFA</td><td>4 500 FCFA</td><td>5 500 FCFA</td></tr>
+        <tr><td><b>Petit</b> jusqu'à 5 kg</td><td>2 500 FCFA</td><td>7 000 FCFA</td><td>8 500 FCFA</td></tr>
+        <tr><td><b>Moyen</b> jusqu'à 15 kg</td><td>4 000 FCFA</td><td>12 000 FCFA</td><td>14 500 FCFA</td></tr>
+        <tr><td><b>Grand</b> jusqu'à 30 kg</td><td>6 500 FCFA</td><td>19 000 FCFA</td><td>23 000 FCFA</td></tr>
+        <tr><td><b>Express</b> <span class="tag">+60 %</span></td><td>Moins de 90 min</td><td>Le jour même</td><td>Le lendemain</td></tr>
+      </tbody>
+    </table></div>
+    <p class="pnote">Encaissement à la livraison : 2 % du montant collecté. Assurance incluse jusqu'à 500 000 FCFA ; couverture étendue disponible. Les comptes entreprises bénéficient de tarifs dégressifs à partir de 50 colis par mois.</p>
+  </div>
+</section>
+
+<section id="entreprises">
+  <div class="wrap">
+    <div class="biz">
+      <div>
+        <h2>La livraison pour votre entreprise</h2>
+        <p>Restaurants, pharmacies, boutiques en ligne et bureaux confient à Kimia des milliers de colis par mois sans gérer leur propre flotte.</p>
+        <ul><li>Tarifs dégressifs dès 50 colis par mois</li><li>Encaissement à la livraison, reversé chaque semaine</li><li>Tableau de bord, API et modules Shopify / WooCommerce</li><li>Chargé de compte dédié et facture mensuelle</li></ul>
+        <a href="#" class="btn btn-yellow" onclick="toast('Merci, notre équipe vous rappelle sous un jour ouvré (simulé).');return false;">Parler à un conseiller</a>
+      </div>
+      <div class="bizcard">
+        <h3>Obtenir un devis entreprise</h3>
+        <div class="field"><label for="b-co">Entreprise</label><input id="b-co" placeholder="Nom de l'entreprise"></div>
+        <div class="field"><label for="b-vol">Colis par mois</label><select id="b-vol"><option>50 à 200</option><option>200 à 1 000</option><option>Plus de 1 000</option></select></div>
+        <div class="field"><label for="b-tel">Téléphone ou WhatsApp</label><input id="b-tel" placeholder="+242"></div>
+        <button class="btn btn-brand full" onclick="toast('Demande envoyée. Nous vous rappelons sous un jour ouvré (simulé).')">Demander un devis</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="drive" style="padding-top:0">
+  <div class="wrap">
+    <div class="dtile d1">
+      <h2>Roulez avec Kimia</h2>
+      <p>Vous avez une moto ou un utilitaire ? Gagnez 250 000 à 450 000 FCFA par mois avec des horaires flexibles et des versements hebdomadaires sur MoMo.</p>
+      <div><a href="#" class="btn btn-yellow" onclick="toast('Les candidatures coursiers sont ouvertes du lundi au vendredi, de 8 h à 17 h (simulé).');return false;">Devenir coursier</a></div>
+    </div>
+    <div class="dtile d2">
+      <img class="art" src="../assets/kimia/parcel-tracking.svg" alt="" aria-hidden="true">
+      <h2>Téléchargez l'application</h2>
+      <p>Réservez, suivez et payez depuis votre téléphone. Partagez un lien de suivi en direct avec la personne qui reçoit le colis.</p>
+      <div class="apps"><span>App Store</span><span>Google Play</span><span>Réservation WhatsApp</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="padding-top:0">
+  <div class="wrap">
+    <div class="head"><h2>Questions fréquentes</h2></div>
+    <div class="faq">
+      <div class="q"><button type="button">Comment payer ?</button><div class="a">MTN Mobile Money, Airtel Money, Visa ou Mastercard dans l'application, ou en espèces au coursier lors de la collecte. Les comptes entreprises sont facturés chaque mois.</div></div>
+      <div class="q"><button type="button">Et si le destinataire est absent ?</button><div class="a">Le coursier appelle deux fois le destinataire et attend 10 minutes. Nous réessayons le lendemain sans frais. Après un second échec, le colis vous revient ou reste 5 jours à notre dépôt.</div></div>
+      <div class="q"><button type="button">Mon colis est-il assuré ?</button><div class="a">Chaque colis est couvert jusqu'à 500 000 FCFA contre la perte ou les dommages. Une couverture étendue peut être ajoutée à la réservation pour les objets de valeur.</div></div>
+      <div class="q"><button type="button">Que ne puis-je pas envoyer ?</button><div class="a">Espèces, animaux vivants, armes, liquides inflammables et tout ce qui est illégal selon la loi congolaise. Les médicaments sont acceptés avec un reçu de pharmacie.</div></div>
+      <div class="q"><button type="button">Puis-je programmer une collecte plus tard ?</button><div class="a">Oui. Choisissez un créneau d'une heure jusqu'à 7 jours à l'avance. Les collectes récurrentes sont disponibles sur les comptes entreprises.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div><h4>Kimia Express</h4><p>Société de courrier et de logistique basée à Brazzaville, active dans toute la République du Congo depuis 2021 (entreprise fictive).</p><p>Assistance : +242 06 500 1234 · WhatsApp 7 j/7, 7 h à 22 h</p></div>
+      <div><h4>Services</h4><ul><li>Coursier urbain</li><li>Intercité</li><li>Repas et courses</li><li>Logistique e-commerce</li><li>Comptes entreprises</li></ul></div>
+      <div><h4>Aide</h4><ul><li>Suivre un colis</li><li>Tarifs</li><li>Objets interdits</li><li>Réclamations</li><li>Contact</li></ul></div>
+      <div><h4>Société</h4><ul><li>À propos</li><li>Devenir coursier</li><li>Carrières</li><li>Presse</li></ul></div>
+    </div>
+    <div class="fb"><span>© 2026 Kimia Express SARL · Brazzaville · Confidentialité · Conditions</span><span>MTN MoMo · Airtel Money · Visa · Mastercard · Espèces</span></div>
+    <p class="credits">Site de démonstration réalisé par <a href="../../index.html">IK Digital Solutions</a>. Photos via Wikimedia Commons : taxis-motos à Brazzaville par <a href="https://commons.wikimedia.org/wiki/File:Taxi-moto_%C3%A0_Brazzaville_02.jpg" rel="noopener">Africany</a> (CC0) ; Corniche de Brazzaville par <a href="https://commons.wikimedia.org/wiki/File:Route_au_bord_de_la_ville_de_Brazzaville_Corniche_Bokoba_veroly.jpg" rel="noopener">Bokoba veroly</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener">CC BY-SA 4.0</a>) ; port de Pointe-Noire par <a href="https://commons.wikimedia.org/wiki/File:Timber_for_export_at_the_Port_of_Pointe-Noire,_Republic_of_Congo.jpg" rel="noopener">David Stanley</a> (<a href="https://creativecommons.org/licenses/by/2.0/" rel="noopener">CC BY 2.0</a>) ; livraison à moto par <a href="https://commons.wikimedia.org/wiki/File:Motorcycle_delivery.jpg" rel="noopener">Duke Makangila</a> (CC BY-SA 4.0). Illustrations : jeu d'images du projet.</p>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+<div id="modal"></div>
+
+<script>
+(function(){
+  "use strict";
+  const $=id=>document.getElementById(id);
+  const t=$('toast');
+  window.toast=function(m){ t.textContent=m; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2600); };
+  window.setTab=function(k){ document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===k)); document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='pane-'+k)); };
+  const CITY={bzv:'Brazzaville',pnr:'Pointe-Noire',dol:'Dolisie',nka:'Nkayi',oyo:'Oyo',oue:'Ouesso'};
+  const SIZE={1:'Enveloppe / documents',2:'Petit (jusqu\'à 5 kg)',3:'Moyen (jusqu\'à 15 kg)',4:'Grand (jusqu\'à 30 kg)'};
+  const base={1:[1500,4500,5500],2:[2500,7000,8500],3:[4000,12000,14500],4:[6500,19000,23000]};
+  const big={bzv:1,pnr:1};
+  const fcfa=n=>n.toLocaleString('fr-FR')+' FCFA';
+  function quote(){
+    const f=$('from').value,to=$('to').value,s=$('size').value,sp=$('speed').value;
+    let col,eta;
+    if(f===to){ col=0; eta=sp==='exp'?'Moins de 90 minutes':'2 à 4 heures'; }
+    else if(big[f]&&big[to]){ col=1; eta=sp==='exp'?'Le jour même':'Le lendemain'; }
+    else { col=2; eta=sp==='exp'?'Le lendemain':'2 jours'; }
+    let p=base[s][col]; if(sp==='exp') p=Math.round(p*1.6/100)*100;
+    return {f,to,s,sp,p,eta};
+  }
+  function est(){ const q=quote(); $('price').textContent=fcfa(q.p); $('eta').textContent='Livraison : '+q.eta; }
+  ['from','to','size','speed'].forEach(id=>$(id).addEventListener('change',est)); est();
+
+  /* bookings persist in the visitor's browser */
+  const KEY='ik-demo-kimia-v1';
+  let store={};
+  try{ store=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+  const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(store)); }catch(e){} };
+  const dfr=d=>d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'})+', '+d.toTimeString().slice(0,5);
+
+  window.book=function(){
+    const q=quote();
+    $('modal').innerHTML=`<div class="overlay"><div class="dialog" role="dialog" aria-modal="true">
+      <span class="sandbox">Bac à sable · aucun paiement réel</span>
+      <h3>Réserver la collecte</h3>
+      <p class="sub">${CITY[q.f]} → ${CITY[q.to]} · ${SIZE[q.s]} · ${q.sp==='exp'?'Express':'Standard'} · <b>${fcfa(q.p)}</b></p>
+      <div class="field"><label for="bk-name">Votre nom</label><input id="bk-name" value="Aline Mabiala"></div>
+      <div class="field"><label for="bk-tel">Téléphone (SMS de suivi)</label><input id="bk-tel" value="+242 06 123 45 67"></div>
+      <div class="field"><label for="bk-addr">Adresse de collecte</label><input id="bk-addr" value="Avenue de la Paix, Moungali, ${CITY[q.f]}"></div>
+      <div class="field"><label>Paiement</label><div class="pay"><label><input type="radio" name="pm" value="MTN MoMo" checked>MTN MoMo</label><label><input type="radio" name="pm" value="Airtel Money">Airtel Money</label><label><input type="radio" name="pm" value="Espèces">Espèces à la collecte</label></div></div>
+      <div id="bk-body"></div>
+      <div class="actions"><button type="button" class="btn btn-ghost" id="bk-cancel">Annuler</button><button type="button" class="btn btn-brand" id="bk-ok">Confirmer la collecte</button></div>
+    </div></div>`;
+    $('bk-cancel').onclick=()=>{ $('modal').innerHTML=''; };
+    $('bk-ok').onclick=()=>{
+      const pm=document.querySelector('input[name=pm]:checked').value, tel=$('bk-tel').value.trim(), name=$('bk-name').value.trim(), addr=$('bk-addr').value.trim();
+      const id='KX-2026-'+String(Math.floor(100000+Math.random()*900000));
+      $('bk-ok').disabled=true; $('bk-cancel').disabled=true;
+      $('bk-body').innerHTML=`<p class="sub">${pm==='Espèces'?'Réservation en cours…':'Demande de paiement envoyée au '+tel+' via '+pm+'. Confirmez avec votre code PIN.'}</p><div class="progress"><i></i></div>`;
+      setTimeout(()=>{
+        const now=new Date();
+        store[id]={id,from:CITY[q.f],to:CITY[q.to],size:SIZE[q.s],speed:q.sp,price:q.p,eta:q.eta,pm,tel,name,addr,created:now.toISOString()};
+        save();
+        $('bk-body').innerHTML=`<p><b style="color:var(--green)">Collecte confirmée.</b> Numéro de suivi <b>${id}</b>.</p><div class="sms">Kimia Express: collecte confirmee ${dfr(now)} a ${addr}. Suivi ${id}. Prix ${fcfa(q.p)} (${pm}).</div><p class="sub">SMS envoyé au ${tel} (simulé). Un coursier est attribué sous 45 minutes.</p>`;
+        $('bk-cancel').disabled=false; $('bk-cancel').textContent='Fermer';
+        $('bk-cancel').onclick=()=>{ $('modal').innerHTML=''; setTab('track'); $('tn').value=id; track(); document.getElementById('envoyer').scrollIntoView(); };
+        $('bk-ok').style.display='none';
+      },1700);
+    };
+  };
+
+  window.track=function(){
+    const v=$('tn').value.trim().toUpperCase(); const e=$('terr'); const o=$('tout');
+    if(!/^KX-\d{4}-\d{6}$/.test(v)){ e.textContent='Entrez un numéro de suivi du type KX-2026-000000'; o.classList.remove('on'); return; }
+    e.textContent='';
+    const b=store[v];
+    if(b){
+      const c=new Date(b.created), pick=new Date(c.getTime()+45*60000);
+      o.innerHTML=`<div class="id">${v} · ${b.from} → ${b.to}</div><ul class="tl">
+        <li class="done"><b>Réservation confirmée</b>${dfr(c)} · ${b.pm}</li>
+        <li class="now"><b>Coursier en route</b>Collecte prévue vers ${dfr(pick)} · ${b.addr}</li>
+        <li><b>Collecté</b></li><li><b>En transit</b>${b.eta}</li><li><b>Livré</b></li></ul>`;
+    } else if(v==='KX-2026-418207'){
+      o.innerHTML=`<div class="id">KX-2026-418207 · Brazzaville → Pointe-Noire</div><ul class="tl">
+        <li class="done"><b>Collecté</b>lun. 14 sept., 09:12 · Moungali, Brazzaville</li>
+        <li class="done"><b>Parti du dépôt</b>lun. 14 sept., 13:40 · Brazzaville centre</li>
+        <li class="now"><b>En transit</b>Sur la N1 · arrivée ce soir</li>
+        <li><b>En cours de livraison</b>Prévu mar. 15 sept., avant 12:00</li>
+        <li><b>Livré</b></li></ul>`;
+    } else {
+      o.innerHTML=`<div class="id">${v}</div><p class="sub" style="color:var(--mute);font-size:.88rem">Aucun colis avec ce numéro dans la démo. Essayez KX-2026-418207 ou réservez une collecte pour obtenir un numéro.</p>`;
+    }
+    o.classList.add('on');
+  };
+  document.querySelectorAll('.q button').forEach(b=>b.addEventListener('click',()=>b.parentElement.classList.toggle('on')));
+})();
+</script>

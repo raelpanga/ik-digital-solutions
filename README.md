@@ -16,8 +16,16 @@ the same site. No sign-in anywhere.
 | One page per project (8) | `projets/<slug>.html` | `en/projects/<slug>.html` |
 | Demo applications (7, French only) | `demos/<slug>/` | same |
 
-Demo pages: `businesshub`, `commande-distributeur`, `portail-sous-traitant`,
-`portail-scolaire`, `site-corporate`, `genos-rentals`, `macclay-wedding-tracker`.
+Demo pages: `kimia-express` (delivery site, replaced the pharmacy demo), `ndala-beauty`
+(skincare shop, replaced the school demo), `commande-distributeur`, `portail-sous-traitant`,
+`site-corporate`, `genos-rentals`, `macclay-wedding-tracker`. The two replaced demo
+sources are kept in `demos/archive/` and are not published.
+
+Images for the demos live in `demos/assets/<slug>/` and are copied to
+`docs/demos/assets/`. Kimia uses the project's SVG illustration set plus freely licensed
+photos from Wikimedia Commons (credits in the page footer; originals in
+`demos/assets/kimia/raw/`, which is ignored by git). Ndala uses the SVG set only, with
+labels translated to French and four extra jars generated to match.
 
 Every demo uses fictitious data and simulated payments, SMS, e-mails and Shopify, and says
 so in its banner. Client project pages describe only what the repositories and live

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+<rect width="600" height="600" fill="#fff"/>
+<rect x="170" y="60" width="260" height="480" rx="36" fill="#14213d"/>
+<rect x="185" y="90" width="230" height="420" rx="22" fill="#f5f7fb"/>
+<rect x="205" y="120" width="190" height="180" rx="14" fill="#e8eefc"/>
+<path d="M230 260c40-60 80-80 130-120" fill="none" stroke="#1d4ed8" stroke-width="8" stroke-linecap="round" stroke-dasharray="14 12"/>
+<circle cx="230" cy="260" r="12" fill="#16a34a"/><circle cx="360" cy="140" r="12" fill="#f7b500"/>
+<rect x="205" y="320" width="190" height="14" rx="7" fill="#c9d3e6"/><rect x="205" y="320" width="130" height="14" rx="7" fill="#1d4ed8"/>
+<text x="205" y="365" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#14213d">En transit</text>
+<text x="205" y="388" font-family="Arial,sans-serif" font-size="12" fill="#5f6b85">Arrivée aujourd'hui, 14 h – 16 h</text>
+<rect x="205" y="420" width="190" height="44" rx="10" fill="#1d4ed8"/>
+<text x="300" y="448" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#fff">Partager le lien de suivi</text>
+<g transform="translate(60 380)"><path d="M0 40l50-25 50 25v60L50 125 0 100z" fill="#f7b500"/><path d="M0 40l50 25 50-25M50 65v60" fill="none" stroke="#14213d" stroke-width="5"/></g>
+</svg>

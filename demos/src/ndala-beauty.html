@@ -1,0 +1,445 @@
+<title>Ndala Beauty · Soins naturels, livrés dans tout le Congo</title>
+<meta name="description" content="Démonstrateur : boutique en ligne de cosmétiques naturels avec panier, code promo, coffret et paiement mobile money simulé.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --white:#ffffff; --bg:#fbfaf8; --ink:#1f2320; --mute:#6b716d; --line:#e8e6e1; --sage:#e7efe6; --moss:#2f6b4f; --blush:#f7e9e4; --rose:#c96a5a; --star:#e5a83c; --copper:#A84E27; --copper-soft:#F7E7DE; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Manrope',sans-serif; color:var(--ink); background:var(--white); font-size:15px; line-height:1.6; }
+  h1,h2,h3 { font-family:'Fraunces',serif; font-weight:500; line-height:1.15; }
+  a { color:inherit; text-decoration:none; }
+  button { font-family:inherit; cursor:pointer; }
+  img { max-width:100%; display:block; }
+  .wrap { max-width:1280px; margin:0 auto; padding:0 2rem; }
+  .ikbar { background:var(--copper-soft); border-bottom:1px solid var(--line); padding:.45rem 2rem; font-size:.82rem; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ikbar strong { color:var(--copper); } .ikbar a { color:var(--mute); text-decoration:underline; }
+
+  .promo { background:var(--moss); color:#fff; text-align:center; font-size:.85rem; padding:.6rem 1rem; font-weight:500; }
+  .promo b { font-weight:700; }
+
+  header { background:var(--white); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:40; }
+  .top { display:flex; align-items:center; gap:2rem; height:68px; }
+  .brand { font-family:'Fraunces',serif; font-size:1.7rem; font-weight:500; letter-spacing:.04em; }
+  .search { flex:1; max-width:440px; display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:var(--bg); }
+  .search input { flex:1; border:none; background:none; padding:.6rem 1.1rem; font:inherit; outline:none; min-width:0; }
+  .search button { border:none; background:none; padding:0 1rem; color:var(--mute); font-size:.85rem; }
+  .icons { margin-left:auto; display:flex; gap:1.2rem; align-items:center; font-size:.9rem; }
+  .cart-btn { background:var(--ink); color:#fff; border:none; border-radius:999px; padding:.55rem 1.1rem; font-weight:600; font-size:.85rem; }
+  .cats { display:flex; gap:2rem; font-size:.88rem; font-weight:500; height:44px; align-items:center; border-top:1px solid var(--line); }
+  .cats a:hover { color:var(--moss); }
+  .cats .sale { color:var(--rose); }
+
+  .hero { background:var(--sage); }
+  .hero .wrap { display:grid; grid-template-columns:1fr 1fr; align-items:center; min-height:480px; gap:3rem; }
+  .hero h1 { font-size:clamp(2.4rem,4.5vw,3.8rem); margin-bottom:1rem; }
+  .hero p { color:var(--mute); max-width:44ch; margin-bottom:1.6rem; font-size:1.05rem; }
+  .btn { display:inline-block; padding:.85rem 1.8rem; border-radius:999px; font-weight:600; font-size:.9rem; border:1px solid transparent; transition:all .2s; }
+  .btn-dark { background:var(--ink); color:#fff; } .btn-dark:hover { background:var(--moss); }
+  .btn-white { background:#fff; color:var(--ink); border-color:var(--line); margin-left:.5rem; } .btn-white:hover { border-color:var(--ink); }
+  .hero-art { height:420px; border-radius:16px; position:relative; overflow:hidden; background:#fff; }
+  .hero-art img { width:100%; height:100%; object-fit:cover; }
+  .hero-badge { position:absolute; top:24px; right:24px; background:var(--ink); color:#fff; border-radius:999px; padding:.4rem .9rem; font-size:.8rem; font-weight:600; }
+
+  .trust { border-bottom:1px solid var(--line); }
+  .trust .wrap { display:grid; grid-template-columns:repeat(4,1fr); }
+  .trust div { padding:1.1rem 0; font-size:.85rem; display:flex; gap:.7rem; align-items:center; }
+  .trust div + div { border-left:1px solid var(--line); padding-left:1.5rem; }
+  .trust i { width:30px; height:30px; border-radius:50%; background:var(--sage); color:var(--moss); display:inline-flex; align-items:center; justify-content:center; font-style:normal; font-weight:700; font-size:.8rem; flex-shrink:0; }
+  .trust span { color:var(--mute); } .trust b { display:block; color:var(--ink); font-weight:600; }
+
+  section { padding:4rem 0; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:1.8rem; gap:1rem; flex-wrap:wrap; }
+  .head h2 { font-size:2rem; } .head p { color:var(--mute); }
+  .head a { font-size:.88rem; font-weight:600; color:var(--moss); }
+
+  .cat-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:1rem; }
+  .cat { border-radius:14px; aspect-ratio:1/1.05; display:flex; align-items:flex-end; padding:1.2rem; font-weight:600; transition:transform .2s; position:relative; overflow:hidden; }
+  .cat:hover { transform:translateY(-3px); }
+  .cat small { display:block; font-weight:500; color:var(--mute); font-size:.8rem; }
+  .cat img { position:absolute; right:-10%; top:-10%; width:70%; opacity:.9; }
+  .cat > span { position:relative; }
+  .k1 { background:#edf3ea; } .k2 { background:#f7e9e4; } .k3 { background:#eef0f3; } .k4 { background:#f5efe3; } .k5 { background:#f0ebf3; }
+
+  .toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; font-size:.88rem; color:var(--mute); gap:1rem; flex-wrap:wrap; }
+  .toolbar select { font:inherit; border:1px solid var(--line); border-radius:999px; padding:.45rem 1rem; background:#fff; }
+  .chips { display:flex; gap:.5rem; flex-wrap:wrap; }
+  .chips button { border:1px solid var(--line); background:#fff; border-radius:999px; padding:.4rem .9rem; font-size:.82rem; }
+  .chips button.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+
+  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; }
+  .card { display:flex; flex-direction:column; }
+  .card[hidden] { display:none; }
+  .card .img { aspect-ratio:1; border-radius:14px; position:relative; overflow:hidden; margin-bottom:.9rem; background:var(--bg); }
+  .card .img img { width:100%; height:100%; object-fit:cover; }
+  .pill { position:absolute; top:12px; left:12px; font-size:.72rem; font-weight:700; padding:3px 9px; border-radius:999px; background:#fff; }
+  .pill.sale { background:var(--rose); color:#fff; }
+  .wish { position:absolute; top:10px; right:10px; width:32px; height:32px; border-radius:50%; background:#fff; border:none; font-size:.85rem; color:var(--mute); }
+  .wish.on { color:var(--rose); }
+  .quick { position:absolute; left:12px; right:12px; bottom:12px; background:var(--ink); color:#fff; border:none; border-radius:999px; padding:.65rem; font-weight:600; font-size:.85rem; opacity:0; transform:translateY(6px); transition:all .2s; }
+  .card:hover .quick, .card:focus-within .quick { opacity:1; transform:none; }
+  .card h3 { font-family:'Manrope',sans-serif; font-weight:600; font-size:.98rem; }
+  .card .sub { font-size:.82rem; color:var(--mute); }
+  .rating { font-size:.78rem; color:var(--mute); margin:.3rem 0; }
+  .rating b { color:var(--star); letter-spacing:1px; font-weight:400; }
+  .price { font-weight:700; } .price s { color:var(--mute); font-weight:400; margin-left:6px; }
+  .noresult { color:var(--mute); padding:2rem 0; display:none; }
+
+  .banner { background:var(--blush); border-radius:18px; padding:3rem; display:grid; grid-template-columns:1fr auto; align-items:center; gap:2rem; }
+  .banner h2 { font-size:2rem; margin-bottom:.5rem; }
+  .banner p { color:var(--mute); max-width:48ch; }
+  .banner code { font-family:inherit; background:#fff; padding:2px 8px; border-radius:6px; font-weight:700; }
+
+  .botan { border-radius:18px; overflow:hidden; margin-top:2rem; }
+  .botan img { width:100%; height:auto; }
+
+  .reviews { background:var(--bg); }
+  .rv { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; }
+  .r { background:#fff; border:1px solid var(--line); border-radius:14px; padding:1.5rem; }
+  .r .stars { color:var(--star); font-size:.85rem; letter-spacing:1px; margin-bottom:.5rem; }
+  .r p { font-size:.92rem; margin-bottom:.9rem; }
+  .r .who { font-size:.8rem; color:var(--mute); } .r .who b { color:var(--ink); font-weight:600; }
+  .verified { display:inline-block; margin-left:6px; color:var(--moss); font-weight:600; }
+
+  footer { border-top:1px solid var(--line); padding:3.5rem 0 1.5rem; background:var(--bg); }
+  .fg { display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:2.5rem; margin-bottom:2.5rem; }
+  .fg h4 { font-weight:700; font-size:.88rem; margin-bottom:.9rem; }
+  .fg li { list-style:none; font-size:.88rem; color:var(--mute); margin-bottom:.45rem; }
+  .fg form { display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:#fff; max-width:340px; margin-top:.8rem; }
+  .fg input { flex:1; border:none; padding:.65rem 1rem; font:inherit; outline:none; min-width:0; }
+  .fg form button { border:none; background:var(--ink); color:#fff; padding:0 1.2rem; font-weight:600; }
+  .fb { border-top:1px solid var(--line); padding-top:1.2rem; display:flex; justify-content:space-between; align-items:center; font-size:.8rem; color:var(--mute); flex-wrap:wrap; gap:1rem; }
+  .pay { display:flex; gap:6px; flex-wrap:wrap; }
+  .pay span { border:1px solid var(--line); background:#fff; border-radius:4px; padding:3px 8px; font-size:.7rem; font-weight:700; color:var(--ink); }
+  .credits { font-size:.74rem; color:var(--mute); margin-top:.8rem; }
+
+  .overlay { position:fixed; inset:0; background:rgba(0,0,0,.3); opacity:0; pointer-events:none; transition:opacity .25s; z-index:90; }
+  .drawer { position:fixed; top:0; right:0; height:100%; width:min(420px,100%); background:#fff; z-index:100; transform:translateX(100%); transition:transform .28s; display:flex; flex-direction:column; }
+  body.open .overlay { opacity:1; pointer-events:auto; }
+  body.open .drawer { transform:none; }
+  .dh { display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.5rem; border-bottom:1px solid var(--line); }
+  .dh h3 { font-size:1.3rem; } .dh button { background:none; border:none; font-size:1.1rem; }
+  .dl { flex:1; overflow:auto; padding:1rem 1.5rem; }
+  .empty { color:var(--mute); text-align:center; padding:3rem 0; }
+  .li { display:grid; grid-template-columns:64px 1fr auto; gap:1rem; padding:.9rem 0; border-bottom:1px solid var(--line); align-items:center; }
+  .li .th { width:64px; height:64px; border-radius:10px; overflow:hidden; background:var(--bg); } .li .th img { width:100%; height:100%; object-fit:cover; }
+  .li .nm { font-weight:600; font-size:.9rem; }
+  .li .qty { display:inline-flex; border:1px solid var(--line); border-radius:999px; margin-top:4px; }
+  .li .qty button { border:none; background:none; width:26px; height:24px; }
+  .li .qty span { width:22px; text-align:center; font-size:.85rem; line-height:24px; }
+  .li .pr { font-weight:600; font-size:.9rem; }
+  .df { padding:1.2rem 1.5rem; border-top:1px solid var(--line); }
+  .ship { font-size:.82rem; color:var(--mute); margin-bottom:.8rem; }
+  .ship .bar { height:5px; background:var(--line); border-radius:999px; margin-top:6px; overflow:hidden; }
+  .ship .bar div { height:100%; background:var(--moss); width:0; transition:width .3s; }
+  .code { display:flex; gap:.4rem; margin-bottom:.8rem; }
+  .code input { flex:1; border:1px solid var(--line); border-radius:999px; padding:.5rem .9rem; font:inherit; outline:none; min-width:0; text-transform:uppercase; }
+  .code button { border:1px solid var(--ink); background:#fff; border-radius:999px; padding:0 .9rem; font-weight:600; font-size:.82rem; }
+  .line { display:flex; justify-content:space-between; font-size:.88rem; color:var(--mute); margin-bottom:.3rem; }
+  .line.disc { color:var(--moss); font-weight:600; }
+  .tot { display:flex; justify-content:space-between; font-weight:700; font-size:1.05rem; margin:.5rem 0 .9rem; }
+  .checkout { width:100%; background:var(--ink); color:#fff; border:none; border-radius:999px; padding:.95rem; font-weight:700; font-size:.95rem; }
+  .checkout:hover { background:var(--moss); } .checkout:disabled { opacity:.5; cursor:not-allowed; }
+
+  .modal-bg { position:fixed; inset:0; background:rgba(31,35,32,.55); display:grid; place-items:center; padding:16px; z-index:120; }
+  .modal { background:#fff; border-radius:18px; max-width:460px; width:100%; padding:1.6rem; }
+  .modal h3 { font-size:1.4rem; margin-bottom:.3rem; }
+  .modal .sub { color:var(--mute); font-size:.88rem; margin-bottom:1rem; }
+  .sandbox { display:inline-block; font-size:.72rem; background:var(--copper-soft); color:var(--copper); padding:2px 8px; border-radius:999px; font-weight:700; margin-bottom:.8rem; }
+  .field { margin-bottom:.8rem; } .field label { display:block; font-size:.8rem; font-weight:600; color:var(--mute); margin-bottom:.3rem; }
+  .field input { width:100%; border:1px solid var(--line); border-radius:10px; padding:.65rem .9rem; font:inherit; outline:none; }
+  .paychoice { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin-bottom:1rem; }
+  .paychoice label { border:1px solid var(--line); border-radius:10px; padding:.6rem .5rem; text-align:center; font-size:.82rem; font-weight:600; cursor:pointer; }
+  .paychoice input { display:none; } .paychoice label:has(input:checked) { border-color:var(--moss); background:var(--sage); }
+  .progress { height:6px; background:var(--line); border-radius:3px; overflow:hidden; margin:1rem 0; } .progress i { display:block; height:100%; width:0; background:var(--moss); animation:fill 1.6s linear forwards; }
+  @keyframes fill { to { width:100%; } }
+  .sms { background:var(--bg); border-left:3px solid var(--moss); padding:.6rem .8rem; font-family:Consolas,monospace; font-size:.8rem; white-space:pre-wrap; margin:.8rem 0; }
+  .actions { display:flex; justify-content:flex-end; gap:.6rem; }
+
+  .toast { position:fixed; bottom:1.5rem; left:50%; transform:translate(-50%,16px); background:var(--ink); color:#fff; padding:.75rem 1.2rem; border-radius:999px; font-size:.88rem; opacity:0; transition:all .2s; pointer-events:none; z-index:130; max-width:90vw; text-align:center; }
+  .toast.show { opacity:1; transform:translate(-50%,0); }
+
+  @media (max-width:1000px) {
+    .grid { grid-template-columns:repeat(2,1fr); } .cat-grid { grid-template-columns:repeat(3,1fr); }
+    .hero .wrap { grid-template-columns:1fr; padding-top:3rem; padding-bottom:3rem; } .hero-art { height:300px; }
+    .trust .wrap { grid-template-columns:1fr 1fr; } .rv { grid-template-columns:1fr; } .fg { grid-template-columns:1fr 1fr; }
+    .search { display:none; } .cats { overflow-x:auto; }
+    .banner { grid-template-columns:1fr; }
+    .quick { opacity:1; transform:none; }
+  }
+  @media (max-width:600px) { .grid,.cat-grid,.fg,.trust .wrap { grid-template-columns:1fr; } .trust div + div { border-left:none; padding-left:0; } .wrap { padding:0 1rem; } .ikbar { padding:.45rem 1rem; } .icons a { display:none; } }
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } .progress i { width:100%; } }
+</style>
+<!-- /head -->
+<div class="ikbar"><span><strong>Démonstrateur IK Digital Solutions</strong> · boutique fictive · panier réel, paiement et SMS simulés · illustrations du jeu d'images du projet</span><a href="../../index.html">← Retour au portfolio</a></div>
+
+<div class="promo">Livraison offerte dès 25 000 FCFA d'achat · Code <b>NDALA10</b> : −10 % sur votre première commande</div>
+
+<header>
+  <div class="wrap top">
+    <a class="brand" href="#">Ndala</a>
+    <form class="search" id="searchform"><input id="q" placeholder="Rechercher un produit, un ingrédient, un besoin" aria-label="Recherche"><button type="submit">Rechercher</button></form>
+    <div class="icons">
+      <a href="#" onclick="toast('Connexion client simulée.');return false;">Se connecter</a>
+      <a href="#" id="wishlink">Favoris · 0</a>
+      <button class="cart-btn" id="cartBtn">Panier · 0</button>
+    </div>
+  </div>
+  <nav class="wrap cats">
+    <a href="#boutique" data-filter="all">Best-sellers</a><a href="#boutique" data-filter="visage">Visage</a><a href="#boutique" data-filter="corps">Corps</a><a href="#boutique" data-filter="cheveux">Cheveux</a><a href="#boutique" data-filter="coffret">Coffrets et cadeaux</a><a href="#boutique" data-filter="all">Recharges</a><a href="#ingredients">Ingrédients</a><a href="#boutique" class="sale" data-filter="promo">Promos</a>
+  </nav>
+</header>
+
+<section class="hero" style="padding:0;">
+  <div class="wrap">
+    <div>
+      <h1>Des soins nés des plantes du bassin du Congo</h1>
+      <p>Baobab, karité, moringa et marula pressés à froid, mélangés en petites séries à Brazzaville. Livrés en 1 à 2 jours à Brazzaville et Pointe-Noire.</p>
+      <a href="#boutique" class="btn btn-dark">Voir les best-sellers</a>
+      <a href="#coffret" class="btn btn-white">Composer un coffret, −15 %</a>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <img src="../assets/ndala/hero-bottle.svg" alt="">
+      <div class="hero-badge">4,8 ★ sur 1 240 avis (exemple)</div>
+    </div>
+  </div>
+</section>
+
+<div class="trust">
+  <div class="wrap">
+    <div><i>✓</i><span><b>Livraison rapide</b>1 à 2 jours dans les grandes villes</span></div>
+    <div><i>✓</i><span><b>Payez comme vous voulez</b>MTN MoMo, Airtel Money, carte</span></div>
+    <div><i>✓</i><span><b>Retours sous 30 jours</b>Sans justification</span></div>
+    <div><i>✓</i><span><b>Recharge et économie</b>Rapportez le verre, payez 30 % de moins</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Acheter par catégorie</h2><a href="#boutique" data-filter="all">Voir tous les produits</a></div>
+    <div class="cat-grid">
+      <a href="#boutique" class="cat k1" data-filter="visage"><img src="../assets/ndala/hero-bottle.svg" alt=""><span>Visage<small>12 produits</small></span></a>
+      <a href="#boutique" class="cat k2" data-filter="corps"><img src="../assets/ndala/shea-cream.svg" alt=""><span>Corps<small>8 produits</small></span></a>
+      <a href="#boutique" class="cat k3" data-filter="cheveux"><img src="../assets/ndala/marula-hair-oil.svg" alt=""><span>Cheveux<small>5 produits</small></span></a>
+      <a href="#boutique" class="cat k4" data-filter="coffret"><img src="../assets/ndala/evening-set.svg" alt=""><span>Coffrets<small>6 produits</small></span></a>
+      <a href="#boutique" class="cat k5" data-filter="all"><img src="../assets/ndala/black-soap.svg" alt=""><span>Recharges<small>10 produits</small></span></a>
+    </div>
+  </div>
+</section>
+
+<section id="boutique" style="padding-top:0;">
+  <div class="wrap">
+    <div class="head"><div><h2>Best-sellers</h2><p>Nos produits les plus recommandés ce mois-ci.</p></div></div>
+    <div class="toolbar">
+      <div class="chips" id="chips"><button class="on" data-filter="all">Tout</button><button data-filter="visage">Visage</button><button data-filter="corps">Corps</button><button data-filter="cheveux">Cheveux</button><button data-filter="cheap">Moins de 10 000</button></div>
+      <label>Trier <select id="sort"><option value="pop">Les plus populaires</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option><option value="new">Nouveautés</option></select></label>
+    </div>
+    <div class="grid" id="grid">
+      <div class="card" data-name="Huile visage baobab" data-price="18500" data-cat="visage" data-img="../assets/ndala/hero-bottle.svg" data-pop="1" data-new="3">
+        <div class="img"><img src="../assets/ndala/hero-bottle.svg" alt="Huile visage baobab" loading="lazy"><span class="pill">Best-seller</span><button class="wish" aria-label="Ajouter aux favoris">♡</button><button class="quick">Ajouter au panier</button></div>
+        <h3>Huile visage baobab</h3><div class="sub">Réparation de nuit · 30 ml</div>
+        <div class="rating"><b>★★★★★</b> 4,9 (312)</div><div class="price">18 500 FCFA</div>
+      </div>
+      <div class="card" data-name="Crème corps karité" data-price="14000" data-cat="corps" data-img="../assets/ndala/shea-cream.svg" data-pop="2" data-new="6">
+        <div class="img"><img src="../assets/ndala/shea-cream.svg" alt="Crème corps karité" loading="lazy"><button class="wish" aria-label="Ajouter aux favoris">♡</button><button class="quick">Ajouter au panier</button></div>
+        <h3>Crème corps karité</h3><div class="sub">Hydratation profonde · 200 ml</div>
+        <div class="rating"><b>★★★★★</b> 4,8 (241)</div><div class="price">14 000 FCFA</div>
+      </div>
+      <div class="card" data-name="Nettoyant moringa" data-price="12500" data-cat="visage" data-img="../assets/ndala/moringa-cleanser.svg" data-pop="6" data-new="1">
+        <div class="img"><img src="../assets/ndala/moringa-cleanser.svg" alt="Nettoyant moringa" loading="lazy"><span class="pill">Nouveau</span><button class="wish" aria-label="Ajouter aux favoris">♡</button><button class="quick">Ajouter au panier</button></div>
+        <h3>Nettoyant moringa</h3><div class="sub">Gel en lait · 150 ml</div>
+        <div class="rating"><b>★★★★☆</b> 4,6 (58)</div><div class="price">12 500 FCFA</div>
+      </div>
+      <div class="card" data-name="Masque argile verte" data-price="9000" data-cat="visage" data-promo="1" data-img="../assets/ndala/clay-mask.svg" data-pop="4" data-new="5">
+        <div class="img"><img src="../assets/ndala/clay-mask.svg" alt="Masque argile verte" loading="lazy"><span class="pill sale">−18 %</span><button class="wish" aria-label="Ajouter aux favoris">♡</button><button class="quick">Ajouter au panier</button></div>
+        <h3>Masque argile verte</h3><div class="sub">Purifiant hebdomadaire · 90 g</div>
+        <div class="rating"><b>★★★★★</b> 4,7 (190)</div><div class="price">9 000 FCFA<s>11 000</s></div>
+      </div>
+      <div class="card" data-name="Huile cheveux marula" data-price="15500" data-cat="cheveux" data-img="../assets/ndala/marula-hair-oil.svg" data-pop="5" data-new="4">
+        <div class="img"><img src="../assets/ndala/marula-hair-oil.svg" alt="Huile cheveux marula" loading="lazy"><button class="wish" aria-label="Ajouter aux favoris">♡</button><button class="quick">Ajouter au panier</button></div>
+        <h3>Huile cheveux marula</h3><div class="sub">Cuir chevelu et pointes · 50 ml</div>
+        <div class="rating"><b>★★★★★</b> 4,8 (167)</div><div class="price">15 500 FCFA</div>
+      </div>
+      <div class="card" data-name="Tonique hibiscus" data-price="9500" data-cat="visage" data-img="../assets/ndala/hibiscus-toner.svg" data-pop="7" data-new="2">
+        <div class="img"><img src="../assets/ndala/hibiscus-toner.svg" alt="Tonique hibiscus" loading="lazy"><button class="wish" aria-label="Ajouter aux favoris">♡</button><button class="quick">Ajouter au panier</button></div>
+        <h3>Tonique hibiscus</h3><div class="sub">Brume équilibrante · 100 ml</div>
+        <div class="rating"><b>★★★★☆</b> 4,5 (94)</div><div class="price">9 500 FCFA</div>
+      </div>
+      <div class="card" data-name="Savon noir" data-price="6500" data-cat="corps" data-img="../assets/ndala/black-soap.svg" data-pop="3" data-new="8">
+        <div class="img"><img src="../assets/ndala/black-soap.svg" alt="Savon noir" loading="lazy"><button class="wish" aria-label="Ajouter aux favoris">♡</button><button class="quick">Ajouter au panier</button></div>
+        <h3>Savon noir</h3><div class="sub">Visage et corps · 120 g</div>
+        <div class="rating"><b>★★★★★</b> 4,9 (402)</div><div class="price">6 500 FCFA</div>
+      </div>
+      <div class="card" data-name="Coffret rituel du soir" data-price="34000" data-cat="coffret" data-promo="1" data-img="../assets/ndala/evening-set.svg" data-pop="8" data-new="7">
+        <div class="img"><img src="../assets/ndala/evening-set.svg" alt="Coffret rituel du soir" loading="lazy"><span class="pill">−15 %</span><button class="wish" aria-label="Ajouter aux favoris">♡</button><button class="quick">Ajouter au panier</button></div>
+        <h3>Coffret rituel du soir</h3><div class="sub">Nettoyant, tonique, huile visage</div>
+        <div class="rating"><b>★★★★★</b> 4,9 (128)</div><div class="price">34 000 FCFA<s>40 500</s></div>
+      </div>
+    </div>
+    <p class="noresult" id="noresult">Aucun produit ne correspond à ce filtre.</p>
+  </div>
+</section>
+
+<section id="coffret" style="padding-top:0;">
+  <div class="wrap">
+    <div class="banner">
+      <div>
+        <h2>Composez votre coffret, −15 %</h2>
+        <p>Choisissez trois produits différents : la remise s'applique automatiquement dans le panier. Ajoutez le code <code>NDALA10</code> par-dessus si c'est votre première commande.</p>
+      </div>
+      <a href="#boutique" class="btn btn-dark">Commencer</a>
+    </div>
+    <div class="botan" id="ingredients"><img src="../assets/ndala/botanicals.svg" alt="Baobab, moringa, karité, marula : nos quatre ingrédients" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="reviews">
+  <div class="wrap">
+    <div class="head"><div><h2>Note de 4,8 sur 5</h2><p>Sur 1 240 avis clients vérifiés (exemples).</p></div><a href="#" onclick="toast('Page des avis simulée.');return false;">Lire tous les avis</a></div>
+    <div class="rv">
+      <div class="r"><div class="stars">★★★★★</div><p>L'huile de baobab est la première chose qui ne me donne pas de boutons avec l'humidité de Brazzaville. Quatrième flacon.</p><div class="who"><b>Mireille K.</b> · Brazzaville <span class="verified">Achat vérifié</span></div></div>
+      <div class="r"><div class="stars">★★★★★</div><p>Commandé mardi, livré mercredi. J'ai pris la crème corps pour ma mère ; elle en a redemandé deux.</p><div class="who"><b>Arsène M.</b> · Pointe-Noire <span class="verified">Achat vérifié</span></div></div>
+      <div class="r"><div class="stars">★★★★★</div><p>Ça sent la vraie plante, pas le parfum. Le verre est lourd et ils le rechargent pour moins cher. Payé par MoMo, aucun souci.</p><div class="who"><b>Chloé D.</b> · Brazzaville <span class="verified">Achat vérifié</span></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div><h4>−10 % sur votre première commande</h4><p style="font-size:.88rem;color:var(--mute)">Nouvelles séries, journées recharge et offres. Un e-mail par mois.</p>
+        <form id="newsletter"><input type="email" placeholder="Adresse e-mail" required aria-label="Adresse e-mail"><button type="submit">Je m'inscris</button></form></div>
+      <div><h4>Boutique</h4><ul><li>Visage</li><li>Corps</li><li>Cheveux</li><li>Coffrets et cadeaux</li><li>Recharges</li><li>Promos</li></ul></div>
+      <div><h4>Aide</h4><ul><li>Livraison</li><li>Retours et remboursements</li><li>Suivre ma commande</li><li>Moyens de paiement</li><li>Nous contacter</li></ul></div>
+      <div><h4>À propos</h4><ul><li>Nos producteurs</li><li>Index des ingrédients</li><li>Points de vente</li><li>Vente en gros</li></ul></div>
+    </div>
+    <div class="fb">
+      <span>© 2026 Ndala SARL · Brazzaville · Confidentialité · Conditions (entreprise fictive)</span>
+      <div class="pay"><span>MTN MoMo</span><span>Airtel Money</span><span>VISA</span><span>Mastercard</span><span>Paiement à la livraison</span></div>
+    </div>
+    <p class="credits">Boutique de démonstration réalisée par <a href="../../index.html" style="text-decoration:underline">IK Digital Solutions</a>. Illustrations : jeu d'images du projet.</p>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" aria-label="Panier">
+  <div class="dh"><h3>Votre panier</h3><button id="closeCart" aria-label="Fermer">✕</button></div>
+  <div class="dl" id="lines"><div class="empty">Votre panier est vide.</div></div>
+  <div class="df">
+    <div class="ship" id="ship"><span id="shiptxt">Ajoutez 25 000 FCFA pour la livraison offerte</span><div class="bar"><div id="bar"></div></div></div>
+    <div class="code"><input id="codein" placeholder="Code promo" aria-label="Code promo"><button type="button" id="codebtn">Appliquer</button></div>
+    <div class="line"><span>Sous-total</span><span id="sub">0 FCFA</span></div>
+    <div class="line disc" id="setline" hidden><span>Coffret 3 produits −15 %</span><span id="setamt"></span></div>
+    <div class="line disc" id="codeline" hidden><span>Code NDALA10 −10 %</span><span id="codeamt"></span></div>
+    <div class="line"><span>Livraison</span><span id="shipamt">2 000 FCFA</span></div>
+    <div class="tot"><span>Total</span><span id="total">0 FCFA</span></div>
+    <button class="checkout" id="checkout" disabled>Commander</button>
+  </div>
+</aside>
+<div id="modal"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  const $=id=>document.getElementById(id);
+  const cart=new Map(); const FREE=25000, SHIP=2000; let code=false; let wishes=0;
+  const fmt=n=>n.toLocaleString('fr-FR')+' FCFA';
+  const t=$('toast');
+  window.toast=function(m){ t.textContent=m; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200); };
+
+  function totals(){
+    let sub=0,count=0; cart.forEach(it=>{ sub+=it.price*it.qty; count+=it.qty; });
+    const setDisc=cart.size>=3?Math.round(sub*0.15):0;
+    const codeDisc=code?Math.round((sub-setDisc)*0.10):0;
+    const after=sub-setDisc-codeDisc;
+    const ship=count===0?0:(after>=FREE?0:SHIP);
+    return {sub,count,setDisc,codeDisc,ship,total:after+ship};
+  }
+  function render(){
+    const lines=$('lines'); lines.innerHTML='';
+    if(!cart.size) lines.innerHTML='<div class="empty">Votre panier est vide.</div>';
+    cart.forEach((it,name)=>{
+      const d=document.createElement('div'); d.className='li';
+      d.innerHTML=`<div class="th"><img src="${it.img}" alt=""></div><div><div class="nm">${name}</div><div class="qty"><button data-n="${name}" data-d="-1" aria-label="Moins">−</button><span>${it.qty}</span><button data-n="${name}" data-d="1" aria-label="Plus">+</button></div></div><div class="pr">${fmt(it.price*it.qty)}</div>`;
+      lines.appendChild(d);
+    });
+    const x=totals();
+    $('sub').textContent=fmt(x.sub);
+    $('cartBtn').textContent='Panier · '+x.count;
+    $('bar').style.width=Math.min(100,x.sub/FREE*100)+'%';
+    $('shiptxt').textContent=x.sub>=FREE?'Livraison offerte sur cette commande':'Ajoutez '+fmt(FREE-x.sub)+' pour la livraison offerte';
+    $('setline').hidden=!x.setDisc; $('setamt').textContent='−'+fmt(x.setDisc);
+    $('codeline').hidden=!x.codeDisc; $('codeamt').textContent='−'+fmt(x.codeDisc);
+    $('shipamt').textContent=x.count===0?'—':(x.ship?fmt(x.ship):'Offerte');
+    $('total').textContent=fmt(x.total);
+    $('checkout').disabled=!cart.size;
+  }
+  $('lines').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const it=cart.get(b.dataset.n); it.qty+= +b.dataset.d; if(it.qty<=0) cart.delete(b.dataset.n); render(); });
+  document.querySelectorAll('.card .quick').forEach(b=>b.addEventListener('click',()=>{
+    const c=b.closest('.card'); const n=c.dataset.name;
+    const it=cart.get(n)||{price:+c.dataset.price,qty:0,img:c.dataset.img}; it.qty++; cart.set(n,it);
+    render(); toast(n+' ajouté au panier'); document.body.classList.add('open');
+  }));
+  document.querySelectorAll('.wish').forEach(b=>b.addEventListener('click',()=>{ b.classList.toggle('on'); const on=b.classList.contains('on'); b.textContent=on?'♥':'♡'; wishes+=on?1:-1; $('wishlink').textContent='Favoris · '+wishes; }));
+  $('codebtn').onclick=()=>{ const v=$('codein').value.trim().toUpperCase(); if(v==='NDALA10'){ code=true; toast('Code NDALA10 appliqué : −10 %.'); } else { code=false; toast('Code inconnu. Essayez NDALA10.'); } render(); };
+  $('cartBtn').onclick=()=>document.body.classList.add('open');
+  $('closeCart').onclick=$('overlay').onclick=()=>document.body.classList.remove('open');
+  $('newsletter').addEventListener('submit',e=>{ e.preventDefault(); e.target.querySelector('input').value=''; toast('Inscription enregistrée. Le code arrive par e-mail (simulé).'); });
+  $('searchform').addEventListener('submit',e=>{ e.preventDefault(); applyFilter('search'); document.getElementById('boutique').scrollIntoView(); });
+
+  /* filters and sort */
+  let filter='all';
+  function applyFilter(f){
+    if(f!=='search') filter=f;
+    const q=$('q').value.trim().toLowerCase();
+    let shown=0;
+    document.querySelectorAll('#grid .card').forEach(c=>{
+      const price=+c.dataset.price, cat=c.dataset.cat;
+      let ok=true;
+      if(filter==='cheap') ok=price<10000; else if(filter==='promo') ok=c.dataset.promo==='1'; else if(filter!=='all') ok=cat===filter;
+      if(f==='search'&&q) ok=ok&&(c.dataset.name.toLowerCase().includes(q)||c.querySelector('.sub').textContent.toLowerCase().includes(q));
+      c.hidden=!ok; if(ok) shown++;
+    });
+    $('noresult').style.display=shown?'none':'block';
+    document.querySelectorAll('#chips button').forEach(b=>b.classList.toggle('on',b.dataset.filter===filter));
+  }
+  document.querySelectorAll('#chips button').forEach(b=>b.addEventListener('click',()=>applyFilter(b.dataset.filter)));
+  document.querySelectorAll('[data-filter]').forEach(a=>{ if(a.tagName==='A') a.addEventListener('click',()=>applyFilter(a.dataset.filter)); });
+  $('sort').addEventListener('change',()=>{
+    const g=$('grid'); const cards=[...g.querySelectorAll('.card')]; const v=$('sort').value;
+    cards.sort((a,b)=>v==='asc'?a.dataset.price-b.dataset.price:v==='desc'?b.dataset.price-a.dataset.price:v==='new'?a.dataset.new-b.dataset.new:a.dataset.pop-b.dataset.pop);
+    cards.forEach(c=>g.appendChild(c));
+  });
+
+  /* checkout (simulated) */
+  $('checkout').onclick=()=>{
+    const x=totals();
+    $('modal').innerHTML=`<div class="modal-bg"><div class="modal" role="dialog" aria-modal="true">
+      <span class="sandbox">Bac à sable · aucun paiement réel</span>
+      <h3>Finaliser la commande</h3>
+      <p class="sub">${x.count} article(s) · total <b>${fmt(x.total)}</b>${x.ship?'':' · livraison offerte'}</p>
+      <div class="field"><label for="ck-name">Nom</label><input id="ck-name" value="Mireille Kombo"></div>
+      <div class="field"><label for="ck-tel">Téléphone (SMS de confirmation)</label><input id="ck-tel" value="+242 06 987 65 43"></div>
+      <div class="field"><label for="ck-addr">Adresse de livraison</label><input id="ck-addr" value="Rue Mbochis, Poto-Poto, Brazzaville"></div>
+      <div class="paychoice"><label><input type="radio" name="pay" value="MTN MoMo" checked>MTN MoMo</label><label><input type="radio" name="pay" value="Airtel Money">Airtel Money</label><label><input type="radio" name="pay" value="Carte bancaire">Carte bancaire</label><label><input type="radio" name="pay" value="Paiement à la livraison">À la livraison</label></div>
+      <div id="ck-body"></div>
+      <div class="actions"><button type="button" class="btn btn-white" id="ck-cancel" style="margin:0">Annuler</button><button type="button" class="btn btn-dark" id="ck-ok">Payer ${fmt(x.total)}</button></div>
+    </div></div>`;
+    $('ck-cancel').onclick=()=>{ $('modal').innerHTML=''; };
+    $('ck-ok').onclick=()=>{
+      const pm=document.querySelector('input[name=pay]:checked').value, tel=$('ck-tel').value.trim(), addr=$('ck-addr').value.trim();
+      $('ck-ok').disabled=true; $('ck-cancel').disabled=true;
+      $('ck-body').innerHTML=`<p class="sub">${pm==='Paiement à la livraison'?'Enregistrement de la commande…':pm==='Carte bancaire'?'Transaction envoyée à la banque…':'Demande de paiement envoyée au '+tel+' via '+pm+'. Confirmez avec votre code PIN.'}</p><div class="progress"><i></i></div>`;
+      setTimeout(()=>{
+        const ref='ND-'+Math.random().toString(36).slice(2,8).toUpperCase();
+        $('ck-body').innerHTML=`<p><b style="color:var(--moss)">Commande confirmée.</b> Référence <b>${ref}</b>.</p><div class="sms">Ndala: commande ${ref} confirmee, ${fmt(x.total)} (${pm}). Livraison sous 1 a 2 jours a ${addr}.</div><p class="sub">SMS envoyé au ${tel} (simulé). Un e-mail de suivi suivra.</p>`;
+        $('ck-cancel').disabled=false; $('ck-cancel').textContent='Fermer'; $('ck-ok').style.display='none';
+        $('ck-cancel').onclick=()=>{ $('modal').innerHTML=''; cart.clear(); code=false; render(); document.body.classList.remove('open'); toast('Merci ! Votre commande est en préparation (simulé).'); };
+      },1700);
+    };
+  };
+  render();
+})();
+</script>

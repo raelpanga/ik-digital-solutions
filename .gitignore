@@ -2,3 +2,4 @@ node_modules/
 *.zip
 Thumbs.db
 .DS_Store
+demos/assets/kimia/raw/
