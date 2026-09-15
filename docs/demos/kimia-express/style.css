@@ -123,6 +123,8 @@ section.dark .eyebrow { color: var(--orange); }
 h3.sub { margin: 1.8rem 0 .9rem; font-size: 1.15rem; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.6rem, 4vw, 3.5rem); align-items: start; }
 .grid-2.middle { align-items: center; }
+/* Let tables scroll inside their column instead of widening the mobile page. */
+.grid-2 > *, .grid-3 > *, .grid-4 > *, .hero-grid > *, .phead-grid > *, .news-grid > *, .wiz-grid > *, .track-grid > * { min-width: 0; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.4rem; }
 .cards-2 { gap: 1.4rem; }

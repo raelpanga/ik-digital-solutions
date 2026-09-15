@@ -247,7 +247,14 @@ if (fs.existsSync(sitesDir)) {
     const slug = SITE_SLUGS[s] || s;
     const n = require(gen).build(path.join(OUT, "demos", slug), { portfolioHome: "../../index.html" });
     console.log("site " + slug + ": " + n + " pages");
-    pages.push("demos/" + slug + "/");
+    const addSitePages = dir => {
+      for (const entry of fs.readdirSync(path.join(OUT, dir), { withFileTypes: true })) {
+        const rel = dir + "/" + entry.name;
+        if (entry.isDirectory()) addSitePages(rel);
+        else if (entry.name.endsWith(".html")) pages.push(rel.replace(/index\.html$/, ""));
+      }
+    };
+    addSitePages("demos/" + slug);
   }
 }
 write("404.html", layout({ lang: "fr", base: "/", title: "Page introuvable · " + C.company, path: "404.html", altPath: "404.html", frHref: "/index.html", enHref: "/en/index.html", body: '<section class="section"><div class="wrap"><p class="eyebrow">404</p><h1>Page introuvable</h1><p class="lead">Cette adresse n\'existe pas. <a href="/index.html">Retour à l\'accueil</a>.</p></div></section>' }).replace(/href="\/(assets|index|en\/)/g, 'href="' + (SITE_URL || "/") + "$1").replace(/src="\/assets/g, 'src="' + (SITE_URL || "/") + "assets"));

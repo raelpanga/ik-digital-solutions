@@ -2,7 +2,7 @@
 
 A real static website: HTML, CSS and JavaScript pages generated from one content file,
 hosted publicly on GitHub Pages. French first, with a full English copy of every page.
-Three client projects in production and seven demonstrations, including three bilingual
+Three client projects in production and six demonstrations, including three bilingual
 multi-page sites. No sign-in anywhere.
 
 **Public site:** https://raelpanga.github.io/ik-digital-solutions/
@@ -13,7 +13,7 @@ multi-page sites. No sign-in anywhere.
 | Page | French | English |
 |---|---|---|
 | Home (services, proofs, projects, method, compliance, pricing, contact) | `index.html` | `en/index.html` |
-| One page per project (10) | `projets/<slug>.html` | `en/projects/<slug>.html` |
+| One page per project (9) | `projets/<slug>.html` | `en/projects/<slug>.html` |
 | Single-page demo applications (5, French only) | `demos/<slug>/` | same |
 | Kando Ressources mining site (16 pages, bilingual) | `demos/kando-ressources/` | `demos/kando-ressources/en/` |
 | Cimenterie du Fleuve site (18 pages, bilingual) | `demos/site-corporate/` | `demos/site-corporate/en/` |
@@ -77,16 +77,19 @@ and `fr` / `en` blocks with `title`, `sector`, `tagline`, `problem`, `built`, `c
 
 ## Screenshots
 
-From `portfolio/` in Git Bash, after building:
+Kimia's repeatable browser verification and card capture (requires Playwright and
+Google Chrome; `NODE_PATH` can point to the installed Playwright package directory):
 
 ```bash
-CH="/c/Program Files/Google/Chrome/Application/chrome.exe"
-u="file:///$(cygpath -m "$PWD/docs/demos/businesshub/index.html")"; u="${u// /%20}"
-"$CH" --headless=new --disable-gpu --hide-scrollbars --window-size=1280,800 --virtual-time-budget=9000 \
-  --user-data-dir="$TEMP/ik-shots" --screenshot="$(cygpath -w "$PWD/shots/businesshub-desktop.png")" "$u"
-"$CH" --headless=new --disable-gpu --hide-scrollbars --window-size=430,900 --virtual-time-budget=9000 \
-  --user-data-dir="$TEMP/ik-shots" --screenshot="$(cygpath -w "$PWD/shots/businesshub-mobile.png")" "$u"
+node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com
+node verify-kimia.js --screenshots
+node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com
 ```
+
+The check serves `docs` locally, follows all 18 FR/EN language switches, checks page,
+asset and fragment links, exercises simulated booking/tracking and filters, and checks
+mobile navigation and overflow. Screenshots use real 1280 × 800 and 430 × 900 browser
+viewports. The final build copies both new card images from `shots/` into `docs/shots/`.
 
 ## Custom domain: iksolutions-inc.com (GoDaddy)
 

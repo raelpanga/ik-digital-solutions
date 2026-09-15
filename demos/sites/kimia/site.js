@@ -47,7 +47,7 @@
     if (weight) size = C.sizes.find(s => s.max >= weight);
     const urban = from.key === to.key;
     if (urban && !from.urban) return { error: J.noUrban };
-    const mode = urban ? "urban" : from.mode === "air" || to.mode === "air" ? "air" : "road";
+    const mode = urban ? "urban" : from.region === to.region ? "road" : from.mode === "air" || to.mode === "air" ? "air" : "road";
     const zone = c => c.communes?.find(x => x[0] === value(f, c === from ? "fc" : "tc"))?.[1] || 1;
     const base = P[mode][size.key], extra = urban ? (Math.max(zone(from), to.communes?.find(x => x[0] === value(f, "tc"))?.[1] || 1) - 1) * P.zoneStep : 0;
     const express = value(f, "speed") === "exp";
@@ -92,7 +92,9 @@
     let step = 0;
     for (const [k, v] of new URLSearchParams(location.search)) {
       if (!["from", "to", "fc", "tc", "size", "speed"].includes(k)) continue;
-      const field = wizard.elements.namedItem(k); if (field) field.value = v;
+      const field = wizard.elements.namedItem(k);
+      if (field instanceof HTMLSelectElement && all("option", field).some(o => o.value === v)) field.value = v;
+      else if (field instanceof RadioNodeList && [...field].some(o => o.value === v)) field.value = v;
     }
     const update = () => {
       cities(wizard);
