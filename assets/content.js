@@ -986,76 +986,80 @@ window.KDS = {
       slug: "site-corporate",
       status: "demo",
       demoUrl: "demos/site-corporate/",
-      color: "#1F2A5A",
+      color: "#1F4E79",
       domain: "cimenterie-du-fleuve.cd",
-      stack: ["HTML/CSS statique", "Cloudflare", "Hébergement RDC", "Formulaires", "Uptime Kuma", "Sauvegardes chiffrées"],
-      timeline: { fr: "3 à 5 semaines", en: "3 to 5 weeks" },
-      price: { fr: "à partir de 2 500 USD", en: "from 2,500 USD" },
-      monthly: { fr: "80 à 150 USD / mois", en: "80 to 150 USD / month" },
+      stack: ["HTML / CSS / JS statique", "18 pages FR / EN", "Fiches produits", "Appels d'offres", "Candidatures", "Mécanisme de plaintes", "Mentions légales", "Cloudflare", "Hébergement RDC"],
+      timeline: { fr: "5 à 8 semaines", en: "5 to 8 weeks" },
+      price: { fr: "à partir de 5 000 USD", en: "from 5,000 USD" },
+      monthly: { fr: "150 à 400 USD / mois", en: "150 to 400 USD / month" },
       fr: {
-        title: "Site Corporate & Hébergement Conforme",
-        sector: "Industrie, logistique, BTP, énergie",
-        tagline: "Un site bilingue pour une entreprise industrielle, hébergé en RDC, avec mentions légales conformes et supervision.",
+        title: "Cimenterie du Fleuve",
+        sector: "Industrie · ciment, béton et granulats, Kongo Central",
+        tagline: "Site corporate bilingue pour un cimentier : produits et fiches techniques, sites et logistique, appels d'offres, carrières, durabilité, mentions légales conformes au Code du numérique.",
         problem: [
-          "Une entreprise industrielle a un site vieilli, hébergé à l'étranger par un prestataire injoignable, sans page carrières, sans espace fournisseurs, sans mentions légales conformes au Code du numérique.",
-          "Ses partenaires étrangers et ses candidats la jugent sur ce site."
+          "Un industriel congolais vend à trois publics à la fois : les chantiers et revendeurs qui cherchent une fiche technique et un point de vente, les fournisseurs qui cherchent les appels d'offres, et les candidats, partenaires et administrations qui le jugent sur son site. Un site vitrine d'une page ne sert aucun des trois.",
+          "Il fallait aussi un site que le service communication puisse tenir à jour seul : nouveau communiqué, nouvel appel d'offres, poste ouvert, sans repasser par un prestataire."
         ],
         built: [
-          "Site bilingue français / anglais : activités, sites, actualités, carrières, appels d'offres",
-          "Formulaire fournisseurs et candidatures, avec accusé de réception",
-          "Mentions légales, politique de données et bandeau de consentement conformes",
-          "Documents PDF (rapports, offres) téléchargeables et légers",
-          "Modifiable par le service communication sans prestataire"
+          "Dix-huit pages en français et en anglais, générées depuis un seul fichier de contenu : neuf pages par langue, mêmes adresses, même navigation",
+          "Produits : cinq fiches (trois ciments CEM I et CEM II, béton prêt à l'emploi, granulats) avec caractéristiques normalisées, usages, fiches techniques, certificat OCC et conseils de stockage",
+          "Sites et logistique : usine, carrière, terminal, dépôts, carte schématique rail-route-fleuve et tableau des points de vente avec téléphones cliquables",
+          "Fournisseurs : tableau des consultations filtrable par état (ouvert, à venir, clôturé), procédure de réponse, règles d'achat et formulaire de référencement avec numéro de dossier",
+          "Durabilité et sécurité : huit indicateurs, règles de sécurité, environnement, programmes communautaires et mécanisme de plainte en quatre étapes avec ligne verte",
+          "Actualités filtrables par mot-clé, rubrique et année ; postes filtrables par site et service avec candidature en ligne ; contact avec demande de devis, horaires, mentions légales et bandeau de consentement"
         ],
         congo: [
-          "Pages statiques : rapides même en 3G, résistantes aux pics de trafic",
-          "Hébergement à Kinshasa, exigé par le Code du numérique pour les données collectées",
-          "Fonctionne sans JavaScript pour les navigateurs anciens",
-          "Formulaires utilisables depuis un téléphone"
+          "Réalités logistiques congolaises intégrées : rail SCTP Matadi–Kinshasa, route nationale n° 1, barges depuis Kinshasa vers Bandundu, Mbandaka et Kisangani",
+          "Certificat OCC, RCCM, numéro d'impôt, ordonnance-loi 23/010 (Code du numérique) : les références qu'un lecteur congolais attend, à leur place",
+          "Prix affichés en francs congolais, téléphones en +243, ligne verte gratuite en français, kikongo et lingala",
+          "Pages statiques et photos compressées : lisible en 3G depuis un chantier ; chaque chiffre est un emplacement à remplir par la société"
         ],
         deploy: [
-          "Site statique servi depuis Kinshasa, Cloudflare devant pour le cache mondial",
-          "Mise en ligne par pipeline automatisé, retour arrière immédiat",
+          "Site statique servi depuis un hébergement en RDC, Cloudflare devant pour le cache et la protection",
+          "Mise en ligne par pipeline automatisé à chaque modification du fichier de contenu, retour arrière immédiat",
+          "Fiches techniques et dossiers d'appel d'offres en PDF servis par le CDN, formulaires branchés sur la messagerie du service concerné",
           "Sauvegarde chiffrée chaque nuit, copie hors du pays"
         ],
         monitor: [
-          "Sonde toutes les 60 secondes, publiée sur la page d'état",
-          "Contrôle du certificat HTTPS et du nom de domaine avant expiration",
-          "Alerte WhatsApp et SMS à notre équipe",
-          "Rapport mensuel de disponibilité"
+          "Sonde toutes les 60 secondes, objectif de disponibilité 99,9 %",
+          "Contrôle du certificat HTTPS, du nom de domaine et des liens vers les documents",
+          "Alerte WhatsApp et SMS à notre équipe et au service communication",
+          "Rapport mensuel de disponibilité et de fréquentation"
         ]
       },
       en: {
-        title: "Corporate Site & Compliant Hosting",
-        sector: "Industry, logistics, construction, energy",
-        tagline: "A bilingual site for an industrial company, hosted in the DRC, with a compliant legal notice and monitoring.",
+        title: "Cimenterie du Fleuve",
+        sector: "Industry · cement, concrete and aggregates, Kongo Central",
+        tagline: "Bilingual corporate site for a cement maker: products and datasheets, sites and logistics, tenders, careers, sustainability, legal notice compliant with the Digital Code.",
         problem: [
-          "An industrial company has an ageing site, hosted abroad by an unreachable provider, with no careers page, no supplier area, no legal notice compliant with the Digital Code.",
-          "Its foreign partners and its candidates judge it on that site."
+          "A Congolese manufacturer sells to three audiences at once: contractors and retailers looking for a datasheet and an outlet, suppliers looking for tenders, and candidates, partners and administrations who judge it on its site. A one-page brochure site serves none of them.",
+          "The communications team also had to be able to keep the site current alone: a new release, a new tender, an open position, without going back to a vendor."
         ],
         built: [
-          "Bilingual French / English site: activities, sites, news, careers, tenders",
-          "Supplier and application forms, with acknowledgement",
-          "Compliant legal notice, data policy and consent banner",
-          "Light, downloadable PDF documents (reports, offers)",
-          "Editable by the communications team without a vendor"
+          "Eighteen pages in French and English, generated from one content file: nine pages per language, same addresses, same navigation",
+          "Products: five sheets (three CEM I and CEM II cements, ready-mix concrete, aggregates) with standardised characteristics, uses, datasheets, OCC certificate and storage advice",
+          "Sites and logistics: plant, quarry, terminal, depots, schematic rail-road-river map and outlet table with tappable phone numbers",
+          "Suppliers: tender table filterable by state (open, upcoming, closed), response procedure, purchasing rules and registration form with file number",
+          "Sustainability and safety: eight indicators, safety rules, environment, community programmes and a four-step grievance mechanism with a green line",
+          "News filterable by keyword, category and year; positions filterable by site and department with online application; contact with quote request, opening hours, legal notice and consent banner"
         ],
         congo: [
-          "Static pages: fast even on 3G, resilient to traffic peaks",
-          "Hosted in Kinshasa, as the Digital Code requires for collected data",
-          "Works without JavaScript for old browsers",
-          "Forms usable from a phone"
+          "Congolese logistics built in: SCTP Matadi–Kinshasa railway, national road no. 1, barges from Kinshasa to Bandundu, Mbandaka and Kisangani",
+          "OCC certificate, RCCM, tax number, ordinance-law 23/010 (Digital Code): the references a Congolese reader expects, where they belong",
+          "Prices posted in Congolese francs, +243 phone numbers, free green line in French, Kikongo and Lingala",
+          "Static pages and compressed photos: readable on 3G from a building site; every figure is a slot for the company to fill"
         ],
         deploy: [
-          "Static site served from Kinshasa, Cloudflare in front for global caching",
-          "Automated release pipeline, immediate rollback",
-          "Encrypted nightly backup, off-country copy"
+          "Static site served from DRC hosting, Cloudflare in front for caching and protection",
+          "Automated pipeline on every change to the content file, immediate rollback",
+          "Datasheets and tender files as PDFs served by the CDN, forms wired to the relevant department's mailbox",
+          "Encrypted backup every night, copy outside the country"
         ],
         monitor: [
-          "Probe every 60 seconds, published on the status page",
-          "HTTPS certificate and domain expiry checks",
-          "WhatsApp and SMS alert to our team",
-          "Monthly availability report"
+          "Probe every 60 seconds, 99.9% availability target",
+          "HTTPS certificate, domain name and document link checks",
+          "WhatsApp and SMS alert to our team and the communications team",
+          "Monthly availability and traffic report"
         ]
       }
     }

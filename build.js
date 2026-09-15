@@ -240,7 +240,8 @@ if (fs.existsSync(sitesDir)) {
   for (const s of fs.readdirSync(sitesDir)) {
     const gen = path.join(sitesDir, s, "build-" + s + ".js");
     if (!fs.existsSync(gen)) continue;
-    const slug = s === "kando" ? "kando-ressources" : s;
+    const SITE_SLUGS = { kando: "kando-ressources", fleuve: "site-corporate" };
+    const slug = SITE_SLUGS[s] || s;
     const n = require(gen).build(path.join(OUT, "demos", slug), { portfolioHome: "../../index.html" });
     console.log("site " + slug + ": " + n + " pages");
     pages.push("demos/" + slug + "/");

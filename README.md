@@ -122,6 +122,20 @@ generator, run automatically by `build.js`:
   application), Contact. To deliver it to a client: replace the figures in `content.js`,
   drop their PDFs into a `docs/` folder and point the `data-doc` links at them, remove the
   demonstrator bar in `build-kando.js`, and rebuild.
+- `demos/sites/fleuve/` — **Cimenterie du Fleuve SA**, a fictitious cement producer in
+  Matadi, Kongo Central. Same pattern (`content.js`, `build-fleuve.js`, `style.css`,
+  `site.js`, `img/`), published as `docs/demos/site-corporate/` (the slug map is in
+  `build.js`). 18 pages: home, Who we are, Products (five datasheets with spec tables),
+  Sites & logistics (schematic map, outlets table), Sustainability & safety (indicators,
+  grievance mechanism), News, Careers, Suppliers (tender table filterable by state,
+  registration form), Contact (quote request, opening hours, legal notice) plus a consent
+  banner. Its own identity: Archivo / Source Sans 3 / IBM Plex Mono, river blue and safety
+  yellow. The previous single-page version is kept in `demos/archive/site-corporate-v1.html`.
+
+Mobile card screenshots: headless Chrome will not open a window narrower than about 500 px,
+so a plain `--window-size=430,900` shot is a crop of a 504 px layout. Use
+`node mshot.js docs/demos/<slug>/index.html shots/<slug>-mobile.png 900`, which frames the
+page in a 430 px iframe first.
 
 ## Old material
 
