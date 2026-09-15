@@ -71,7 +71,7 @@ window.KDS = {
       },
       projects: {
         eyebrow: "Réalisations",
-        title: "Trois projets clients en production, cinq démonstrateurs.",
+        title: "Trois projets clients en production, six démonstrateurs.",
         lead: "Chaque fiche suit le même plan : le problème, ce que nous avons construit, comment cela tient en RDC, comment c'est déployé, comment c'est supervisé, ce que cela coûte. Le badge vert signale un client réel, le badge cuivre un démonstrateur.",
         badgeDemo: "Démonstrateur",
         badgeClient: "Client",
@@ -231,7 +231,7 @@ window.KDS = {
       },
       projects: {
         eyebrow: "Work",
-        title: "Three client projects in production, five demonstrators.",
+        title: "Three client projects in production, six demonstrators.",
         lead: "Every page follows the same plan: the problem, what we built, how it holds up in the DRC, how it is deployed, how it is monitored, what it costs. The green badge marks a real client, the copper badge a demonstrator.",
         badgeDemo: "Demonstrator",
         badgeClient: "Client",
@@ -586,6 +586,87 @@ window.KDS = {
           "Forms delivered by e-mail through Web3Forms, appointments through Google Apps Script",
           "Content updates to the French and English pages on the client's request",
           "Security and accessibility audits repeated after each change"
+        ]
+      }
+    },
+    {
+      slug: "kando-ressources",
+      status: "demo",
+      demoUrl: "demos/kando-ressources/",
+      color: "#9A4B1E",
+      domain: "kando-ressources.cd",
+      stack: ["HTML / CSS / JS statique", "16 pages FR / EN", "Espace investisseurs", "Rapports et ITIE", "Mécanisme de plaintes", "Archive de communiqués", "Cloudflare", "Hébergement RDC"],
+      timeline: { fr: "6 à 10 semaines", en: "6 to 10 weeks" },
+      price: { fr: "à partir de 8 000 USD", en: "from 8,000 USD" },
+      monthly: { fr: "250 à 600 USD / mois", en: "250 to 600 USD / month" },
+      fr: {
+        title: "Kando Ressources",
+        sector: "Société minière · cuivre et cobalt, Lualaba",
+        tagline: "Site corporate bilingue pour un producteur de cuivre-cobalt : activités, espace investisseurs, durabilité avec mécanisme de plaintes, actualités, carrières.",
+        problem: [
+          "Les grandes sociétés minières présentent toutes la même architecture : qui nous sommes, activités, investisseurs, durabilité, actualités, carrières, contact. Leurs partenaires, prêteurs, administrations et communautés s'y attendent. La plupart des opérateurs installés en RDC n'ont pourtant aucun site à la hauteur de cette attente.",
+          "Il fallait un site qui serve deux publics à la fois : les partenaires financiers, qui cherchent rapports, chiffres de production et déclaration ITIE, et les communautés riveraines, qui cherchent les programmes, les emplois et un moyen de déposer une plainte."
+        ],
+        built: [
+          "Seize pages en français et en anglais, générées depuis un seul fichier de contenu que le service communication peut modifier sans coder",
+          "Page d'accueil avec chiffres clés, activités, indicateurs de durabilité, derniers communiqués, documents investisseurs et programmes communautaires",
+          "Espace investisseurs : faits saillants, production trimestrielle, bibliothèque de rapports, calendrier, tableau ITIE des paiements à l'État, structure du capital, contact et alertes",
+          "Durabilité : indicateurs sécurité, eau, climat et emploi local, programmes communautaires, consultation, origine des minerais, mécanisme de plaintes en quatre étapes avec formulaire et numéro de référence",
+          "Archive de communiqués consultable par mot-clé, catégorie et année ; offres d'emploi filtrables par site et service avec candidature en ligne",
+          "Carte schématique des sites, fiches par produit (cuivre, cobalt), équipe de direction et conseil d'administration, gouvernance et politiques"
+        ],
+        congo: [
+          "Bilingue français-anglais pour les partenaires étrangers, numéro vert et bureaux communautaires mis en avant pour les riverains",
+          "Déclaration ITIE, loi 17/001 sur la sous-traitance, Code minier de 2018 et diligence raisonnable OCDE cités là où un lecteur congolais les attend",
+          "Photos compressées et pages statiques : lisible en 3G depuis Kolwezi ou Fungurume",
+          "Chaque chiffre est un emplacement à remplir par la société ; rien n'est inventé sur un client réel"
+        ],
+        deploy: [
+          "Site statique servi depuis un hébergement en RDC, Cloudflare devant pour le cache, la protection et la disponibilité",
+          "Mise en ligne par pipeline automatisé à chaque publication de communiqué, retour arrière immédiat",
+          "Bibliothèque de PDF servie par le CDN, formulaires branchés sur la messagerie du service communication",
+          "Sauvegarde chiffrée chaque nuit, copie hors du pays"
+        ],
+        monitor: [
+          "Sonde toutes les 60 secondes, objectif de disponibilité 99,9 %",
+          "Contrôle des certificats, du nom de domaine et des liens vers les documents",
+          "Alerte WhatsApp et SMS à notre équipe et au service communication",
+          "Rapport mensuel de disponibilité et de fréquentation"
+        ]
+      },
+      en: {
+        title: "Kando Ressources",
+        sector: "Mining company · copper and cobalt, Lualaba",
+        tagline: "Bilingual corporate site for a copper-cobalt producer: operations, investor centre, sustainability with a grievance mechanism, news, careers.",
+        problem: [
+          "Every major mining company presents the same architecture: who we are, what we do, investors, sustainability, news, careers, contact. Their partners, lenders, administrations and communities expect it. Most operators established in the DRC have no site that meets that expectation.",
+          "The site had to serve two audiences at once: financial partners looking for reports, production figures and the EITI disclosure, and neighbouring communities looking for programmes, jobs and a way to file a grievance."
+        ],
+        built: [
+          "Sixteen pages in French and English, generated from a single content file that the communications team can edit without code",
+          "Home page with key figures, operations, sustainability indicators, latest releases, investor documents and community programmes",
+          "Investor centre: highlights, quarterly production, report library, calendar, EITI table of payments to the State, ownership, contact and alerts",
+          "Sustainability: safety, water, climate and local employment indicators, community programmes, consultation, mineral origin, four-step grievance mechanism with a form and reference number",
+          "Release archive searchable by keyword, category and year; job openings filterable by site and department with online application",
+          "Schematic site map, product pages (copper, cobalt), executive team and board, governance and policies"
+        ],
+        congo: [
+          "Bilingual French-English for foreign partners, hotline and community offices prominent for neighbours",
+          "EITI disclosure, Law 17/001 on subcontracting, the 2018 Mining Code and OECD due diligence cited where a Congolese reader expects them",
+          "Compressed photos and static pages: readable on 3G from Kolwezi or Fungurume",
+          "Every figure is a slot for the company to fill; nothing is invented about a real client"
+        ],
+        deploy: [
+          "Static site served from hosting in the DRC, Cloudflare in front for caching, protection and availability",
+          "Automated release pipeline on every press release, immediate rollback",
+          "PDF library served by the CDN, forms routed to the communications team's mailbox",
+          "Encrypted nightly backup, off-country copy"
+        ],
+        monitor: [
+          "Probe every 60 seconds, 99.9% availability target",
+          "Certificate, domain and document-link checks",
+          "WhatsApp and SMS alert to our team and to the communications team",
+          "Monthly availability and traffic report"
         ]
       }
     },
