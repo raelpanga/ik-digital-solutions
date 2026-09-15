@@ -594,14 +594,14 @@ window.KDS = {
       status: "demo",
       demoUrl: "demos/kimia-express/",
       color: "#1D4ED8",
-      domain: "kimia-express.cg",
+      domain: "kimia-express.cd",
       stack: ["HTML / CSS / JS", "Estimateur de prix", "Suivi de colis", "MTN MoMo · Airtel Money", "SMS", "Cloudflare", "Hébergement local"],
       timeline: { fr: "3 à 5 semaines", en: "3 to 5 weeks" },
       price: { fr: "à partir de 2 500 USD", en: "from 2,500 USD" },
       monthly: { fr: "80 à 150 USD / mois", en: "80 to 150 USD / month" },
       fr: {
         title: "Kimia Express",
-        sector: "Livraison et logistique · Brazzaville et Pointe-Noire",
+        sector: "Livraison et logistique · Kinshasa et Pointe-Noire",
         tagline: "Site de livraison express avec estimateur de prix instantané, réservation de collecte, paiement mobile money et suivi de colis en direct.",
         problem: [
           "Une société de coursiers reçoit ses commandes par appels et messages WhatsApp, donne ses prix de tête, et ses clients rappellent trois fois pour savoir où est leur colis. Les entreprises qui expédient tous les jours veulent un compte, des tarifs dégressifs et une facture mensuelle.",
@@ -618,7 +618,7 @@ window.KDS = {
           "Page unique et légère, photos compressées : lisible en 3G, même sur un téléphone d'entrée de gamme",
           "Paiement mobile money et espèces au coursier, sans carte bancaire obligatoire",
           "SMS de confirmation et de suivi pour les clients sans application",
-          "Prix en francs, délais réalistes par ville, adaptable à Kinshasa, Lubumbashi ou Goma en changeant une liste"
+          "Prix en francs, délais réalistes par ville, adaptable à Lubumbashi ou Goma en changeant une liste"
         ],
         deploy: [
           "Site statique servi depuis un hébergement local, Cloudflare devant pour le cache et la protection",
@@ -635,7 +635,7 @@ window.KDS = {
       },
       en: {
         title: "Kimia Express",
-        sector: "Delivery and logistics · Brazzaville and Pointe-Noire",
+        sector: "Delivery and logistics · Kinshasa and Pointe-Noire",
         tagline: "Express delivery site with an instant price estimator, pickup booking, mobile money payment and live parcel tracking.",
         problem: [
           "A courier company takes orders by phone and WhatsApp, quotes prices from memory, and customers call three times to ask where their parcel is. Businesses that ship every day want an account, volume rates and a monthly invoice.",
@@ -652,7 +652,7 @@ window.KDS = {
           "One light page with compressed photos: readable on 3G, even on an entry-level phone",
           "Mobile money and cash to the courier, no bank card required",
           "SMS confirmation and tracking for customers without the app",
-          "Prices in francs, realistic delivery times per city, adaptable to Kinshasa, Lubumbashi or Goma by changing one list"
+          "Prices in francs, realistic delivery times per city, adaptable to Lubumbashi or Goma by changing one list"
         ],
         deploy: [
           "Static site served from local hosting, Cloudflare in front for caching and protection",
@@ -827,14 +827,14 @@ window.KDS = {
       status: "demo",
       demoUrl: "demos/ndala-beauty/",
       color: "#2F6B4F",
-      domain: "ndala.cg",
+      domain: "ndala.cd",
       stack: ["HTML / CSS / JS", "Panier et code promo", "MTN MoMo · Airtel Money", "SMS", "Cloudflare", "Hébergement local"],
       timeline: { fr: "4 à 6 semaines", en: "4 to 6 weeks" },
       price: { fr: "à partir de 2 500 USD", en: "from 2,500 USD" },
       monthly: { fr: "80 à 150 USD / mois", en: "80 to 150 USD / month" },
       fr: {
         title: "Ndala Beauty",
-        sector: "Commerce en ligne · cosmétiques naturels, Brazzaville",
+        sector: "Commerce en ligne · cosmétiques naturels, Kinshasa",
         tagline: "Boutique en ligne de soins naturels avec catalogue filtrable, panier, remise coffret, code promo et paiement mobile money.",
         problem: [
           "Une marque de cosmétiques vend sur Instagram et WhatsApp : les prix se négocient en message privé, les commandes se perdent, et chaque paiement est vérifié à la main sur le téléphone du gérant. Impossible de proposer des coffrets, des codes promo ou des recharges sans tout expliquer à chaque cliente.",
@@ -851,7 +851,7 @@ window.KDS = {
           "Illustrations vectorielles légères au lieu de photos lourdes : la page reste rapide en 3G",
           "Mobile money et paiement à la livraison, sans carte bancaire obligatoire",
           "SMS de confirmation pour les clientes sans e-mail",
-          "Prix en francs, livraison en 1 à 2 jours dans les grandes villes, adaptable à Kinshasa en changeant les zones"
+          "Prix en francs, livraison en 1 à 2 jours dans les grandes villes, adaptable à Lubumbashi en changeant les zones"
         ],
         deploy: [
           "Site statique servi depuis un hébergement local, Cloudflare devant pour le cache et la protection",
@@ -868,7 +868,7 @@ window.KDS = {
       },
       en: {
         title: "Ndala Beauty",
-        sector: "E-commerce · natural skincare, Brazzaville",
+        sector: "E-commerce · natural skincare, Kinshasa",
         tagline: "Natural skincare online shop with a filterable catalogue, bag, set discount, promo code and mobile money payment.",
         problem: [
           "A skincare brand sells on Instagram and WhatsApp: prices are negotiated in private messages, orders get lost, and every payment is checked by hand on the owner's phone. Sets, promo codes and refills are impossible to offer without explaining everything to each customer.",
@@ -885,7 +885,7 @@ window.KDS = {
           "Light vector illustrations instead of heavy photos: the page stays fast on 3G",
           "Mobile money and cash on delivery, no bank card required",
           "SMS confirmation for customers without e-mail",
-          "Prices in francs, delivery in 1 to 2 days in major cities, adaptable to Kinshasa by changing the zones"
+          "Prices in francs, delivery in 1 to 2 days in major cities, adaptable to Lubumbashi by changing the zones"
         ],
         deploy: [
           "Static site served from local hosting, Cloudflare in front for caching and protection",
