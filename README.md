@@ -15,6 +15,7 @@ the same site. No sign-in anywhere.
 | Home (services, proofs, projects, method, compliance, pricing, contact) | `index.html` | `en/index.html` |
 | One page per project (8) | `projets/<slug>.html` | `en/projects/<slug>.html` |
 | Demo applications (7, French only) | `demos/<slug>/` | same |
+| Kando Ressources mining site (16 pages, bilingual) | `demos/kando-ressources/` | `demos/kando-ressources/en/` |
 
 Demo pages: `kimia-express` (delivery site, replaced the pharmacy demo), `ndala-beauty`
 (skincare shop, replaced the school demo), `commande-distributeur`, `portail-sous-traitant`,
@@ -104,6 +105,23 @@ issued) and rebuild with the CNAME file:
 node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com
 git add -A && git commit -m "Custom domain" && git push
 ```
+
+## Multi-page demo sites (`demos/sites/`)
+
+Larger demos that need several pages live in `demos/sites/<name>/` with their own
+generator, run automatically by `build.js`:
+
+- `demos/sites/kando/` — **Kando Ressources SA**, a fictitious copper-cobalt producer in
+  Lualaba. `content.js` holds all text (FR + EN), figures, leaders, news, jobs, documents
+  and photo credits; `build-kando.js` generates 16 pages (8 French at the root, 8 English
+  under `en/`) into `docs/demos/kando-ressources/`; `style.css`, `site.js` and `img/` are
+  copied alongside. Structure follows the major-miner pattern: Who we are, What we do,
+  Investors (production table, report library, calendar, EITI payments), Sustainability
+  (indicators, environment, community programmes, consultation, mineral origin, grievance
+  mechanism with reference numbers), News (searchable archive), Careers (filterable jobs,
+  application), Contact. To deliver it to a client: replace the figures in `content.js`,
+  drop their PDFs into a `docs/` folder and point the `data-doc` links at them, remove the
+  demonstrator bar in `build-kando.js`, and rebuild.
 
 ## Old material
 
