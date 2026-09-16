@@ -15,7 +15,12 @@ const routes = {
   websites: { fr: "services/sites-web.html", en: "en/services/websites.html" },
   commerce: { fr: "services/commerce-reservations.html", en: "en/services/commerce-bookings.html" },
   applications: { fr: "services/applications-metier.html", en: "en/services/business-applications.html" },
-  hosting: { fr: "services/hebergement-maintenance.html", en: "en/services/hosting-maintenance.html" }
+  hosting: { fr: "services/hebergement-maintenance.html", en: "en/services/hosting-maintenance.html" },
+  mobile: { fr: "services/applications-mobiles.html", en: "en/services/mobile-apps.html" },
+  ai: { fr: "services/ia-et-automatisation.html", en: "en/services/ai-and-automation.html" },
+  audit: { fr: "services/audit-et-conseil.html", en: "en/services/audit-and-advice.html" },
+  modernisation: { fr: "services/modernisation-et-integrations.html", en: "en/services/modernisation-and-integrations.html" },
+  team: { fr: "services/renfort-d-equipe.html", en: "en/services/team-augmentation.html" }
 };
 const services = [
   {
@@ -101,5 +106,6 @@ const labels = {
   en: { home: "Home", services: "Services", work: "Work", process: "Our process", about: "About", contact: "Contact", legal: "Legal notice", privacy: "Privacy", discuss: "Discuss your project", view: "View project", allWork: "All work", allServices: "All services", client: "Client project", demo: "Demonstrator", scope: "What you receive", needs: "What we prepare together", budget: "Budget & support", examples: "Examples to explore", questions: "Frequently asked questions", build: "Build / setup", monthly: "Monthly support", related: "Related services", menu: "Menu", close: "Close menu" }
 };
 services.push(...require("./integrations").services);
+services.push(...require("./expansion").services);
 projectServices["commande-distributeur"].push("payments");
 module.exports = { routes, services, projectServices, labels };

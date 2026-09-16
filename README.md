@@ -55,6 +55,8 @@ lead to the corresponding project story, in the selected language for bilingual 
 | `assets/content.js` | Company config, bilingual project stories, demo paths and card colours. Also retains legacy homepage copy. |
 | `site/content.js` | Paired FR/EN routes, service descriptions, project-to-service assignments and labels. |
 | `site/pages.js` | Shared layout and page rendering for Home, Services, Work, project stories and supporting pages. |
+| `site/expansion.js` | The five services without a showcase project yet: mobile apps, AI & automation, audit & advice, modernisation & integrations, team augmentation. Each entry carries a `panel` shown where project examples would go, plus its short card promise. |
+| `site/tech.js` | The technology names and icon paths used by the scrolling band. Icons come from Simple Icons (CC0) on a 24×24 grid; add or remove a line and rebuild to change the band. |
 | `build.js` | Validates source dependencies, generates `docs/`, runs registered demo generators and writes the sitemap. |
 | `assets/style.css`, `assets/site.js`, `assets/favicon.svg` | Stylesheet, mobile navigation, progressive project filters, local email/WhatsApp preparation and icon. |
 | `shots/` | Screenshots used on the cards. Copied into `docs/shots/`. |

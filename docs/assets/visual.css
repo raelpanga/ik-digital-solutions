@@ -293,3 +293,32 @@
 .integration-features + .hint { margin-top:28px; }
 .integration-features > article > .payment-illustration,.integration-features > article > .chat-illustration { min-height:350px; }
 @media(max-width:760px) { .integration-brands .named-brand { flex-direction:column;gap:4px; } .integration-brands .named-brand img { height:38px;width:38px; } }
+
+/* Technology band: two rows scrolling in opposite directions, paused on hover or keyboard focus. */
+.portfolio .tech-band { background:var(--night);color:#fff;padding-block:clamp(52px,6vw,92px);overflow:hidden; }
+.portfolio .tech-band h2,.portfolio .tech-band .editorial-heading { color:#fff; }
+.portfolio .tech-band .eyebrow { color:var(--acid); }
+.portfolio .tech-band .editorial-heading p { color:#c7d0d3; }
+.portfolio .tech-band .hint { color:#8d989b;margin-top:26px; }
+.tech-sprite { position:absolute;width:0;height:0;overflow:hidden; }
+.tech-marquee { margin-top:38px;display:grid;gap:18px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent); }
+.tech-track { display:flex;width:max-content;animation:techScroll 52s linear infinite; }
+.tech-track.reverse { animation-direction:reverse; }
+.tech-seq { display:flex; }
+.tech-marquee:hover .tech-track,.tech-marquee:focus-within .tech-track { animation-play-state:paused; }
+.tech-chip { display:inline-flex;align-items:center;gap:.55em;margin-right:clamp(32px,4vw,64px);font-family:var(--font-display);font-weight:800;font-size:clamp(1.15rem,2.4vw,1.95rem);letter-spacing:-.03em;white-space:nowrap;color:#fff; }
+.tech-chip svg { width:1.05em;height:1.05em;fill:currentColor;opacity:.9;flex:none; }
+@keyframes techScroll { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+@media (prefers-reduced-motion:reduce) { .tech-track { animation:none; } .tech-marquee { overflow-x:auto;-webkit-mask-image:none;mask-image:none; } }
+@media(max-width:760px) { .tech-marquee { margin-top:26px;gap:14px; } }
+
+/* Compact cards for services without a showcase project yet. */
+.portfolio .more-services { margin-top:clamp(28px,4vw,48px); }
+.portfolio .more-services .eyebrow { color:var(--ink-3);margin-bottom:14px; }
+.portfolio .more-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px; }
+.portfolio .more-card { display:flex;flex-direction:column;gap:6px;padding:20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);text-decoration:none;transition:border-color .2s,transform .2s,box-shadow .2s; }
+.portfolio .more-card:hover { border-color:var(--cobalt);transform:translateY(-3px);box-shadow:0 14px 30px #172b2212; }
+.portfolio .more-num { font-family:var(--font-mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.08em; }
+.portfolio .more-card h3 { font-size:1.05rem;line-height:1.2; }
+.portfolio .more-card p { font-size:.86rem;color:var(--ink-2);margin:0;flex:1; }
+.portfolio .more-card .open { font-size:.75rem;font-weight:600;color:var(--cobalt);margin-top:6px; }
