@@ -9,6 +9,7 @@ const routes = {
   contact: { fr: "contact.html", en: "en/contact.html" },
   legal: { fr: "mentions-legales.html", en: "en/legal.html" },
   privacy: { fr: "confidentialite.html", en: "en/privacy.html" },
+  guide: { fr: "guides/construire-pour-la-rdc.html", en: "en/guides/building-for-the-drc.html" },
   websites: { fr: "services/sites-web.html", en: "en/services/websites.html" },
   commerce: { fr: "services/commerce-reservations.html", en: "en/services/commerce-bookings.html" },
   applications: { fr: "services/applications-metier.html", en: "en/services/business-applications.html" },

@@ -175,7 +175,27 @@ so a plain `--window-size=430,900` shot is a crop of a 504 px layout. Use
 `node mshot.js docs/demos/<slug>/index.html shots/<slug>-mobile.png 900`, which frames the
 page in a 430 px iframe first.
 
-## Old material
+## Visual presentation — September 2026
+
+The portfolio now uses a photographic Kinshasa hero, large desktop/mobile project
+compositions, short benefit-led service cards and a visible founder introduction.
+The editorial direction draws on Kava and VegaTech; all project captures are IK's
+own work or labelled demonstrations. Competitor projects and images are not reused.
+
+- `site/visual.js`: homepage, concise project labels, illustrated services,
+  Startup/Growth/Scale packages, ten FAQs and the bilingual DRC scoping guide.
+- `assets/visual.css`: responsive presentation shared by portfolio pages.
+- `assets/media/`: optimized local photography and source/license record.
+- `guides/construire-pour-la-rdc.html` and
+  `en/guides/building-for-the-drc.html`: mobile money, offline planning and Digital
+  Code questions, with official source links and project-specific legal validation.
+
+The generator produces 44 portfolio pages and 57 demo pages, plus the 404 page.
+Existing demo and project URLs remain stable. Photo credits appear on the legal
+pages. Testimonials, a real founder portrait and measured client outcomes require
+approved source material; no placeholder quotes or invented results are published.
+
+## Original case-study material
 
 The three original case studies and the zip in the parent folder still contain invented
 figures. Nothing on the site uses them.

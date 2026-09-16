@@ -36,7 +36,8 @@ const copyDir = (src, dst) => {
 };
 copyDir(path.join(__dirname, "shots"), path.join(OUT, "shots"));
 copyDir(path.join(__dirname, "demos", "assets"), path.join(OUT, "demos", "assets"));
-for (const f of ["style.css", "site.js", "favicon.svg"]) write("assets/" + f, fs.readFileSync(path.join(__dirname, "assets", f)));
+for (const f of ["style.css", "visual.css", "site.js", "favicon.svg"]) write("assets/" + f, fs.readFileSync(path.join(__dirname, "assets", f)));
+copyDir(path.join(__dirname, "assets", "media"), path.join(OUT, "assets", "media"));
 write(".nojekyll", "");
 if (arg("--cname")) write("CNAME", arg("--cname").trim() + "\n");
 const pages = [];
