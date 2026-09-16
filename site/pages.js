@@ -1,5 +1,15 @@
 "use strict";
+const fs = require("fs"), path = require("path");
 const { routes, services, projectServices, labels } = require("./content");
+// Content stamp appended to stylesheet and script URLs: a rebuilt asset is never served from a stale cache.
+const assetStamp = (() => {
+  let h = 5381;
+  for (const f of ["style.css", "visual.css", "site.js"]) {
+    const s = fs.readFileSync(path.join(__dirname, "..", "assets", f), "utf8");
+    for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
+  }
+  return h.toString(36);
+})();
 const visualFactory = require("./visual");
 const { projectCopy } = visualFactory;
 labels.fr.guide = "Construire pour la RDC";
@@ -114,10 +124,10 @@ module.exports = function createPages(D, siteUrl) {
 ${siteUrl ? `<link rel="canonical" href="${siteUrl + route}"><link rel="alternate" hreflang="${lang}" href="${siteUrl + route}"><link rel="alternate" hreflang="${other}" href="${siteUrl + alternate}">` : ""}
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:image" content="${(siteUrl || base) + image}"><meta property="og:type" content="website">
 <link rel="icon" href="${base}assets/favicon.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link href="${base}assets/style.css" rel="stylesheet"><link href="${base}assets/visual.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link href="${base}assets/style.css?v=${assetStamp}" rel="stylesheet"><link href="${base}assets/visual.css?v=${assetStamp}" rel="stylesheet">
 </head><body class="portfolio" data-page="${esc(key)}"><a class="skip" href="#main">${tr(lang, "Aller au contenu", "Skip to content")}</a>
 <header class="site-header"><div class="wrap header-row"><a class="brand" href="${link(base, lang, "home")}" aria-label="${esc(C.company)}"><span class="brand-name">IK</span><span class="brand-sub">Digital Solutions</span></a><button class="nav-toggle" aria-controls="main-nav" aria-expanded="false" data-open="${esc(L.menu)}" data-close="${esc(L.close)}">${L.menu}</button><nav class="nav" id="main-nav" aria-label="${tr(lang, "Navigation principale", "Main navigation")}">${nav}</nav><div class="header-tools"><div class="lang" aria-label="Language"><a data-language href="${langHref("fr")}" lang="fr"${lang === "fr" ? ' aria-current="true"' : ""}>FR</a><a data-language href="${langHref("en")}" lang="en"${lang === "en" ? ' aria-current="true"' : ""}>EN</a></div>${button(inquiry(base, lang), L.discuss, "btn-primary header-inquiry")}</div></div></header>
-<main id="main">${body}</main><footer class="site-footer"><div class="wrap footer-grid"><div><strong>${esc(C.company)}</strong><p>${esc(C.location[lang])}</p><a href="mailto:${esc(C.email)}">${esc(C.email)}</a><p>© ${new Date().getFullYear()} ${esc(C.company)}</p></div><nav aria-label="${tr(lang, "Navigation de pied de page", "Footer navigation")}">${["services", "work", "process", "about", "contact"].map(k => `<a href="${link(base, lang, k)}">${L[k]}</a>`).join("")}</nav><nav aria-label="${tr(lang, "Informations", "Information")}"><a href="${link(base, lang, "services")}#tarifs">${tr(lang, "Votre projet", "Your project")}</a><a href="${link(base, lang, "process")}#securite">${tr(lang, "Livraison & sécurité", "Delivery & security")}</a><a href="${link(base, lang, "guide")}">${L.guide}</a><a href="${link(base, lang, "legal")}">${L.legal}</a><a href="${link(base, lang, "privacy")}">${L.privacy}</a></nav></div></footer><script src="${base}assets/site.js" defer></script></body></html>`;
+<main id="main">${body}</main><footer class="site-footer"><div class="wrap footer-grid"><div><strong>${esc(C.company)}</strong><p>${esc(C.location[lang])}</p><a href="mailto:${esc(C.email)}">${esc(C.email)}</a><p>© ${new Date().getFullYear()} ${esc(C.company)}</p></div><nav aria-label="${tr(lang, "Navigation de pied de page", "Footer navigation")}">${["services", "work", "process", "about", "contact"].map(k => `<a href="${link(base, lang, k)}">${L[k]}</a>`).join("")}</nav><nav aria-label="${tr(lang, "Informations", "Information")}"><a href="${link(base, lang, "services")}#tarifs">${tr(lang, "Votre projet", "Your project")}</a><a href="${link(base, lang, "process")}#securite">${tr(lang, "Livraison & sécurité", "Delivery & security")}</a><a href="${link(base, lang, "guide")}">${L.guide}</a><a href="${link(base, lang, "legal")}">${L.legal}</a><a href="${link(base, lang, "privacy")}">${L.privacy}</a></nav></div></footer><script src="${base}assets/site.js?v=${assetStamp}" defer></script></body></html>`;
   }
   function page(key, lang) {
     const route = routes[key][lang], base = baseFor(route), L = labels[lang];
