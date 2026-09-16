@@ -53,7 +53,7 @@ lead to the corresponding project story, in the selected language for bilingual 
 | Path | Role |
 |---|---|
 | `assets/content.js` | Company config, bilingual project stories, demo paths and card colours. Also retains legacy homepage copy. |
-| `site/content.js` | Paired FR/EN routes, service content and prices, project-to-service assignments and labels. |
+| `site/content.js` | Paired FR/EN routes, service descriptions, project-to-service assignments and labels. |
 | `site/pages.js` | Shared layout and page rendering for Home, Services, Work, project stories and supporting pages. |
 | `build.js` | Validates source dependencies, generates `docs/`, runs registered demo generators and writes the sitemap. |
 | `assets/style.css`, `assets/site.js`, `assets/favicon.svg` | Stylesheet, mobile navigation, progressive project filters, local email/WhatsApp preparation and icon. |
@@ -183,14 +183,14 @@ The editorial direction draws on Kava and VegaTech; all project captures are IK'
 own work or labelled demonstrations. Competitor projects and images are not reused.
 
 - `site/visual.js`: homepage, concise project labels, illustrated services,
-  Startup/Growth/Scale packages, ten FAQs and the bilingual DRC scoping guide.
+  Six service offers with tailored proposals, ten FAQs and the bilingual DRC scoping guide.
 - `assets/visual.css`: responsive presentation shared by portfolio pages.
 - `assets/media/`: optimized local photography and source/license record.
 - `guides/construire-pour-la-rdc.html` and
   `en/guides/building-for-the-drc.html`: mobile money, offline planning and Digital
   Code questions, with official source links and project-specific legal validation.
 
-The generator produces 44 portfolio pages and 57 demo pages, plus the 404 page.
+The generator produces 48 portfolio pages and 57 demo pages, plus the 404 page.
 Existing demo and project URLs remain stable. Photo credits appear on the legal
 pages. Testimonials, a real founder portrait and measured client outcomes require
 approved source material; no placeholder quotes or invented results are published.
@@ -199,3 +199,7 @@ approved source material; no placeholder quotes or invented results are publishe
 
 The three original case studies and the zip in the parent folder still contain invented
 figures. Nothing on the site uses them.
+
+### Connected services and expanded gallery
+
+The homepage features all nine existing projects. Cards and project headings omit status badges; individual case studies retain accurate explanations of simulated operations. Public service prices are replaced with scope and tailored-proposal copy. New paired service pages cover mobile-money integration and WhatsApp Business automation. `site/integrations.js` owns these services and illustrative workflows. Brand images are local, credited in `assets/media/README.md`, and do not imply partnerships. Motion respects reduced-motion preferences; content remains visible without JavaScript.

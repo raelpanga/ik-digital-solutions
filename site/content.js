@@ -1,6 +1,8 @@
 "use strict";
 // Stable page keys pair equivalent French and English destinations.
 const routes = {
+  payments: { fr: "services/paiements-mobile-money.html", en: "en/services/mobile-money-payments.html" },
+  whatsapp: { fr: "services/automatisation-whatsapp.html", en: "en/services/whatsapp-automation.html" },
   home: { fr: "index.html", en: "en/index.html" },
   services: { fr: "services/index.html", en: "en/services/index.html" },
   work: { fr: "projets/index.html", en: "en/projects/index.html" },
@@ -17,7 +19,7 @@ const routes = {
 };
 const services = [
   {
-    key: "websites", price: "900–2 500 USD", monthly: "40–80 USD",
+    key: "websites",
     examples: ["ets-financial", "kando-ressources", "site-corporate", "kimia-express"],
     fr: {
       title: "Sites web", brief: "Présentez votre entreprise avec un site clair, soigné et facile à consulter sur téléphone.",
@@ -35,7 +37,7 @@ const services = [
     }
   },
   {
-    key: "commerce", price: "2 500–6 000 USD", monthly: "80–150 USD",
+    key: "commerce",
     examples: ["genos-rentals", "ndala-beauty", "kimia-express"],
     fr: {
       title: "E-commerce & réservations", brief: "Transformez votre catalogue en un parcours de commande ou de réservation, du choix à la confirmation.",
@@ -53,7 +55,7 @@ const services = [
     }
   },
   {
-    key: "applications", price: "6 000–25 000 USD", monthly: "150–500 USD",
+    key: "applications",
     examples: ["macclay-wedding-tracker", "commande-distributeur", "portail-sous-traitant"],
     fr: {
       title: "Applications métier", brief: "Réunissez les dossiers, les tâches et les décisions de votre équipe dans un outil adapté à son travail.",
@@ -71,7 +73,7 @@ const services = [
     }
   },
   {
-    key: "hosting", price: "1 000–3 000 USD", monthly: "200–800 USD", examples: [],
+    key: "hosting", examples: [],
     fr: {
       title: "Hébergement & maintenance", brief: "Organisez la mise en ligne, les mises à jour et le suivi de votre site ou application existante.",
       audience: "Pour les entreprises qui ont déjà un système et souhaitent clarifier qui le maintient, où il fonctionne et comment réagir à un incident.",
@@ -98,4 +100,6 @@ const labels = {
   fr: { home: "Accueil", services: "Services", work: "Réalisations", process: "Notre méthode", about: "À propos", contact: "Contact", legal: "Mentions légales", privacy: "Confidentialité", discuss: "Parlons de votre projet", view: "Voir le projet", allWork: "Toutes les réalisations", allServices: "Tous les services", client: "Projet client", demo: "Démonstrateur", scope: "Ce que vous recevez", needs: "Ce que nous préparons ensemble", budget: "Budget & accompagnement", examples: "Des exemples à explorer", questions: "Questions fréquentes", build: "Construction / mise en place", monthly: "Accompagnement mensuel", related: "Services associés", menu: "Menu", close: "Fermer le menu" },
   en: { home: "Home", services: "Services", work: "Work", process: "Our process", about: "About", contact: "Contact", legal: "Legal notice", privacy: "Privacy", discuss: "Discuss your project", view: "View project", allWork: "All work", allServices: "All services", client: "Client project", demo: "Demonstrator", scope: "What you receive", needs: "What we prepare together", budget: "Budget & support", examples: "Examples to explore", questions: "Frequently asked questions", build: "Build / setup", monthly: "Monthly support", related: "Related services", menu: "Menu", close: "Close menu" }
 };
+services.push(...require("./integrations").services);
+projectServices["commande-distributeur"].push("payments");
 module.exports = { routes, services, projectServices, labels };

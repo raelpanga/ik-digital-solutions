@@ -242,3 +242,54 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-device, .case-desktop, .case-mobile, .offer-preview img { transition: none !important; }
 }
+/* Connected services: recognizable brands and illustrative customer journeys. */
+.portfolio .visual-offers { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.portfolio .integrations-section { background:#e9ede5; }
+.integration-brands { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:28px 0 42px; }
+.integration-brands > div { min-height:104px;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:1px solid #dce1d8;border-radius:16px;padding:18px; }
+.integration-brands img { width:125px;height:58px;object-fit:contain; }
+.integration-brands > div:last-child img { width:38px;height:38px; }
+.integration-brands span { font-size:14px;font-weight:600; }
+.airtel-wordmark { color:#cf102d;font-size:22px;font-weight:700; }
+.integration-features { display:grid;grid-template-columns:1fr 1fr;gap:28px; }
+.integration-feature { min-width:0;background:#fafbf7;border-radius:22px;overflow:hidden;border:1px solid #d5ddcf; }
+.integration-feature > div:last-child { padding:30px; }
+.integration-feature h3 { font-size:28px;margin:0 0 16px; }
+.payment-illustration,.chat-illustration { min-height:315px;padding:28px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#142d31;color:#fff;gap:8px; }
+.payment-illustration { background:radial-gradient(ellipse at top right,#3e6558,#122b31 70%); }
+.flow-label { font:11px monospace;letter-spacing:2px;opacity:.75; }
+.flow-node { padding:13px 20px;width:min(100%,300px);border:1px solid #ffffff30;background:#ffffff0d;border-radius:10px;display:flex;justify-content:space-between;gap:12px;font-size:14px; }
+.wallet-node { background:#e1fa86;color:#142d31;font-weight:600; }
+.flow-connector { color:#b8d07a; }
+.success-node { justify-content:center; }
+.chat-illustration { background:#dce8db;color:#172c24;align-items:stretch; }
+.chat-heading { font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:10px; }
+.chat-bubble { max-width:86%;padding:14px 18px;background:#fff;border-radius:14px 14px 14px 0;margin:0;font-size:15px;box-shadow:0 2px 6px #162b2410; }
+.chat-bubble.customer { align-self:flex-end;background:#bbdfb4;border-radius:14px 14px 0 14px; }
+.chat-options { display:flex;flex-wrap:wrap;gap:8px; }
+.chat-options span { background:#fff;border:1px solid #a6c5a1;border-radius:30px;padding:8px 12px;font-size:12px; }
+.payment-illustration small,.chat-illustration small { margin-top:12px;font-size:10px;opacity:.7; }
+.portfolio .integration-preview { height:230px;aspect-ratio:auto; }
+.integration-preview .payment-illustration,.integration-preview .chat-illustration { min-height:230px;height:230px;padding:16px;gap:4px; }
+.integration-preview .flow-node { padding:8px 14px; }
+.integration-preview .chat-bubble { font-size:12px;padding:10px 12px; }
+.portfolio .offer-preview:not(.integration-preview) { height:230px; }
+@keyframes signalPulse { 0%,100% { box-shadow:0 0 0 0 #d9f88100; } 50% { box-shadow:0 0 0 7px #d9f88124; } }
+@media (prefers-reduced-motion:no-preference) { .portfolio .signal-dot { animation:signalPulse 3s ease-in-out 3; } .portfolio .integration-feature { transition:box-shadow .3s,transform .3s; } .portfolio .integration-feature:hover { transform:translateY(-4px);box-shadow:0 16px 35px #172b2210; } }
+@media(max-width:1100px) { .portfolio .visual-offers { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:760px) { .portfolio .visual-offers,.integration-features { grid-template-columns:1fr; } .integration-brands { grid-template-columns:1fr 1fr;gap:10px; } .integration-brands > div { min-height:86px;padding:12px; } .integration-brands img { max-width:100%;width:110px; } .integration-brands > div:last-child { flex-direction:column;gap:4px; } .integration-brands span { font-size:11px; } .airtel-wordmark { font-size:18px; } .integration-feature > div:last-child { padding:24px; } }
+
+.integration-preview .flow-label,.integration-preview .payment-illustration small { display:none; }
+.integration-brands .airtel-brand { flex-direction:column;gap:0; }
+.integration-brands .airtel-brand img { height:40px;max-width:100%; }
+.integration-brands .airtel-brand span { color:#cf102d;font-weight:600; }
+
+.portfolio .offer-card { min-width:0; }
+.portfolio .offer-copy .eyebrow { white-space:normal;overflow-wrap:anywhere; }
+@media(max-width:760px) { .portfolio .visual-offers { grid-template-columns:minmax(0,1fr); } }
+.portfolio .offer-preview { width:100%;min-width:0;aspect-ratio:auto; }
+
+.integration-brands .named-brand img { width:58px;height:58px; }
+.integration-features + .hint { margin-top:28px; }
+.integration-features > article > .payment-illustration,.integration-features > article > .chat-illustration { min-height:350px; }
+@media(max-width:760px) { .integration-brands .named-brand { flex-direction:column;gap:4px; } .integration-brands .named-brand img { height:38px;width:38px; } }

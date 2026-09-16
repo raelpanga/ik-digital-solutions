@@ -27,21 +27,32 @@
   const filters = $("[data-work-filters]");
   if (filters) {
     filters.hidden = false;
-    const service = $("#work-service"), status = $("#work-status"), params = new URLSearchParams(location.search);
-    choose(service, params.get("service")); choose(status, params.get("status"));
+    const service = $("#work-service"), params = new URLSearchParams(location.search);
+    choose(service, params.get("service"));
     const filter = () => {
       let visible = 0;
       all(".work-card").forEach(card => {
-        const match = (!service.value || card.dataset.services.split(" ").includes(service.value)) && (!status.value || card.dataset.status === status.value);
+        const match = (!service.value || card.dataset.services.split(" ").includes(service.value));
         card.hidden = !match; if (match) visible++;
       });
       $("#work-count").textContent = visible + " " + $("#work-count").dataset.unit;
       $("#work-empty").hidden = visible !== 0;
       const url = new URL(location.href);
-      for (const [key, value] of [["service", service.value], ["status", status.value]]) { if (value) url.searchParams.set(key, value); else url.searchParams.delete(key); }
+      for (const [key, value] of [["service", service.value], ["status", ""]]) { if (value) url.searchParams.set(key, value); else url.searchParams.delete(key); }
       history.replaceState(null, "", url); syncLanguages();
     };
-    service.addEventListener("change", filter); status.addEventListener("change", filter); filter();
+    service.addEventListener("change", filter); filter();
+  }
+  const motion = matchMedia("(prefers-reduced-motion: reduce)");
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        if (!motion.matches) entry.target.animate([{ transform: "translateY(22px)" }, { transform: "translateY(0)" }], { duration: 650, easing: "cubic-bezier(.2,.7,.2,1)" });
+        observer.unobserve(entry.target);
+      }
+    }), { threshold: 0.12 });
+    all(".work-card, .offer-card, .integration-feature, .local-principles > div").forEach(el => observer.observe(el));
+    motion.addEventListener("change", () => { if (motion.matches) document.getAnimations().forEach(a => a.cancel()); });
   }
   const form = $("#contact-form");
   if (form) {

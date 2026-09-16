@@ -14,3 +14,12 @@ offices or clients. No competitor imagery is used.
 Changes: resized/recompressed as WebP; responsive cropping and dark overlays are
 applied in CSS. The photograph copies remain available under their respective
 licenses. Public credit links appear beside the photographs and in Legal → Credits.
+
+- mpesa.webp: https://www.vodacom.cd/sites/drc-portal/files/styles/large/public/images/2025-09/mpesa_logo.png.webp — respective brand owner; identification of services only, no partnership implied.
+
+
+- whatsapp.png: https://whatsappbusiness.com/wp-content/uploads/2026/03/cropped-Digital_Glyph_Green_RGB_2026.png — respective brand owner; identification of services only, no partnership implied.
+
+- airtel.png: https://www.airtel.africa/sites/default/files/airtel-logo_0.png — Airtel Africa logo, identifying Airtel Money alongside its service name.
+
+- orange.svg: https://www.orange.cd/particuliers/resources/img/master-logo.svg — official Orange logo; shown with the Money service label.

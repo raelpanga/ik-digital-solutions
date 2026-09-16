@@ -67,13 +67,22 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
         await page.locator(`[data-language][lang="${other}"]`).click();
         assert.equal(await page.locator("body").getAttribute("data-page"), "project:" + p.slug);
       }
+      await goto(routes.home[lang]);
+      assert.equal(await page.locator(".selected-work .work-card").count(), 9);
+      assert.equal(await page.locator(".offer-card").count(), 6);
+      assert.equal(await page.locator(".pill-client,.pill-demo").count(), 0);
+      assert.equal(await page.locator(".integration-brands img").count(), 4);
+      for (const key of ["payments", "whatsapp"]) {
+        await goto(routes[key][lang]);
+        assert.ok(!/\d[\d ,–-]*\sUSD|USD\s[\d]/.test(await page.locator("main").innerText()));
+        await page.locator('#contact a[href*="service=' + key + '"]').click();
+        assert.equal(await page.locator("#f-service").inputValue(), key);
+      }
       await goto(routes.work[lang]);
       assert.equal(await page.locator(".work-card:visible").count(), 9);
-      await page.locator("#work-status").selectOption("client"); assert.equal(await page.locator(".work-card:visible").count(), 3);
-      await page.locator("#work-status").selectOption("demo");
-      await page.locator("#work-service").selectOption("websites"); assert.equal(await page.locator(".work-card:visible").count(), 3);
+      await page.locator("#work-service").selectOption("websites"); assert.equal(await page.locator(".work-card:visible").count(), 4);
       await page.locator(`[data-language][lang="${other}"]`).click();
-      assert.equal(await page.locator("#work-status").inputValue(), "demo"); assert.equal(await page.locator("#work-service").inputValue(), "websites");
+      assert.equal(await page.locator("#work-service").inputValue(), "websites");
       await page.locator("#work-service").selectOption("hosting"); assert.ok(await page.locator("#work-empty").isVisible());
       await goto(routes.commerce[lang]);
       await page.locator('#contact a[href*="service=commerce"]').click();
