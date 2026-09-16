@@ -1,9 +1,5 @@
 <!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Distribution Mokili · Démo Commande & Encaissement</title>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Distribution Mokili · Démo Commande & Encaissement</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -88,9 +84,9 @@ fieldset{border:1px solid var(--line);border-radius:4px;padding:.6rem .8rem;disp
 .pstrip figcaption{position:absolute;left:0;right:0;bottom:0;padding:1rem .8rem .5rem;background:linear-gradient(transparent,rgba(13,17,32,.82));color:#fff;font-size:.8rem;font-weight:600}
 @media (max-width:700px){.pstrip{grid-template-columns:1fr}}
 </style>
-</head>
-<body>
-<div class="ikbar"><span><strong>Démonstrateur IK Digital Solutions</strong> · entreprise fictive · données d'exemple · paiements simulés</span><a href="../../index.html">← Retour au portfolio</a></div>
+</head><body>
+
+<div class="ikbar"><span><strong>Démonstrateur IK Digital Solutions</strong> · entreprise fictive · données d'exemple · paiements simulés</span><a href="../../projets/commande-distributeur.html">← Retour au portfolio</a></div>
 
 <header class="top">
   <div class="brand"><span>Distribution Mokili</span><small>Exemple · dépôt de Limete, Kinshasa · boissons et biens de consommation</small></div>
@@ -191,7 +187,7 @@ function renderRetail(){
     <section><h2>Mes commandes</h2><div class="tablewrap" style="margin-top:.6rem"><table><thead><tr><th>N°</th><th>Heure</th><th>Montant</th><th>Statut</th><th></th></tr></thead><tbody>
     ${my.length?my.map(o=>`<tr><td class="num">${esc(o.id)}${o.sample?' <span class="tag info">exemple</span>':""}</td><td class="num">${esc(o.time)}</td><td class="num">${fmtUsd(o.total)}</td><td>${statusTag(o)}</td><td>${o.status==="validée"&&!o.paid?`<button type="button" class="btn primary small" data-pay="${o.id}">Payer par mobile money</button>`:""}</td></tr>`).join(""):`<tr><td colspan="5" class="muted">Aucune commande pour ce détaillant.</td></tr>`}
     </tbody></table></div></section>
-    <footer class="dist-foot"><span>Distribution Mokili · dépôt de Limete, Kinshasa · commandes 6 h – 18 h</span><span>Plateforme réalisée par <a href="../../index.html">IK Digital Solutions</a></span><span class="credits">Photos via Wikimedia Commons : casiers par <a href="https://commons.wikimedia.org/wiki/File:Beer_crates_stacked.jpg" rel="noopener">Ei'eke</a> (CC BY-SA 4.0) ; livraison de boissons par <a href="https://commons.wikimedia.org/wiki/File:Street_Delivery_of_Soft_Drinks.jpg" rel="noopener">Bigkotech</a> (CC BY-SA 4.0) ; marché de Kinshasa par <a href="https://commons.wikimedia.org/wiki/File:Kinshasa_Farmers%27_Market.jpg" rel="noopener">OussamaHamama</a> (CC BY-SA 4.0) ; boutique à Kinshasa par <a href="https://commons.wikimedia.org/wiki/File:2007_Kinshasa_2127406497.jpg" rel="noopener">Irene2005</a> (CC BY 2.0).</span></footer>`;
+    <footer class="dist-foot"><span>Distribution Mokili · dépôt de Limete, Kinshasa · commandes 6 h – 18 h</span><span>Plateforme réalisée par <a href="../../projets/commande-distributeur.html">IK Digital Solutions</a></span><span class="credits">Photos via Wikimedia Commons : casiers par <a href="https://commons.wikimedia.org/wiki/File:Beer_crates_stacked.jpg" rel="noopener">Ei'eke</a> (CC BY-SA 4.0) ; livraison de boissons par <a href="https://commons.wikimedia.org/wiki/File:Street_Delivery_of_Soft_Drinks.jpg" rel="noopener">Bigkotech</a> (CC BY-SA 4.0) ; marché de Kinshasa par <a href="https://commons.wikimedia.org/wiki/File:Kinshasa_Farmers%27_Market.jpg" rel="noopener">OussamaHamama</a> (CC BY-SA 4.0) ; boutique à Kinshasa par <a href="https://commons.wikimedia.org/wiki/File:2007_Kinshasa_2127406497.jpg" rel="noopener">Irene2005</a> (CC BY 2.0).</span></footer>`;
   bindSync();
   $("ret").onchange=()=>{retailer=$("ret").value;draft={};renderRetail();};
   document.querySelectorAll("[data-q]").forEach(i=>i.onchange=()=>{draft[i.dataset.q]=Math.max(0,Math.min(parseInt(i.value,10)||0,P(i.dataset.q).stock));renderRetail();});
@@ -252,5 +248,4 @@ $("net").onclick=()=>{online=!online;$("net").classList.toggle("on",online);$("n
 render();
 })();
 </script>
-</body>
-</html>
+</body></html>

@@ -156,7 +156,7 @@ function build(outDir, opts) {
     for (const key of Object.keys(BUILDERS)) {
       const U = C.ui[lang];
       const title = key === "home" ? U.home.title : U[key].title + " · " + C.company.name;
-      const html = layout(lang, key, { title, description: DESC[lang][key], body: BUILDERS[key](lang, base), portfolioHome });
+      const html = layout(lang, key, { title, description: DESC[lang][key], body: BUILDERS[key](lang, base), portfolioHome: lang === "en" && opts.portfolioHomeEn ? opts.portfolioHomeEn : portfolioHome });
       const rel = (lang === "en" ? "en/" : "") + FILES[lang][key];
       fs.writeFileSync(path.join(outDir, rel), html);
       n++;

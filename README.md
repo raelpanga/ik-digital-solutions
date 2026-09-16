@@ -1,19 +1,25 @@
 # IK Digital Solutions — website
 
-A real static website: HTML, CSS and JavaScript pages generated from one content file,
-hosted publicly on GitHub Pages. French first, with a full English copy of every page.
+A static website: HTML, CSS and JavaScript generated from shared page templates and
+bilingual content, hosted publicly on GitHub Pages. Every portfolio page has an English equivalent.
 Three client projects in production and six demonstrations, including three bilingual
-multi-page sites. No sign-in anywhere.
+multi-page sites. The portfolio and demos are public; linked production systems may require an account.
 
-**Public site:** https://raelpanga.github.io/ik-digital-solutions/
+**Public site:** https://iksolutions-inc.com/
 **Repository:** https://github.com/raelpanga/ik-digital-solutions
 
 ## What the site contains
 
 | Page | French | English |
 |---|---|---|
-| Home (services, proofs, projects, method, compliance, pricing, contact) | `index.html` | `en/index.html` |
+| Home (selected work, services, process, budget and contact) | `index.html` | `en/index.html` |
+| Services overview and four offers | `services/` | `en/services/` |
+| Work directory, with service and client/demo filters | `projets/` | `en/projects/` |
 | One page per project (9) | `projets/<slug>.html` | `en/projects/<slug>.html` |
+| Our process | `methode.html` | `en/process.html` |
+| About | `a-propos.html` | `en/about.html` |
+| Contact, preserving service/project inquiry context | `contact.html` | `en/contact.html` |
+| Legal notice and privacy | `mentions-legales.html`, `confidentialite.html` | `en/legal.html`, `en/privacy.html` |
 | Single-page demo applications (5, French only) | `demos/<slug>/` | same |
 | Kando Ressources mining site (16 pages, bilingual) | `demos/kando-ressources/` | `demos/kando-ressources/en/` |
 | Cimenterie du Fleuve site (18 pages, bilingual) | `demos/site-corporate/` | `demos/site-corporate/en/` |
@@ -33,28 +39,41 @@ labels translated to French and four extra jars generated to match.
 
 Every demo uses fictitious data and simulated payments, SMS, e-mails and Shopify, and says
 so in its banner. Client project pages describe only what the repositories and live
-sites show, and link to the real production address as a secondary button.
+sites show. Their main button opens the production address; any demonstration copy is
+labelled separately. Demonstrator project pages lead with the demo link. English pages
+open English demos where available and identify French-only examples.
+
+The navigation follows **Services → Work → a relevant example → Contact**. Pricing is
+part of Services; delivery and security are explained under Our process. Existing
+homepage anchors and every existing project/demo route are preserved. Demo return links
+lead to the corresponding project story, in the selected language for bilingual demos.
 
 ## How it is built
 
 | Path | Role |
 |---|---|
-| `assets/content.js` | **All text** (FR + EN), company config, project list, demo paths, card colours. Edit this. |
-| `build.js` | Generates the whole site into `docs/`. Run `node build.js --base-url https://raelpanga.github.io/ik-digital-solutions/`. |
-| `assets/style.css`, `assets/site.js`, `assets/favicon.svg` | Stylesheet, page script (live metrics, contact form), icon. Copied into `docs/assets/`. |
+| `assets/content.js` | Company config, bilingual project stories, demo paths and card colours. Also retains legacy homepage copy. |
+| `site/content.js` | Paired FR/EN routes, service content and prices, project-to-service assignments and labels. |
+| `site/pages.js` | Shared layout and page rendering for Home, Services, Work, project stories and supporting pages. |
+| `build.js` | Validates source dependencies, generates `docs/`, runs registered demo generators and writes the sitemap. |
+| `assets/style.css`, `assets/site.js`, `assets/favicon.svg` | Stylesheet, mobile navigation, progressive project filters, local email/WhatsApp preparation and icon. |
 | `shots/` | Screenshots used on the cards. Copied into `docs/shots/`. |
 | `demos/src/<slug>.html` | Demo sources (head + body fragment). Wrapped into `docs/demos/<slug>/index.html`. |
 | `demos/sites/<name>/` | Bilingual demo generators and assets; public route mapping in `build.js`. |
 | `docs/` | The generated site. GitHub Pages serves this folder. Do not edit by hand. |
 | `check.js` | Syntax-checks inline scripts: `node check.js demos/src/*.html`. |
+| `verify-site.js` | Browser checks for navigation, paired languages, links, filters, inquiry context, demo returns and mobile overflow. |
 | `tojpg.js` | Converts a PNG screenshot to JPEG through headless Chrome. |
 | `src/page.html`, `assets/app.js` | The earlier single-page version used for claude.ai previews. Not part of the site. |
 
 ## Updating the site
 
-1. Edit `assets/content.js`, a demo in `demos/src/`, or a multi-page site in `demos/sites/`.
+1. Edit the relevant content or template in `site/`, `assets/content.js`, or a demo source.
 2. Run `node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com` for the current custom domain.
-3. Commit and push:
+3. Run `node verify-site.js` and `node verify-kimia.js` (Playwright and Google Chrome required;
+   set `NODE_PATH` to the installed package directory if needed). `verify-site.js --screenshots`
+   saves desktop/mobile review images in the OS temporary directory under `ik-architecture-preview/`.
+4. Commit and push:
 
 ```bash
 git add -A
@@ -69,11 +88,13 @@ GitHub Pages republishes within about a minute.
 Copy a project object in `assets/content.js`. Fields: `slug`, `status` ("client" or
 "demo"), `demoUrl` (a relative demo path like `demos/x/` or an external URL), optional
 `demoUrls` (language-specific demo URLs, for example `{ fr: "demos/x/", en: "demos/x/en/" }`),
-`liveUrl` (production address, shown as a secondary button), `color`, `domain`, optional
-`shotExt`, `openLabel`, `note`, `s3Label`, then `stack`, `timeline`, `price`, `monthly`,
+`liveUrl` (production address, the primary link for client projects), `color`, `domain`, optional
+`shotExt`, `note`, `s3Label`, then `stack`, `timeline`, `price`, `monthly`,
 and `fr` / `en` blocks with `title`, `sector`, `tagline`, `problem`, `built`, `congo`,
 `deploy`, `monitor`. Add two screenshots to `shots/` named `<slug>-desktop.png` and
-`<slug>-mobile.png`, then rebuild.
+`<slug>-mobile.png`. Assign the slug to one or more services in `site/content.js`;
+add it to an offer's `examples` when appropriate, then rebuild. A new portfolio page
+needs paired routes in `site/content.js` and a renderer in `site/pages.js`.
 
 ## Screenshots
 
@@ -117,7 +138,8 @@ git add -A && git commit -m "Custom domain" && git push
 ## Multi-page demo sites (`demos/sites/`)
 
 Larger demos that need several pages live in `demos/sites/<name>/` with their own
-generator, run automatically by `build.js`:
+generator, registered in `build.js` under `SITE_SLUGS`. The generator receives French
+and English project-return paths through `portfolioHome` and `portfolioHomeEn`:
 
 - `demos/sites/kimia/` — **Kimia Express**, a fictitious delivery company serving 12
   DRC cities. `build-kimia.js`, `content.js`, `lib.js` and `pages-1.js` through

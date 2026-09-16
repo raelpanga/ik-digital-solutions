@@ -32,7 +32,7 @@ function build(outDir, opts) {
     for (const key of K.KEYS) {
       const [t, d] = TITLES[lang][key];
       const title = key === "home" ? t : t + " · " + C.company.name;
-      const html = K.layout(lang, key, { title, description: d, body: BUILDERS[key](lang, base), portfolioHome });
+      const html = K.layout(lang, key, { title, description: d, body: BUILDERS[key](lang, base), portfolioHome: lang === "en" && opts?.portfolioHomeEn ? opts.portfolioHomeEn : portfolioHome });
       fs.writeFileSync(path.join(outDir, lang === "en" ? "en" : "", K.FILES[lang][key]), html);
       n++;
     }

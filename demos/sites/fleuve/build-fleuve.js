@@ -183,7 +183,7 @@ function build(outDir, opts) {
     for (const key of ["home", ...PAGES]) {
       const [t, d] = TITLES[lang][key];
       const title = key === "home" ? t : t + " · " + C.company.name;
-      const html = layout(lang, key, { title, description: d, body: BUILDERS[key](lang, base), portfolioHome });
+      const html = layout(lang, key, { title, description: d, body: BUILDERS[key](lang, base), portfolioHome: lang === "en" && opts?.portfolioHomeEn ? opts.portfolioHomeEn : portfolioHome });
       fs.writeFileSync(path.join(outDir, lang === "en" ? "en" : "", FILES[lang][key]), html);
       n++;
     }

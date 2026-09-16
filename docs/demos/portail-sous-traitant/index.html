@@ -1,9 +1,5 @@
 <!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sotramines Services · Démo Portail Sous-traitant</title>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sotramines Services · Démo Portail Sous-traitant</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -97,9 +93,9 @@ tr:last-child td{border-bottom:0}td.num{font-family:var(--mono);font-variant-num
   #report table{width:100%;border-collapse:collapse;min-width:0}#report th,#report td{border:1px solid #999;padding:4px 6px;font-size:11px}
 }
 </style>
-</head>
-<body>
-<div class="ikbar"><span><strong>Démonstrateur IK Digital Solutions</strong> · entreprise fictive · données d'exemple</span><a href="../../index.html">← Retour au portfolio</a></div>
+</head><body>
+
+<div class="ikbar"><span><strong>Démonstrateur IK Digital Solutions</strong> · entreprise fictive · données d'exemple</span><a href="../../projets/portail-sous-traitant.html">← Retour au portfolio</a></div>
 
 <header class="top">
   <div class="brand"><span>Sotramines Services SARL</span><small>Exemple · sous-traitant terrassement et maintenance · site de Kolwezi, Lualaba</small></div>
@@ -249,7 +245,7 @@ function renderMgr(){
     <section><h2>Dossier de conformité · contrat Kolwezi</h2><div class="tablewrap" style="margin-top:.6rem"><table><thead><tr><th>Document</th><th>Référence</th><th>Expire le</th><th>Reste</th><th>État</th></tr></thead><tbody>
     ${state.docs.map(d=>{const n=daysUntil(d.exp);return `<tr><td>${esc(d.name)}</td><td class="num">${esc(d.ref)}</td><td class="num">${fmtDate(d.exp)}</td><td class="num">${n<0?"expiré depuis "+(-n)+" j":n+" j"}</td><td>${n<0?'<span class="tag bad">expiré</span>':n<=30?'<span class="tag warn">à renouveler</span>':'<span class="tag ok">valide</span>'}</td></tr>`;}).join("")}
     </tbody></table></div></section>
-    <p class="credits">Application de démonstration réalisée par <a href="../../index.html">IK Digital Solutions</a>. Photos via Wikimedia Commons : chargement d'un camion par <a href="https://commons.wikimedia.org/wiki/File:Belaz_haul_truck_and_a_Hitachi_mining_excavator.jpg" rel="noopener">Sandrerro</a> (CC BY-SA 3.0) ; atelier par <a href="https://commons.wikimedia.org/wiki/File:Haul_truck_under_repair_at_Brockman_4,_September_2018.jpg" rel="noopener">Calistemon</a> (CC BY-SA 4.0).</p>`;
+    <p class="credits">Application de démonstration réalisée par <a href="../../projets/portail-sous-traitant.html">IK Digital Solutions</a>. Photos via Wikimedia Commons : chargement d'un camion par <a href="https://commons.wikimedia.org/wiki/File:Belaz_haul_truck_and_a_Hitachi_mining_excavator.jpg" rel="noopener">Sandrerro</a> (CC BY-SA 3.0) ; atelier par <a href="https://commons.wikimedia.org/wiki/File:Haul_truck_under_repair_at_Brockman_4,_September_2018.jpg" rel="noopener">Calistemon</a> (CC BY-SA 4.0).</p>`;
   bindSync();
   document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>{state.incidents.find(i=>i.id===b.dataset.close).status="clôturé";save();renderMgr();});
   $("reset").onclick=()=>{state=seed();save();renderMgr();toast("Données de démonstration réinitialisées");};
@@ -271,5 +267,4 @@ $("net").onclick=()=>{online=!online;$("net").classList.toggle("on",online);$("n
 render();
 })();
 </script>
-</body>
-</html>
+</body></html>

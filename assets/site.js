@@ -1,47 +1,72 @@
-/* IK Digital Solutions — page script for the static site.
-   Fills the two live metrics in the hero and turns the contact form into a mailto. */
-(function () {
-  "use strict";
-
-  function esc(s) { return String(s); }
-
-  function fmt(n, lang) {
-    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, lang === "fr" ? " " : ",");
+/* Portfolio interactions: navigation, progressive project filters and local message preparation. */
+"use strict";
+(() => {
+  const $ = s => document.querySelector(s);
+  const all = s => [...document.querySelectorAll(s)];
+  const lang = document.documentElement.lang;
+  const fr = lang === "fr";
+  const syncLanguages = () => all("[data-language]").forEach(a => {
+    const url = new URL(a.href); url.search = location.search; url.hash = location.hash; a.href = url.href;
+  });
+  syncLanguages();
+  const toggle = $(".nav-toggle"), nav = $("#main-nav");
+  if (toggle && nav) {
+    const close = () => { toggle.setAttribute("aria-expanded", "false"); toggle.textContent = toggle.dataset.open; nav.classList.remove("is-open"); };
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") !== "true";
+      toggle.setAttribute("aria-expanded", String(open)); toggle.textContent = open ? toggle.dataset.close : toggle.dataset.open;
+      nav.classList.toggle("is-open", open);
+    });
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") { close(); toggle.focus(); } });
+    document.addEventListener("click", e => { if (!e.target.closest(".site-header")) close(); });
+    nav.addEventListener("click", e => { if (e.target.closest("a")) close(); });
+    matchMedia("(min-width: 1101px)").addEventListener("change", close);
+    document.documentElement.classList.add("js");
   }
-
-  function measure() {
-    var lang = document.documentElement.getAttribute("lang") || "fr";
-    var ms = null, bytes = 0;
-    try {
-      var nav = performance.getEntriesByType("navigation")[0];
-      if (nav) {
-        var end = nav.loadEventEnd > 0 ? nav.loadEventEnd : nav.domContentLoadedEventEnd;
-        ms = Math.max(1, Math.round(end - nav.startTime));
-        bytes += nav.transferSize || nav.encodedBodySize || 0;
-      }
-      performance.getEntriesByType("resource").forEach(function (r) {
-        bytes += r.transferSize || r.encodedBodySize || 0;
+  const choose = (select, value) => { if (select && [...select.options].some(o => o.value === value)) select.value = value; };
+  const filters = $("[data-work-filters]");
+  if (filters) {
+    filters.hidden = false;
+    const service = $("#work-service"), status = $("#work-status"), params = new URLSearchParams(location.search);
+    choose(service, params.get("service")); choose(status, params.get("status"));
+    const filter = () => {
+      let visible = 0;
+      all(".work-card").forEach(card => {
+        const match = (!service.value || card.dataset.services.split(" ").includes(service.value)) && (!status.value || card.dataset.status === status.value);
+        card.hidden = !match; if (match) visible++;
       });
-    } catch (e) { /* Performance API unavailable */ }
-    var a = document.getElementById("m-ms"), b = document.getElementById("m-kb");
-    if (a && ms !== null) { a.innerHTML = fmt(ms, lang) + "<small>" + esc(a.getAttribute("data-unit")) + "</small>"; }
-    if (b && bytes > 0) { b.innerHTML = fmt(Math.max(1, Math.round(bytes / 1024)), lang) + "<small>" + esc(b.getAttribute("data-unit")) + "</small>"; }
+      $("#work-count").textContent = visible + " " + $("#work-count").dataset.unit;
+      $("#work-empty").hidden = visible !== 0;
+      const url = new URL(location.href);
+      for (const [key, value] of [["service", service.value], ["status", status.value]]) { if (value) url.searchParams.set(key, value); else url.searchParams.delete(key); }
+      history.replaceState(null, "", url); syncLanguages();
+    };
+    service.addEventListener("change", filter); status.addEventListener("change", filter); filter();
   }
-
-  var form = document.getElementById("contact-form");
+  const form = $("#contact-form");
   if (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var lang = form.getAttribute("data-lang") || "fr";
-      var name = (document.getElementById("f-name").value || "").trim();
-      var company = (document.getElementById("f-company").value || "").trim();
-      var need = (document.getElementById("f-need").value || "").trim();
-      var subject = (lang === "fr" ? "Projet — " : "Project — ") + (company || name || "");
-      var body = (lang === "fr" ? "Nom : " : "Name: ") + name + "\n" + (lang === "fr" ? "Entreprise : " : "Company: ") + company + "\n\n" + need + "\n";
-      window.location.href = "mailto:" + form.getAttribute("data-email") + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    $("#f-whatsapp").hidden = false;
+    const service = $("#f-service"), project = $("#f-project"), params = new URLSearchParams(location.search);
+    choose(service, params.get("service")); choose(project, params.get("project"));
+    const context = () => {
+      const url = new URL(location.href);
+      for (const [key, value] of [["service", service.value], ["project", project.value]]) { if (value) url.searchParams.set(key, value); else url.searchParams.delete(key); }
+      history.replaceState(null, "", url); syncLanguages();
+    };
+    service.addEventListener("change", context); project.addEventListener("change", context); context();
+    const message = () => {
+      const name = $("#f-name").value.trim(), company = $("#f-company").value.trim(), need = $("#f-need").value.trim();
+      return (fr ? "Bonjour IK Digital Solutions,\n\nNom : " : "Hello IK Digital Solutions,\n\nName: ") + name + "\n" + (fr ? "Entreprise : " : "Company: ") + company + "\n" +
+        (fr ? "Service : " : "Service: ") + service.selectedOptions[0].textContent + "\n" + (fr ? "Projet de référence : " : "Reference project: ") + project.selectedOptions[0].textContent + "\n\n" + need;
+    };
+    form.addEventListener("submit", e => {
+      e.preventDefault(); if (!form.reportValidity()) return;
+      const subject = (fr ? "Projet — " : "Project — ") + ($("#f-company").value.trim() || $("#f-name").value.trim());
+      location.href = "mailto:" + form.dataset.email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(message());
+    });
+    $("#f-whatsapp").addEventListener("click", () => {
+      if (!form.reportValidity()) return;
+      window.open("https://wa.me/" + form.dataset.whatsapp + "?text=" + encodeURIComponent(message()), "_blank", "noopener,noreferrer");
     });
   }
-
-  if (document.readyState === "complete") { setTimeout(measure, 0); }
-  else { window.addEventListener("load", function () { setTimeout(measure, 0); }); }
 })();
