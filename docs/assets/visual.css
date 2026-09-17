@@ -125,12 +125,6 @@
 .compact-process li > span { font-size: .75rem; color: var(--ink-2); padding-top: 5px; }
 .compact-process h3 { font-size: 1.5rem; }
 .compact-process p { color: var(--ink-2); font-size: .85rem; margin-bottom: 0; }
-.portfolio .founder-feature { padding-block: 50px; border-block: 1px solid var(--line); }
-.founder-line { display: grid; grid-template-columns: 220px 1fr; gap: 50px; align-items: center; max-width: 1000px !important; }
-.founder-monogram { background: var(--acid); aspect-ratio: 1; border-radius: 50%; font: 800 7rem var(--font-display); letter-spacing: -.09em; display: grid; place-content: center; position: relative; padding-right: 10px; color: var(--night); }
-.founder-monogram span { position: absolute; right: 12px; top: 0; font: 2.5rem var(--font-body); }
-.founder-line h2 { font-size: 2.4rem; }
-.founder-line p:not(.eyebrow) { max-width: 59ch; color: var(--ink-2); font-size: .95rem; }
 .quick-answers .grid-2 { gap: 8%; }
 .quick-answers h2 { margin-bottom: 24px; }
 .quick-answers p { color: var(--ink-2); max-width: 36ch; }
@@ -218,12 +212,6 @@
   .place-label { font-size: 2.1rem; left: 24px; }
   .drc-photo .photo-credit { left: 24px; }
   .compact-process, .quick-answers .grid-2 { grid-template-columns: 1fr; gap: 35px; }
-  .founder-line { grid-template-columns: 100px 1fr; gap: 22px; align-items: start; }
-  .founder-monogram { font-size: 3.7rem; }
-  .founder-monogram span { font-size: 1.4rem; right: 0; }
-  .founder-line h2 { font-size: 1.8rem; }
-  .founder-line p:not(.eyebrow) { font-size: .83rem; }
-  .founder-line .eyebrow { font-size: .6rem; }
   .portfolio .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
   .tier-grid, .guide-layout { grid-template-columns: 1fr; gap: 24px; }
   .tier-card h3 { min-height: 0; }
@@ -236,8 +224,6 @@
 @media (max-width: 400px) {
   .portfolio .btn { font-size: .77rem; padding: .85rem 1.1rem; }
   .portfolio .visual-offers { grid-template-columns: 1fr; }
-  .founder-line { grid-template-columns: 1fr; }
-  .founder-monogram { width: 100px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-device, .case-desktop, .case-mobile, .offer-preview img { transition: none !important; }
