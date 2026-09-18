@@ -11,7 +11,7 @@ window.KDS = {
     founder: "Israel Kapanga",
     // WhatsApp number in international format without "+".
     whatsapp: "18593825280",
-    email: "itconsultation@iksolutions-inc.com",
+    email: "consultation@iksolutions-inc.com",
     location: { fr: "Kentucky, États-Unis", en: "Kentucky, United States" }
   },
 
