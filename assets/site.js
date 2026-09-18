@@ -28,6 +28,8 @@
   if (filters) {
     filters.hidden = false;
     const service = $("#work-service"), chips = all("[data-kind-filter]"), params = new URLSearchParams(location.search);
+    const demoGrid = $(".work-group"), studyGrid = $(".concept-grid"), studyBtn = $("[data-study-toggle]");
+    let studiesOpen = false;
     choose(service, params.get("service"));
     let kind = params.get("kind") || "";
     if (!chips.some(c => c.dataset.kindFilter === kind)) kind = "";
@@ -40,6 +42,16 @@
       });
       // A section whose cards are all filtered out takes its heading with it.
       all("[data-work-section]").forEach(s => { s.hidden = !s.querySelector(".work-card:not([hidden])"); });
+      // The demonstrator grid leads with one oversized card; that placement only holds while all six are shown.
+      if (demoGrid) demoGrid.classList.toggle("is-filtered", all(".work-group .work-card").some(c => c.hidden));
+      // Studies collapse to the first four, unless the visitor opened them or is filtering.
+      if (studyGrid && studyBtn) {
+        const filtering = !!picked || !!kind;
+        studyGrid.classList.toggle("is-collapsed", !studiesOpen && !filtering);
+        studyBtn.hidden = filtering;
+        studyBtn.textContent = studiesOpen ? studyBtn.dataset.less : studyBtn.dataset.more;
+        studyBtn.setAttribute("aria-expanded", String(studiesOpen));
+      }
       chips.forEach(c => c.setAttribute("aria-pressed", String(c.dataset.kindFilter === kind)));
       const counter = $("#work-count");
       counter.textContent = visible + " " + (visible === 1 && counter.dataset.unitOne ? counter.dataset.unitOne : counter.dataset.unit);
@@ -50,6 +62,10 @@
     };
     if (service) service.addEventListener("change", filter);
     chips.forEach(c => c.addEventListener("click", () => { kind = c.dataset.kindFilter; filter(); }));
+    if (studyBtn) {
+      studyBtn.hidden = false;
+      studyBtn.addEventListener("click", () => { studiesOpen = !studiesOpen; filter(); });
+    }
     filter();
   }
   const motion = matchMedia("(prefers-reduced-motion: reduce)");

@@ -96,6 +96,10 @@ module.exports = function createPages(D, siteUrl) {
     const tools = `<div class="wrap work-tools" data-work-filters hidden><div class="work-kinds" role="group" aria-label="${tr(lang, "Filtrer par type de réalisation", "Filter by type of work")}">${kinds.map(([v, t]) => `<button type="button" class="chip" data-kind-filter="${v}" aria-pressed="${v ? "false" : "true"}">${esc(t)}</button>`).join("")}</div><label class="work-service"><span class="sr-only">${esc(L.services)}</span><select id="work-service"><option value="">${tr(lang, "Tous les services", "All services")}</option>${filterable.map(s => `<option value="${s.key}">${esc(s[lang].title)}</option>`).join("")}</select></label><p id="work-count" data-unit="${esc(unit)}" data-unit-one="${esc(unitOne)}">${total} ${esc(unit)}</p></div><p class="wrap work-empty" id="work-empty" hidden>${tr(lang, "Aucune réalisation ne correspond à ce filtre.", "No work matches this filter.")}</p>`;
     const block = (kind, num, eyebrow, title, lead, body) => `<section class="section architecture-section work-block" id="${kind}" data-work-section="${kind}"><div class="wrap"><div class="section-head work-block-head"><p class="eyebrow">${num} / ${esc(eyebrow)}</p><h2>${esc(title)}</h2></div><p class="work-group-intro">${esc(lead)}</p>${body}</div></section>`;
     const studyCount = COUNT_WORD[lang][studies.length] || String(studies.length);
+    // The studies are the longest block on the page, so the default view shows the first four.
+    // The button is revealed by the script; without it every study stays on the page.
+    const showAll = tr(lang, "Voir les " + studies.length + " études", "See all " + studies.length + " studies"), showLess = tr(lang, "Voir moins", "Show less");
+    const studyToggle = `<button type="button" class="btn btn-outline study-toggle" data-study-toggle hidden data-more="${esc(showAll)}" data-less="${esc(showLess)}">${esc(showAll)}</button>`;
     return intro + tools +
       block("client", "01", tr(lang, "Projets clients", "Client projects"), tr(lang, "En production, chez de vrais clients.", "In production, with real clients."),
         tr(lang, "Des systèmes construits avec l’entreprise et utilisés aujourd’hui dans son activité quotidienne.", "Systems built with the business and used in its day-to-day work today."),
@@ -105,7 +109,7 @@ module.exports = function createPages(D, siteUrl) {
         cards(demos, lang, base, "work-group", true)) +
       block("concept", "03", tr(lang, "Études de conception", "Design studies"), tr(lang, "Une direction par métier.", "One direction per trade."),
         tr(lang, studyCount + " études de conception originales pour explorer des directions éditoriales et visuelles selon l’activité. Elles ne représentent pas des entreprises clientes.", studyCount + " original design studies exploring editorial and visual directions for different businesses. They do not represent client companies."),
-        `<p class="concept-sectors">${tr(lang, "Restaurant · Immobilier · Santé · Éducation · Droit · Construction · Hôtellerie · Commerce", "Restaurant · Real estate · Healthcare · Education · Law · Construction · Hotel · Retail")}</p>${cards(studies, lang, base, "concept-grid", true)}`) +
+        `<p class="concept-sectors">${tr(lang, "Restaurant · Immobilier · Santé · Éducation · Droit · Construction · Hôtellerie · Commerce", "Restaurant · Real estate · Healthcare · Education · Law · Construction · Hotel · Retail")}</p>${cards(studies, lang, base, "concept-grid", true)}${studyToggle}`) +
       contactBand(lang, base);
   }
   function project(p, lang, base) {
