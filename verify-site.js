@@ -107,7 +107,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       }
       for (const p of projects.filter(p => p.isConcept)) {
         await goto(p.demoUrls[lang]);
-        const href = await page.locator(".notice a").getAttribute("href");
+        const href = await page.locator(".notice > a").getAttribute("href");
         assert.equal(new URL(href, page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html");
       }
       console.log("Projects, filters, inquiry context and demo returns: " + lang);
