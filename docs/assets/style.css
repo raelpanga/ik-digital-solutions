@@ -474,7 +474,6 @@ html { scroll-padding-top: 105px; }
 .intro-note h2 { font-size: clamp(1.8rem, 3vw, 2.7rem); }
 .intro-note p { color: var(--ink-2); }
 .section-lead { color: var(--ink-2); max-width: 76ch; margin-bottom: 1.5rem; }
-.selected-work { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .showcase-grid + .btn { margin-top: 1.8rem; }
 .portfolio .work-card { grid-template-columns: none; min-width: 0; }
 .work-card .card-top { flex-wrap: wrap; gap: .5rem; }
@@ -544,13 +543,10 @@ html { scroll-padding-top: 105px; }
   .js .portfolio .nav.is-open { display: flex; }
   .js .portfolio .nav-toggle { display: inline-block; margin-left: auto; }
   .portfolio .header-tools { margin-left: 0; }
-  .selected-work { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .selected-work > :last-child { grid-column: 1 / -1; }
   .architecture-section > .wrap > .process-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
-  .intro-grid, .selected-work { grid-template-columns: 1fr; }
-  .selected-work > :last-child { grid-column: auto; }
+  .intro-grid { grid-template-columns: 1fr; }
   .intro-note { gap: 1rem; }
   .intro-note h2 { font-size: 1.7rem; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
