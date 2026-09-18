@@ -27,21 +27,30 @@
   const filters = $("[data-work-filters]");
   if (filters) {
     filters.hidden = false;
-    const service = $("#work-service"), params = new URLSearchParams(location.search);
+    const service = $("#work-service"), chips = all("[data-kind-filter]"), params = new URLSearchParams(location.search);
     choose(service, params.get("service"));
+    let kind = params.get("kind") || "";
+    if (!chips.some(c => c.dataset.kindFilter === kind)) kind = "";
     const filter = () => {
       let visible = 0;
+      const picked = service ? service.value : "";
       all(".work-card").forEach(card => {
-        const match = (!service.value || card.dataset.services.split(" ").includes(service.value));
+        const match = (!picked || card.dataset.services.split(" ").includes(picked)) && (!kind || card.dataset.kind === kind);
         card.hidden = !match; if (match) visible++;
       });
-      $("#work-count").textContent = visible + " " + $("#work-count").dataset.unit;
+      // A section whose cards are all filtered out takes its heading with it.
+      all("[data-work-section]").forEach(s => { s.hidden = !s.querySelector(".work-card:not([hidden])"); });
+      chips.forEach(c => c.setAttribute("aria-pressed", String(c.dataset.kindFilter === kind)));
+      const counter = $("#work-count");
+      counter.textContent = visible + " " + (visible === 1 && counter.dataset.unitOne ? counter.dataset.unitOne : counter.dataset.unit);
       $("#work-empty").hidden = visible !== 0;
       const url = new URL(location.href);
-      for (const [key, value] of [["service", service.value], ["status", ""]]) { if (value) url.searchParams.set(key, value); else url.searchParams.delete(key); }
+      for (const [key, value] of [["service", picked], ["kind", kind]]) { if (value) url.searchParams.set(key, value); else url.searchParams.delete(key); }
       history.replaceState(null, "", url); syncLanguages();
     };
-    service.addEventListener("change", filter); filter();
+    if (service) service.addEventListener("change", filter);
+    chips.forEach(c => c.addEventListener("click", () => { kind = c.dataset.kindFilter; filter(); }));
+    filter();
   }
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
   if ("IntersectionObserver" in window) {

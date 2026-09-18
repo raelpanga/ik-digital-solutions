@@ -14,7 +14,7 @@ multi-page sites. The portfolio and demos are public; linked production systems 
 |---|---|---|
 | Home (selected work, services, process, budget and contact) | `index.html` | `en/index.html` |
 | Services overview and four offers | `services/` | `en/services/` |
-| Work directory, with service and client/demo filters | `projets/` | `en/projects/` |
+| Work directory, sorted by kind with service and kind filters | `projets/` | `en/projects/` |
 | One page per project (9) | `projets/<slug>.html` | `en/projects/<slug>.html` |
 | Our process | `methode.html` | `en/process.html` |
 | About | `a-propos.html` | `en/about.html` |
@@ -204,7 +204,7 @@ figures. Nothing on the site uses them.
 
 ### Connected services and expanded gallery
 
-The homepage highlights three client projects. The work page organizes nine existing projects and eight original industry studies. Cards and project headings omit status badges; individual case studies retain accurate explanations of simulated operations. Public service prices are replaced with scope and tailored-proposal copy. New paired service pages cover mobile-money integration and WhatsApp Business automation. `site/integrations.js` owns these services and illustrative workflows. Brand images are local, credited in `assets/media/README.md`, and do not imply partnerships. Motion respects reduced-motion preferences; content remains visible without JavaScript.
+The homepage highlights three client projects. The work page sorts its seventeen entries by what each one is — three client systems, six demonstrators, eight design studies — and offers progressive filters by kind and by service, deep-linkable through `?kind=` and `?service=`. Every card carries a status badge and, on the work page, a direct link to the production site or the published build; individual case studies retain accurate explanations of simulated operations. Public service prices are replaced with scope and tailored-proposal copy. New paired service pages cover mobile-money integration and WhatsApp Business automation. `site/integrations.js` owns these services and illustrative workflows. Brand images are local, credited in `assets/media/README.md`, and do not imply partnerships. Motion respects reduced-motion preferences; content remains visible without JavaScript.
 
 ### Photography-led industry studies
 

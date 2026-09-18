@@ -30,11 +30,29 @@ module.exports = function createPages(D, siteUrl) {
     const ext = p.shotExt || "png";
     return `<div class="shot" style="--pc:${esc(p.color)}"><div class="browser"><div class="bar"><i></i><i></i><i></i><span>${esc(p.domain)}</span></div><img src="${base}shots/${p.slug}-desktop.${ext}" alt="${esc(p[lang].title)}" loading="lazy" width="1280" height="800"></div><div class="phone"><img src="${base}shots/${p.slug}-mobile.${ext}" alt="${tr(lang, "Version mobile", "Mobile view")}" loading="lazy" width="430" height="900"></div></div>`;
   }
-  function card(p, lang, base) {
-    const x = projectCopy[p.slug], ext = p.shotExt || "png";
-    return `<a class="card showcase work-card" data-project="${p.slug}" data-status="${p.status}" data-services="${projectServices[p.slug].join(" ")}" href="${base + projectRoute(p, lang)}" style="--pc:${esc(p.color)};--case-bg:${x.tint}"><div class="case-cover"><span class="case-index">IK / ${String(D.projects.indexOf(p)+1).padStart(2,"0")}</span><img class="case-desktop" src="${base}shots/${p.slug}-desktop.${ext}" alt="${esc(p[lang].title)}" loading="lazy" width="1280" height="800"><img class="case-mobile" src="${base}shots/${p.slug}-mobile.${ext}" alt="${tr(lang,"Aperçu mobile","Mobile preview")}" loading="lazy" width="430" height="900"></div><div class="card-body"><div class="card-top"><span class="project-sector">${esc(x.type[lang === "fr" ? 0 : 1])}</span></div><h3>${esc(p.slug === "portail-sous-traitant" && lang === "en" ? "Mining contractor portal" : x.title)}</h3><p>${esc(x[lang])}</p><span class="open" aria-label="${esc(labels[lang].view)}">↗</span></div></a>`;
+  // Three kinds of work, kept apart everywhere: client systems, demonstrators we built, design studies.
+  const kindOf = p => p.isConcept ? "concept" : p.status === "client" ? "client" : "demo";
+  const rank = (lead, slug) => { const i = lead.indexOf(slug); return i < 0 ? lead.length : i; };
+  const ordered = (kind, lead = []) => D.projects.filter(p => kindOf(p) === kind).sort((a, b) => rank(lead, a.slug) - rank(lead, b.slug));
+  const CLIENT_LEAD = ["ets-financial", "genos-rentals"], DEMO_LEAD = ["kimia-express", "kando-ressources", "ndala-beauty"];
+  // Case numbers follow the order of the work page, so a card reads the same wherever it appears.
+  const workOrder = [...ordered("client", CLIENT_LEAD), ...ordered("demo", DEMO_LEAD), ...ordered("concept")];
+  const caseNumber = p => String(workOrder.findIndex(q => q.slug === p.slug) + 1).padStart(2, "0");
+  const cardTitle = (p, lang) => p.slug === "portail-sous-traitant" && lang === "en" ? "Mining contractor portal" : projectCopy[p.slug].title;
+  // A client card opens the production system; a demonstrator or study opens the build we published.
+  function openHref(p, lang, base) {
+    const target = kindOf(p) === "client" ? (p.liveUrl || (/^https?:/.test(p.demoUrl || "") ? p.demoUrl : null)) : (p.demoUrls?.[lang] || p.demoUrl);
+    return target ? (/^https?:/.test(target) ? target : base + target) : null;
   }
-  const cards = (projects, lang, base, cls = "") => `<div class="showcase-grid ${cls}">${projects.map(p => card(p, lang, base)).join("")}</div>`;
+  const OPEN_LABEL = (p, lang) => ({ client: tr(lang, "Site en ligne", "Live site"), demo: tr(lang, "Ouvrir la démonstration", "Open the demonstration"), concept: tr(lang, "Ouvrir l’étude", "Open the study") })[kindOf(p)];
+  function card(p, lang, base, open = false) {
+    const x = projectCopy[p.slug], ext = p.shotExt || "png", kind = kindOf(p);
+    const badge = { client: ["pill-client", labels[lang].client], demo: ["pill-demo", labels[lang].demo], concept: ["pill-study", tr(lang, "Étude de conception", "Design study")] }[kind];
+    const href = open ? openHref(p, lang, base) : null;
+    const live = href ? `<a class="case-live" href="${esc(href)}"${/^https?:/.test(href) ? ' target="_blank" rel="noopener"' : ""}>${esc(OPEN_LABEL(p, lang))} <span aria-hidden="true">↗</span><span class="sr-only"> — ${esc(cardTitle(p, lang))}</span></a>` : "";
+    return `<article class="card showcase work-card" data-project="${p.slug}" data-status="${p.status}" data-kind="${kind}" data-services="${projectServices[p.slug].join(" ")}" style="--pc:${esc(p.color)};--case-bg:${x.tint}"><div class="case-cover"><span class="case-index">IK / ${caseNumber(p)}</span><img class="case-desktop" src="${base}shots/${p.slug}-desktop.${ext}" alt="${esc(p[lang].title)}" loading="lazy" width="1280" height="800"><img class="case-mobile" src="${base}shots/${p.slug}-mobile.${ext}" alt="${tr(lang,"Aperçu mobile","Mobile preview")}" loading="lazy" width="430" height="900"></div><div class="card-body"><div class="card-top"><span class="project-sector">${esc(x.type[lang === "fr" ? 0 : 1])}</span><span class="pill ${badge[0]}">${esc(badge[1])}</span></div><h3><a class="case-link" href="${base + projectRoute(p, lang)}">${esc(cardTitle(p, lang))}</a></h3><p>${esc(x[lang])}</p>${live}<span class="open" aria-hidden="true">↗</span></div></article>`;
+  }
+  const cards = (projects, lang, base, cls = "", open = false) => `<div class="showcase-grid ${cls}">${projects.map(p => card(p, lang, base, open)).join("")}</div>`;
   const serviceCards = (lang, base) => visual.serviceCards(lang, base);
   const processSteps = lang => tr(lang,
     [["Cadrer", "Nous définissons le problème, les utilisateurs, le budget et les critères de réussite."], ["Concevoir", "Vous validez la structure et les écrans avant la construction."], ["Construire & tester", "Vous essayez les versions intermédiaires sur un lien de test et partagez vos retours."], ["Mettre en ligne", "Nous préparons les accès, les vérifications et la procédure de retour arrière."], ["Accompagner", "Nous convenons des mises à jour, des sauvegardes et du support après livraison."]],
@@ -60,17 +78,28 @@ module.exports = function createPages(D, siteUrl) {
   }
   function work(lang, base) {
     const L = labels[lang];
-    const bySlug = slugs => slugs.map(slug => D.projects.find(p => p.slug === slug));
-    const groups = [
-      [tr(lang, "Se faire découvrir", "Get discovered"), tr(lang, "Des présences qui expliquent, rassurent et donnent envie de prendre contact.", "Digital presences that explain, build trust and invite people to get in touch."), ["ets-financial", "kando-ressources", "site-corporate"]],
-      [tr(lang, "Vendre et encaisser", "Sell and get paid"), tr(lang, "Des parcours de réservation, de commande et de paiement pensés pour le téléphone.", "Booking, ordering and payment journeys designed around the phone."), ["genos-rentals", "ndala-beauty", "commande-distributeur"]],
-      [tr(lang, "Faire tourner l’activité", "Run the business"), tr(lang, "Des outils pour les équipes, les dossiers, le terrain et les décisions quotidiennes.", "Tools for teams, records, fieldwork and everyday decisions."), ["macclay-wedding-tracker", "portail-sous-traitant"]]
-    ];
-    const concepts = D.projects.filter(p => p.isConcept);
-    return header(L.work, tr(lang, "Des sites, des parcours de vente et des outils métier organisés autour de ce que votre activité doit accomplir.", "Websites, sales journeys and business tools organized around what your business needs to accomplish.")) +
-      `<section class="section work-feature"><div class="wrap"><p class="eyebrow">01 / ${tr(lang, "Projet à découvrir", "Featured work")}</p><div class="work-feature-grid"><div><h2>${tr(lang, "Un parcours complet, du premier clic au suivi.", "A complete journey, from first click to follow-up.")}</h2><p>${tr(lang, "Kimia Express rassemble présence bilingue, réservation et expérience mobile dans une même étude de service.", "Kimia Express brings together bilingual presence, booking and a mobile experience in one service study.")}</p>${button(base + projectRoute(D.projects.find(p => p.slug === "kimia-express"), lang), tr(lang, "Voir le projet Kimia Express", "View Kimia Express"), "btn-acid")}</div>${cards(bySlug(["kimia-express"]), lang, base, "work-feature-card")}</div></div></section>` +
-      groups.map(([title, intro, slugs], i) => section(title, `<p class="work-group-intro">${esc(intro)}</p>${cards(bySlug(slugs), lang, base, "work-group")}`, "work-group-" + i)).join("") +
-      section(tr(lang, "Études de sites statiques", "Static website studies"), `<div class="concept-intro"><p>${tr(lang, "Huit études de conception originales pour explorer des directions éditoriales et visuelles selon l’activité. Elles ne représentent pas des entreprises clientes.", "Eight original design studies exploring editorial and visual directions for different businesses. They do not represent client companies.")}</p><span>${tr(lang, "Restaurant · Immobilier · Santé · Éducation · Droit · Construction · Hôtellerie · Commerce", "Restaurant · Real estate · Healthcare · Education · Law · Construction · Hotel · Retail")}</span></div>${cards(concepts, lang, base, "concept-grid")}`, "concepts") + contactBand(lang, base);
+    const clients = ordered("client", CLIENT_LEAD), demos = ordered("demo", DEMO_LEAD), studies = ordered("concept");
+    const total = clients.length + demos.length + studies.length;
+    const unit = tr(lang, "réalisations", "projects"), unitOne = tr(lang, "réalisation", "project");
+    const kinds = [["", tr(lang, "Tout", "Everything")], ["client", tr(lang, "Projets clients", "Client projects")], ["demo", tr(lang, "Démonstrateurs", "Demonstrators")], ["concept", tr(lang, "Études", "Studies")]];
+    // Only services that actually carry a project become filter options.
+    const filterable = services.filter(s => D.projects.some(p => projectServices[p.slug]?.includes(s.key)));
+    const intro = `<div class="page-intro wrap"><p class="eyebrow">IK Digital Solutions</p><h1>${esc(L.work)}</h1><p class="lead measure">${tr(lang, "Des sites, des parcours de vente et des outils métier organisés autour de ce que votre activité doit accomplir.", "Websites, sales journeys and business tools organized around what your business needs to accomplish.")}</p><p class="work-mix">${clients.length} ${tr(lang, "projets clients", "client projects")} · ${demos.length} ${tr(lang, "démonstrateurs", "demonstrators")} · ${studies.length} ${tr(lang, "études de conception", "design studies")}</p></div>`;
+    // The filter bar is progressive: it stays hidden until the script reveals it, so every card is reachable without JavaScript.
+    const tools = `<div class="wrap work-tools" data-work-filters hidden><div class="work-kinds" role="group" aria-label="${tr(lang, "Filtrer par type de réalisation", "Filter by type of work")}">${kinds.map(([v, t]) => `<button type="button" class="chip" data-kind-filter="${v}" aria-pressed="${v ? "false" : "true"}">${esc(t)}</button>`).join("")}</div><label class="work-service"><span class="sr-only">${esc(L.services)}</span><select id="work-service"><option value="">${tr(lang, "Tous les services", "All services")}</option>${filterable.map(s => `<option value="${s.key}">${esc(s[lang].title)}</option>`).join("")}</select></label><p id="work-count" data-unit="${esc(unit)}" data-unit-one="${esc(unitOne)}">${total} ${esc(unit)}</p></div><p class="wrap work-empty" id="work-empty" hidden>${tr(lang, "Aucune réalisation ne correspond à ce filtre.", "No work matches this filter.")}</p>`;
+    const block = (kind, num, eyebrow, title, lead, body) => `<section class="section architecture-section work-block" id="${kind}" data-work-section="${kind}"><div class="wrap"><div class="section-head work-block-head"><p class="eyebrow">${num} / ${esc(eyebrow)}</p><h2>${esc(title)}</h2></div><p class="work-group-intro">${esc(lead)}</p>${body}</div></section>`;
+    const studyCount = COUNT_WORD[lang][studies.length] || String(studies.length);
+    return intro + tools +
+      block("client", "01", tr(lang, "Projets clients", "Client projects"), tr(lang, "En production, chez de vrais clients.", "In production, with real clients."),
+        tr(lang, "Des systèmes construits avec l’entreprise et utilisés aujourd’hui dans son activité quotidienne.", "Systems built with the business and used in its day-to-day work today."),
+        cards(clients, lang, base, "work-clients", true)) +
+      block("demo", "02", tr(lang, "Démonstrateurs", "Demonstrators"), tr(lang, "Des solutions complètes, ouvertes à l’essai.", "Complete solutions, open to try."),
+        tr(lang, "Chaque démonstrateur présente un parcours de bout en bout. Les sociétés, les utilisateurs et les paiements sont fictifs ; vous pouvez ouvrir chacun d’eux.", "Each demonstrator shows an end-to-end journey. The companies, users and payments are fictional; every one of them is open to explore."),
+        cards(demos, lang, base, "work-group", true)) +
+      block("concept", "03", tr(lang, "Études de conception", "Design studies"), tr(lang, "Une direction par métier.", "One direction per trade."),
+        tr(lang, studyCount + " études de conception originales pour explorer des directions éditoriales et visuelles selon l’activité. Elles ne représentent pas des entreprises clientes.", studyCount + " original design studies exploring editorial and visual directions for different businesses. They do not represent client companies."),
+        `<p class="concept-sectors">${tr(lang, "Restaurant · Immobilier · Santé · Éducation · Droit · Construction · Hôtellerie · Commerce", "Restaurant · Real estate · Healthcare · Education · Law · Construction · Hotel · Retail")}</p>${cards(studies, lang, base, "concept-grid", true)}`) +
+      contactBand(lang, base);
   }
   function project(p, lang, base) {
     const L = labels[lang], x = p[lang], J = D.i18n[lang].project, client = p.status === "client", concept = p.isConcept;

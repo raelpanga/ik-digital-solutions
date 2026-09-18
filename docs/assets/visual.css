@@ -309,27 +309,42 @@
 .portfolio .more-card p { font-size:.86rem;color:var(--ink-2);margin:0;flex:1; }
 .portfolio .more-card .open { font-size:.75rem;font-weight:600;color:var(--cobalt);margin-top:6px; }
 
-/* Work is grouped by the outcome a visitor needs, followed by original static studies. */
-.portfolio .work-feature { background:#e6ece5; }
-.portfolio .work-feature-grid { display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,80px);align-items:center; }
-.portfolio .work-feature h2 { font-size:clamp(2rem,4vw,4.6rem);line-height:.95;letter-spacing:-.06em;max-width:9ch; }
-.portfolio .work-feature-grid > div > p:not(.eyebrow) { max-width:39ch;margin:22px 0 28px;color:var(--ink-2); }
-.portfolio .work-feature-card { grid-template-columns:1fr;gap:0; }
-.portfolio .work-feature-card .work-card { max-width:660px;justify-self:end; }
-.portfolio .work-group-intro { max-width:56ch;color:var(--ink-2);margin:-10px 0 30px; }
+/* Work is sorted by what each project is — client system, demonstrator, design study — and filtered by service. */
+.sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0; }
+.portfolio .work-mix { font:12px/1.6 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:6px 0 0; }
+.portfolio .work-tools { position:sticky;top:64px;z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;padding-block:14px;margin-bottom:8px;background:#f6f5f1f2;backdrop-filter:blur(12px);border-bottom:1px solid var(--line); }
+.portfolio .work-kinds { display:flex;flex-wrap:wrap;gap:8px; }
+.portfolio .chip { font:600 .78rem/1 var(--font-body);letter-spacing:.01em;padding:.62rem 1rem;border:1px solid var(--line);border-radius:100px;background:transparent;color:var(--ink-2);cursor:pointer;transition:background .18s,color .18s,border-color .18s; }
+.portfolio .chip:hover { border-color:var(--ink-3);color:var(--ink); }
+.portfolio .chip[aria-pressed="true"] { background:var(--ink);border-color:var(--ink);color:#fff; }
+.portfolio .work-service select { font:.78rem/1 var(--font-body);padding:.62rem 2rem .62rem .9rem;border:1px solid var(--line);border-radius:100px;background:transparent;color:var(--ink-2);cursor:pointer; }
+.portfolio #work-count { margin:0 0 0 auto;font:11px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3); }
+.portfolio .work-empty { padding-block:60px;color:var(--ink-2); }
+.portfolio .work-block-head { display:grid;gap:10px; }
+.portfolio .work-block-head .eyebrow { margin:0;color:var(--ink-3); }
+.portfolio .work-group-intro { max-width:60ch;color:var(--ink-2);margin:-10px 0 34px; }
+/* Client systems lead the page in the largest format; demonstrators and studies stay tighter. */
+.portfolio .work-clients { grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 30px; }
 .portfolio .work-group { grid-template-columns:repeat(3,minmax(0,1fr)); }
-.portfolio .concept-intro { display:flex;justify-content:space-between;align-items:end;gap:24px;margin:-8px 0 32px; }
-.portfolio .concept-intro p { max-width:56ch;color:var(--ink-2);margin:0; }
-.portfolio .concept-intro span { font:11px/1.55 var(--font-mono);letter-spacing:.05em;text-transform:uppercase;max-width:32ch;color:var(--ink-3); }
-.portfolio .concept-grid { grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 30px; }
+.portfolio .concept-sectors { font:11px/1.55 var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);margin:-22px 0 32px; }
+.portfolio .concept-grid { grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 26px; }
 .portfolio .concept-grid .case-cover { aspect-ratio:1.6; }
 .portfolio .concept-grid .case-desktop { width:100%;height:100%;top:0;left:0;transform:none;border:0;border-radius:0;box-shadow:none; }
 .portfolio .concept-grid .case-mobile { display:none; }
 .portfolio .concept-grid .work-card:nth-child(even) .case-desktop { transform:none; }
-.portfolio .concept-grid .work-card h3 { font-size:1.25rem;padding-right:35px; }
-.portfolio .concept-grid .work-card .card-body p { padding-right:0;font-size:.8rem; }
-@media(max-width:1100px) { .portfolio .work-group { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media(max-width:760px) { .portfolio .work-feature-grid { grid-template-columns:1fr; } .portfolio .work-feature-card .work-card { justify-self:stretch; } .portfolio .work-group,.portfolio .concept-grid { grid-template-columns:1fr; } .portfolio .concept-intro { display:grid;align-items:start; } }
+.portfolio .concept-grid .work-card h3 { font-size:1.1rem;padding-right:35px; }
+.portfolio .concept-grid .work-card .card-body p { padding-right:0;font-size:.78rem; }
+/* The whole card is clickable through the title link; the live link sits above it. */
+.portfolio .work-card { position:relative; }
+.portfolio .work-card h3 a { color:inherit;text-decoration:none; }
+.portfolio .work-card .case-link::after { content:"";position:absolute;inset:0;z-index:1;border-radius:8px; }
+.portfolio .work-card:focus-within .open { background:var(--acid); }
+.portfolio .work-card .case-live { position:relative;z-index:2;justify-self:start;margin-top:4px;font:600 .76rem/1 var(--font-body);color:var(--cobalt);text-decoration:none;border-bottom:1px solid #254dcc40;padding-bottom:3px; }
+.portfolio .work-card .case-live:hover { border-bottom-color:var(--cobalt); }
+.portfolio .work-card .pill-client { background:#e0ead2;color:#3c4a24; }
+.portfolio .work-card .pill-study { background:#e4e5ea;color:#4a4f5e; }
+@media(max-width:1100px) { .portfolio .work-group,.portfolio .concept-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:760px) { .portfolio .work-clients,.portfolio .work-group,.portfolio .concept-grid { grid-template-columns:1fr; } .portfolio .work-tools { position:static;padding-block:10px 16px; } .portfolio #work-count { margin-left:0;width:100%; } }
 
 /* Home: "what we do" block - dark panel, ghost word, one card per service, closing invitation. */
 .portfolio .what-we-do { position:relative;overflow:hidden;background:var(--night);color:#fff;padding-block:clamp(56px,7vw,110px);padding-inline:clamp(20px,4vw,64px); }
