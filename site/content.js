@@ -107,5 +107,6 @@ const labels = {
 };
 services.push(...require("./integrations").services);
 services.push(...require("./expansion").services);
+Object.assign(projectServices, require("./concepts").projectServices);
 projectServices["commande-distributeur"].push("payments");
 module.exports = { routes, services, projectServices, labels };

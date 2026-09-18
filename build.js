@@ -5,6 +5,8 @@ const fs = require("fs"), path = require("path");
 global.window = {};
 require("./assets/content.js");
 const D = window.KDS;
+const concepts = require("./site/concepts");
+D.projects.push(...concepts.projects);
 const arg = name => { const i = process.argv.indexOf(name); return i < 0 ? null : process.argv[i + 1]; };
 const SITE_URL = (arg("--base-url") || "").replace(/\/+$/, "") + (arg("--base-url") ? "/" : "");
 const OUT = path.resolve(__dirname, "docs");
@@ -21,6 +23,7 @@ const generators = Object.entries(SITE_SLUGS).map(([name, slug]) => {
   for (const file of ["build-" + name + ".js", "style.css", "site.js"]) fs.accessSync(path.join(dir, file));
   return { slug, generate: require(path.join(dir, "build-" + name + ".js")).build };
 });
+generators.push({ slug: "concepts", generate: require("./demos/sites/concepts/build-concepts.js").build, collection: true });
 // OUT is a fixed, resolved child of this repository; never delete a caller-supplied path.
 if (OUT !== path.join(path.resolve(__dirname), "docs")) throw new Error("Unexpected output path");
 fs.rmSync(OUT, { recursive: true, force: true });
@@ -58,15 +61,17 @@ for (const f of fs.readdirSync(path.join(__dirname, "demos", "src"))) {
   write("demos/" + slug + "/index.html", wrapDemo(path.join(__dirname, "demos", "src", f), slug));
   pages.push("demos/" + slug + "/");
 }
-for (const { slug, generate } of generators) {
-  const n = generate(path.join(OUT, "demos", slug), { portfolioHome: "../../projets/" + slug + ".html", portfolioHomeEn: "../../en/projects/" + slug + ".html" });
+for (const { slug, generate, collection } of generators) {
+  const n = generate(path.join(OUT, "demos", collection ? "" : slug), { portfolioHome: "../../projets/" + slug + ".html", portfolioHomeEn: "../../en/projects/" + slug + ".html" });
   const add = dir => {
     for (const entry of fs.readdirSync(path.join(OUT, dir), { withFileTypes: true })) {
       const rel = dir + "/" + entry.name;
       if (entry.isDirectory()) add(rel); else if (entry.name.endsWith(".html")) pages.push(rel.replace(/index\.html$/, ""));
     }
   };
-  add("demos/" + slug);
+  if (collection) {
+    for (const concept of concepts.demos) add("demos/" + concept.slug);
+  } else add("demos/" + slug);
   console.log("Demo " + slug + ": " + n + " pages");
 }
 write("404.html", Site.layout({ lang: "fr", route: "404.html", alternate: "404.html", key: "404", title: "Page introuvable", description: "Cette page n'existe pas.", body: '<section class="section"><div class="wrap"><h1>Page introuvable</h1><p><a href="index.html">Retour à l’accueil</a> · <a href="en/index.html">English home</a></p></div></section>' }).replace('<head>', '<head><base href="' + (SITE_URL || "/") + '">'));

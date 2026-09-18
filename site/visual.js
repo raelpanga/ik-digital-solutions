@@ -11,6 +11,7 @@ const projectCopy = {
   "commande-distributeur": { title: "Mokili Distribution", fr: "Commander et rapprocher les encaissements, simplement.", en: "A simpler way to order and reconcile collections.", type: ["Application métier", "Business application"], facts: ["Commandes", "USD / CDF", "Mobile"], tint: "#dce1cf" },
   "portail-sous-traitant": { title: "Portail sous-traitant", fr: "Le suivi terrain, de l’inspection au rapport.", en: "Field operations, from inspection to report.", type: ["Application terrain", "Field application"], facts: ["HSE", "Inspections", "Mobile"], tint: "#e5d9cb" }
 };
+Object.assign(projectCopy, require("./concepts").projectCopy);
 const faq = {
   fr: [
     ["Comment démarrer un projet ?", "Nous partons de votre activité, de vos utilisateurs et de vos priorités. Vous recevez une proposition personnalisée avec les fonctionnalités, les étapes de validation et l’accompagnement prévu."],

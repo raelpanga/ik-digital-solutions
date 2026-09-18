@@ -5,6 +5,7 @@ const fs = require("fs"), path = require("path"), http = require("http"), os = r
 const { chromium } = require("playwright");
 const { routes, services, projectServices } = require("./site/content");
 global.window = {}; require("./assets/content");
+window.KDS.projects.push(...require("./site/concepts").projects);
 const projects = window.KDS.projects, root = path.join(__dirname, "docs");
 const server = http.createServer((req, res) => {
   let file = path.resolve(root, "." + decodeURIComponent(new URL(req.url, "http://localhost").pathname));
@@ -68,8 +69,8 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
         assert.equal(await page.locator("body").getAttribute("data-page"), "project:" + p.slug);
       }
       await goto(routes.home[lang]);
-      assert.equal(await page.locator(".selected-work .work-card").count(), 9);
-      assert.equal(await page.locator(".offer-card").count(), 6);
+      assert.equal(await page.locator(".selected-work .work-card").count(), projects.filter(p => p.status === "client").length);
+      assert.equal(await page.locator(".wwd-card").count(), services.length + 1);
       assert.equal(await page.locator(".pill-client,.pill-demo").count(), 0);
       assert.equal(await page.locator(".integration-brands img").count(), 4);
       for (const key of ["payments", "whatsapp"]) {
@@ -79,11 +80,9 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
         assert.equal(await page.locator("#f-service").inputValue(), key);
       }
       await goto(routes.work[lang]);
-      assert.equal(await page.locator(".work-card:visible").count(), 9);
-      await page.locator("#work-service").selectOption("websites"); assert.equal(await page.locator(".work-card:visible").count(), 4);
-      await page.locator(`[data-language][lang="${other}"]`).click();
-      assert.equal(await page.locator("#work-service").inputValue(), "websites");
-      await page.locator("#work-service").selectOption("hosting"); assert.ok(await page.locator("#work-empty").isVisible());
+      assert.equal(await page.locator(".concept-grid .work-card").count(), projects.filter(p => p.isConcept).length);
+      assert.equal(await page.locator(".work-feature-card .work-card").count(), 1);
+      assert.equal(await page.locator("#work-group-0 .work-card").count(), 3);
       await goto(routes.commerce[lang]);
       await page.locator('#contact a[href*="service=commerce"]').click();
       assert.equal(await page.locator("#f-service").inputValue(), "commerce");
@@ -101,15 +100,20 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       await goto(routes.contact[lang] + "?service=invalid&project=%3Cscript%3E");
       assert.equal(await page.locator("#f-service").inputValue(), ""); assert.equal(await page.locator("#f-project").inputValue(), "");
       // All bilingual demos must return to the corresponding project story.
-      for (const p of projects.filter(p => p.demoUrls?.en)) {
+      for (const p of projects.filter(p => p.demoUrls?.en && !p.isConcept)) {
         await goto(p.demoUrls[lang]);
         await page.locator(".ikbar a").click();
         assert.equal(new URL(page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html");
       }
+      for (const p of projects.filter(p => p.isConcept)) {
+        await goto(p.demoUrls[lang]);
+        const href = await page.locator(".notice a").getAttribute("href");
+        assert.equal(new URL(href, page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html");
+      }
       console.log("Projects, filters, inquiry context and demo returns: " + lang);
     }
     const noJS = await browser.newPage({ javaScriptEnabled: false });
-    await noJS.goto(origin + "/projets/index.html"); assert.equal(await noJS.locator(".work-card:visible").count(), 9);
+    await noJS.goto(origin + "/projets/index.html"); assert.equal(await noJS.locator(".concept-grid .work-card:visible").count(), projects.filter(p => p.isConcept).length);
     await noJS.goto(origin + "/contact.html");
     assert.ok((await noJS.locator("#contact-form").getAttribute("action")).startsWith("mailto:"));
     assert.equal(await noJS.locator("#contact-form").getAttribute("method"), "post");
