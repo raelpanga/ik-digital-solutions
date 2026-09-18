@@ -81,7 +81,7 @@
     };
     form.addEventListener("submit", e => {
       e.preventDefault(); if (!form.reportValidity()) return;
-      const subject = (fr ? "Projet — " : "Project — ") + ($("#f-company").value.trim() || $("#f-name").value.trim());
+      const subject = (fr ? "Projet : " : "Project: ") + ($("#f-company").value.trim() || $("#f-name").value.trim());
       location.href = "mailto:" + form.dataset.email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(message());
     });
     $("#f-whatsapp").addEventListener("click", () => {
