@@ -40,11 +40,18 @@ module.exports = function createPages(D, siteUrl) {
   const caseNumber = p => String(workOrder.findIndex(q => q.slug === p.slug) + 1).padStart(2, "0");
   const cardTitle = (p, lang) => p.slug === "portail-sous-traitant" && lang === "en" ? "Mining contractor portal" : projectCopy[p.slug].title;
   // A client card opens the production system; a demonstrator or study opens the build we published.
+  // Where production sits behind the client's own login, a visitor would reach only a sign-in screen,
+  // so the card sends them to our replica of that system instead.
+  const restrictedLive = p => kindOf(p) === "client" && !!p.liveNeedsAccount;
   function openHref(p, lang, base) {
-    const target = kindOf(p) === "client" ? (p.liveUrl || (/^https?:/.test(p.demoUrl || "") ? p.demoUrl : null)) : (p.demoUrls?.[lang] || p.demoUrl);
+    const target = kindOf(p) === "client" && !restrictedLive(p)
+      ? (p.liveUrl || (/^https?:/.test(p.demoUrl || "") ? p.demoUrl : null))
+      : (p.demoUrls?.[lang] || p.demoUrl);
     return target ? (/^https?:/.test(target) ? target : base + target) : null;
   }
-  const OPEN_LABEL = (p, lang) => ({ client: tr(lang, "Site en ligne", "Live site"), demo: tr(lang, "Ouvrir la démonstration", "Open the demonstration"), concept: tr(lang, "Ouvrir l’étude", "Open the study") })[kindOf(p)];
+  const OPEN_LABEL = (p, lang) => restrictedLive(p)
+    ? tr(lang, "Essayer la démonstration", "Try the demonstration")
+    : ({ client: tr(lang, "Site en ligne", "Live site"), demo: tr(lang, "Ouvrir la démonstration", "Open the demonstration"), concept: tr(lang, "Ouvrir l’étude", "Open the study") })[kindOf(p)];
   function card(p, lang, base, open = false) {
     const x = projectCopy[p.slug], ext = p.shotExt || "png", kind = kindOf(p);
     const badge = { client: ["pill-client", labels[lang].client], demo: ["pill-demo", labels[lang].demo], concept: ["pill-study", tr(lang, "Étude de conception", "Design study")] }[kind];
@@ -106,15 +113,23 @@ module.exports = function createPages(D, siteUrl) {
     const production = p.liveUrl || (client && /^https?:/.test(p.demoUrl || "") ? p.demoUrl : null);
     const demo = p.demoUrls?.[lang] || p.demoUrl;
     const demoHref = demo && (/^https?:/.test(demo) ? demo : base + demo);
-    const main = production || demoHref;
+    // When production needs the client's own credentials, the demonstration leads and the real
+    // address follows, labelled so nobody clicks through to a sign-in screen expecting the system.
+    const restricted = restrictedLive(p);
+    const main = restricted ? demoHref : (production || demoHref);
     const external = /^https?:/.test(main || "");
-    const mainButton = main ? `<a class="btn btn-primary" href="${esc(main)}"${external ? ' target="_blank" rel="noopener"' : ""}>${tr(lang, production ? "Ouvrir le site de production" : concept ? "Ouvrir l’étude statique" : "Ouvrir la démo", production ? "Open production site" : concept ? "Open static study" : "Open demo")} ↗</a>` : "";
-    const secondary = production && demoHref !== production ? button(demoHref, tr(lang, "Essayer la copie de démonstration", "Try the demonstration copy"), "btn-outline") : "";
+    const mainLabel = restricted
+      ? tr(lang, "Essayer la démonstration", "Try the demonstration")
+      : tr(lang, production ? "Ouvrir le site de production" : concept ? "Ouvrir l’étude statique" : "Ouvrir la démo", production ? "Open production site" : concept ? "Open static study" : "Open demo");
+    const mainButton = main ? `<a class="btn btn-primary" href="${esc(main)}"${external ? ' target="_blank" rel="noopener"' : ""}>${esc(mainLabel)} ↗</a>` : "";
+    const secondary = restricted
+      ? `<a class="btn btn-outline" href="${esc(production)}" target="_blank" rel="noopener">${tr(lang, "Système de production (accès client)", "Production system (client login)")} ↗</a>`
+      : production && demoHref !== production ? button(demoHref, tr(lang, "Essayer la copie de démonstration", "Try the demonstration copy"), "btn-outline") : "";
     const frOnly = lang === "en" && demoHref && demoHref !== production && !p.demoUrls?.en;
     const block = (title, body) => `<section class="pblock"><h2>${esc(title)}</h2>${body}</section>`;
     return `<div class="wrap project-head"><a class="back" href="${link(base, lang, "work")}">← ${L.allWork}</a><div></div><h1>${esc(x.title)}</h1><p class="lead measure">${esc(projectCopy[p.slug][lang])}</p><div class="project-highlights">${(lang === "en" && projectCopy[p.slug].factsEn || projectCopy[p.slug].facts).map(t => `<span>${esc(lang === "en" ? ({ Industrie: "Industry", Panier: "Cart", Commandes: "Orders" }[t] || t) : t)}</span>`).join("")}<span>${esc(p.timeline[lang])}</span></div></div><div class="wrap"><div class="gallery">${screenshot(p, lang, base)}</div></div>` +
       `<div class="wrap project-grid"><aside class="spec"><dl><div class="kv"><dt>${tr(lang, "Secteur", "Sector")}</dt><dd>${esc(x.sector)}</dd></div><div class="kv"><dt>${tr(lang, "Calendrier", "Timeline")}</dt><dd>${esc(p.timeline[lang])}</dd></div></dl><div class="actions">${mainButton}${secondary}${frOnly ? '<p class="hint">This demonstration is in French.</p>' : ""}${p.note ? `<p class="hint">${esc(p.note[lang])}</p>` : ""}</div><h3>${L.related}</h3><ul class="related-links">${projectServices[p.slug].map(key => `<li><a href="${link(base, lang, key)}">${esc(services.find(s => s.key === key)[lang].title)}</a></li>`).join("")}</ul>${button(inquiry(base, lang, projectServices[p.slug][0], p.slug), L.discuss)}</aside><div>` +
-      `<div class="transparency">${esc(concept ? tr(lang, "Étude de conception originale : cette réalisation illustre une direction de site statique et ne représente pas un client, une entreprise ou des résultats réels.", "Original design study: this work illustrates a static website direction and does not represent a client, a business or real results.") : client ? J.transparencyClient : J.transparency)}</div>` +
+      `<div class="transparency">${esc(concept ? tr(lang, "Étude de conception originale : cette réalisation illustre une direction de site statique et ne représente pas un client, une entreprise ou des résultats réels.", "Original design study: this work illustrates a static website direction and does not represent a client, a business or real results.") : restricted ? tr(lang, "Ce projet a été livré à un client réel. Le système de production est réservé à son personnel et à ses clients : nous ne pouvons pas vous y donner accès. La démonstration ci-dessus le reproduit avec des données fictives.", "This project was delivered to a real client. The production system is reserved for its staff and customers, so we cannot give you access to it. The demonstration above reproduces it with fictional data.") : client ? J.transparencyClient : J.transparency)}</div>` +
       block(tr(lang, client ? "Le contexte et le besoin" : concept ? "L’intention de l’étude" : "Le scénario de démonstration", client ? "Context and need" : concept ? "The study intention" : "The demonstration scenario"), x.problem.map(t => `<p>${esc(t)}</p>`).join("")) +
       block(tr(lang, "Notre contribution", "Our contribution"), list(x.built)) +
       block(p.s3Label?.[lang] || tr(lang, "Les choix d'usage", "Designing for everyday use"), list(x.congo)) +

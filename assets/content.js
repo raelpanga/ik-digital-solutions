@@ -344,6 +344,8 @@ window.KDS = {
       status: "client",
       demoUrl: "demos/genos-rentals/",
       liveUrl: "https://style.macandclay.com/",
+      // Production is behind the store's own login, so visitor-facing links lead to our replica instead.
+      liveNeedsAccount: true,
       color: "#1F2A44",
       domain: "style.macandclay.com",
       openLabel: { fr: "Ouvrir la démo", en: "Open the demo" },
@@ -429,6 +431,7 @@ window.KDS = {
       status: "client",
       demoUrl: "demos/macclay-wedding-tracker/",
       liveUrl: "https://weddings.macandclay.com/",
+      liveNeedsAccount: true,
       color: "#1B2433",
       domain: "weddings.macandclay.com",
       openLabel: { fr: "Ouvrir la démo", en: "Open the demo" },
