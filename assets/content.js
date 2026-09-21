@@ -349,7 +349,9 @@ window.KDS = {
       color: "#1F2A44",
       domain: "style.macandclay.com",
       openLabel: { fr: "Ouvrir la démo", en: "Open the demo" },
-      note: { fr: "La démo reproduit l'application de production avec des données fictives : inscrivez un mariage, approuvez-le, créez une commande à l'essayage et encaissez par carte (Stripe simulé). L'application réelle est réservée au personnel et aux clients du magasin.", en: "The demo reproduces the production app with mock data: register a wedding, approve it, create an order at the fitting and collect by card (simulated Stripe). The real app is reserved for the store's staff and customers." },
+      // The demonstration reproduces the interface in English, as the production system is.
+      demoLang: "en",
+      note: { fr: "La démonstration rejoue le système de production avec des données inventées, sous quatre angles : l'application du magasin, l'espace du client, la page publique que suit la mariée et le lien d'envoi des mesures reçu par chaque garçon d'honneur. Enregistrez un cortège, approuvez-le, encaissez par carte (Stripe simulé) ; tout revient à zéro au rechargement. Le système réel est réservé au personnel et aux clients du magasin.", en: "The demonstration replays the production system with invented data, from four angles: the store application, the customer's own account, the public page the bride follows, and the sizing link each groomsman receives. Register a party, approve it, take a card payment (simulated Stripe); everything resets on reload. The real system is reserved for the store's staff and customers." },
       s3Label: { fr: "Ce qui est transférable en RDC", en: "What carries over to the DRC" },
       stack: ["React 18", "TypeScript", "Vite", "Tailwind", "Express", "Supabase (PostgreSQL)", "Stripe", "Twilio", "SendGrid", "Sentry", "Vercel", "Railway", "GitHub Actions"],
       timeline: { fr: "en production depuis juillet 2026", en: "in production since July 2026" },

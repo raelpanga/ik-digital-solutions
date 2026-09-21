@@ -49,7 +49,7 @@ for (const lang of ["fr", "en"]) {
   for (const p of D.projects) { const route = Site.projectRoute(p, lang); write(route, Site.projectPage(p, lang)); pages.push(route); }
 }
 // Demos are French unless their interface reproduces an English-language production tool.
-const DEMO_LANG = { "macclay-wedding-tracker": "en" };
+const DEMO_LANG = { "macclay-wedding-tracker": "en", "genos-rentals": "en" };
 function wrapDemo(src, slug) {
   const fragment = fs.readFileSync(src, "utf8"), marker = "<!-- /head -->", i = fragment.indexOf(marker);
   const head = i < 0 ? "" : fragment.slice(0, i), body = i < 0 ? fragment : fragment.slice(i + marker.length);
