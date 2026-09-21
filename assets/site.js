@@ -28,7 +28,7 @@
   if (filters) {
     filters.hidden = false;
     const service = $("#work-service"), chips = all("[data-kind-filter]"), params = new URLSearchParams(location.search);
-    const demoGrid = $(".work-group"), studyGrid = $(".concept-grid"), studyBtn = $("[data-study-toggle]");
+    const studyGrid = $(".concept-grid"), studyBtn = $("[data-study-toggle]");
     let studiesOpen = false;
     choose(service, params.get("service"));
     let kind = params.get("kind") || "";
@@ -42,8 +42,6 @@
       });
       // A section whose cards are all filtered out takes its heading with it.
       all("[data-work-section]").forEach(s => { s.hidden = !s.querySelector(".work-card:not([hidden])"); });
-      // The demonstrator grid leads with one oversized card; that placement only holds while all six are shown.
-      if (demoGrid) demoGrid.classList.toggle("is-filtered", all(".work-group .work-card").some(c => c.hidden));
       // Studies collapse to the first four, unless the visitor opened them or is filtering.
       if (studyGrid && studyBtn) {
         const filtering = !!picked || !!kind;
