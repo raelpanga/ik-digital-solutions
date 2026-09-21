@@ -14,8 +14,8 @@
     var en = document.documentElement.lang === "en";
     if (!box) { box = document.createElement("p"); box.className = "ik-notice"; box.setAttribute("role", "status"); document.body.appendChild(box); }
     box.textContent = en
-      ? "Contact buttons are disabled in this demonstration copy. The live site reaches TRUTH directly."
-      : "Les boutons de contact sont désactivés dans cette copie de démonstration. Le site en ligne joint TRUTH directement.";
+      ? "Contact buttons are disabled in this demonstration copy."
+      : "Les boutons de contact sont désactivés dans cette copie de démonstration.";
     box.hidden = false; clearTimeout(timer); timer = setTimeout(function () { box.hidden = true; }, 4200);
   }
   document.addEventListener("click", function (e) {

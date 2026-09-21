@@ -43,14 +43,18 @@ module.exports = function createPages(D, siteUrl) {
   // Where production sits behind the client's own login, a visitor would reach only a sign-in screen,
   // so the card sends them to our replica of that system instead.
   const restrictedLive = p => kindOf(p) === "client" && !!p.liveNeedsAccount;
+  // A client project may deliberately publish no production link; its card then opens
+  // the demonstration instead of having no link at all.
+  const productionOf = p => p.liveUrl || (/^https?:/.test(p.demoUrl || "") ? p.demoUrl : null);
   function openHref(p, lang, base) {
     const target = kindOf(p) === "client" && !restrictedLive(p)
-      ? (p.liveUrl || (/^https?:/.test(p.demoUrl || "") ? p.demoUrl : null))
+      ? (productionOf(p) || p.demoUrls?.[lang] || p.demoUrl)
       : (p.demoUrls?.[lang] || p.demoUrl);
     return target ? (/^https?:/.test(target) ? target : base + target) : null;
   }
   const OPEN_LABEL = (p, lang) => restrictedLive(p)
     ? tr(lang, "Essayer la démonstration", "Try the demonstration")
+    : kindOf(p) === "client" && !productionOf(p) ? tr(lang, "Ouvrir la démonstration", "Open the demonstration")
     : ({ client: tr(lang, "Site en ligne", "Live site"), demo: tr(lang, "Ouvrir la démonstration", "Open the demonstration"), concept: tr(lang, "Ouvrir l’étude", "Open the study") })[kindOf(p)];
   function card(p, lang, base, open = false) {
     const x = projectCopy[p.slug], ext = p.shotExt || "png", kind = kindOf(p);
@@ -136,7 +140,7 @@ module.exports = function createPages(D, siteUrl) {
     const block = (title, body) => `<section class="pblock"><h2>${esc(title)}</h2>${body}</section>`;
     return `<div class="wrap project-head"><a class="back" href="${link(base, lang, "work")}">← ${L.allWork}</a><div></div><h1>${esc(x.title)}</h1><p class="lead measure">${esc(projectCopy[p.slug][lang])}</p><div class="project-highlights">${(lang === "en" && projectCopy[p.slug].factsEn || projectCopy[p.slug].facts).map(t => `<span>${esc(lang === "en" ? ({ Industrie: "Industry", Panier: "Cart", Commandes: "Orders" }[t] || t) : t)}</span>`).join("")}<span>${esc(p.timeline[lang])}</span></div></div><div class="wrap"><div class="gallery">${screenshot(p, lang, base)}</div></div>` +
       `<div class="wrap project-grid"><aside class="spec"><dl><div class="kv"><dt>${tr(lang, "Secteur", "Sector")}</dt><dd>${esc(x.sector)}</dd></div><div class="kv"><dt>${tr(lang, "Calendrier", "Timeline")}</dt><dd>${esc(p.timeline[lang])}</dd></div></dl><div class="actions">${mainButton}${secondary}${langNote ? '<p class="hint">' + esc(langNote) + '</p>' : ""}${p.note ? `<p class="hint">${esc(p.note[lang])}</p>` : ""}</div><h3>${L.related}</h3><ul class="related-links">${projectServices[p.slug].map(key => `<li><a href="${link(base, lang, key)}">${esc(services.find(s => s.key === key)[lang].title)}</a></li>`).join("")}</ul>${button(inquiry(base, lang, projectServices[p.slug][0], p.slug), L.discuss)}</aside><div>` +
-      `<div class="transparency">${esc(concept ? tr(lang, "Étude de conception originale : cette réalisation illustre une direction de site statique et ne représente pas un client, une entreprise ou des résultats réels.", "Original design study: this work illustrates a static website direction and does not represent a client, a business or real results.") : restricted ? tr(lang, "Ce projet a été livré à un client réel. Le système de production est réservé à son personnel et à ses clients : nous ne pouvons pas vous y donner accès. La démonstration ci-dessus le reproduit avec des données fictives.", "This project was delivered to a real client. The production system is reserved for its staff and customers, so we cannot give you access to it. The demonstration above reproduces it with fictional data.") : client ? J.transparencyClient : J.transparency)}</div>` +
+      `<div class="transparency">${esc(p.transparencyNote?.[lang] || (concept ? tr(lang, "Étude de conception originale : cette réalisation illustre une direction de site statique et ne représente pas un client, une entreprise ou des résultats réels.", "Original design study: this work illustrates a static website direction and does not represent a client, a business or real results.") : restricted ? tr(lang, "Ce projet a été livré à un client réel. Le système de production est réservé à son personnel et à ses clients : nous ne pouvons pas vous y donner accès. La démonstration ci-dessus le reproduit avec des données fictives.", "This project was delivered to a real client. The production system is reserved for its staff and customers, so we cannot give you access to it. The demonstration above reproduces it with fictional data.") : client ? J.transparencyClient : J.transparency))}</div>` +
       block(tr(lang, client ? "Le contexte et le besoin" : concept ? "L’intention de l’étude" : "Le scénario de démonstration", client ? "Context and need" : concept ? "The study intention" : "The demonstration scenario"), x.problem.map(t => `<p>${esc(t)}</p>`).join("")) +
       block(tr(lang, "Notre contribution", "Our contribution"), list(x.built)) +
       block(p.s3Label?.[lang] || tr(lang, "Les choix d'usage", "Designing for everyday use"), list(x.congo)) +

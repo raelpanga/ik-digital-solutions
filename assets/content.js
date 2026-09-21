@@ -599,9 +599,9 @@ window.KDS = {
     {
       slug: "truth-construction",
       status: "client",
-      liveUrl: "https://truth-construction.vercel.app/",
-      // A snapshot of the delivered site, labelled as a demonstration copy with its
-      // contact buttons disabled; the English route opens the copy in English.
+      // No liveUrl on purpose: the portfolio links only the demonstration copy, a
+      // snapshot of the delivered site with its contact buttons disabled. The English
+      // route opens the copy in English.
       demoUrl: "demos/truth-construction/",
       demoUrls: { fr: "demos/truth-construction/", en: "demos/truth-construction/?lang=en" },
       color: "#101F2B",
@@ -611,11 +611,15 @@ window.KDS = {
       timeline: { fr: "Site en ligne", en: "Live site" },
       price: { fr: "sur devis", en: "on quote" },
       monthly: { fr: "mises à jour à la demande", en: "updates on request" },
-      // The copy reproduces the real company's information, so the generic sentence
-      // about demonstration copies using fictional data would be untrue here.
+      // The copy reproduces the real company's information, and no production address is
+      // shown, so both generic sentences (fictional data; "the address shown") would be untrue.
       exploreNote: {
-        fr: "Le lien de production ouvre le site en ligne de l'entreprise. La copie de démonstration reproduit le site tel que livré, avec les vraies informations de l'entreprise ; ses boutons WhatsApp, téléphone et e-mail sont désactivés pour que vos essais n'atteignent jamais le client.",
-        en: "The production link opens the company's live site. The demonstration copy reproduces the site as delivered, with the company's real information; its WhatsApp, phone and e-mail buttons are disabled so your testing never reaches the client."
+        fr: "La copie de démonstration reproduit le site tel que livré, avec les vraies informations de l'entreprise, et toutes ses pages sont consultables. Ses boutons WhatsApp, téléphone et e-mail sont désactivés pour que vos essais n'atteignent jamais le client.",
+        en: "The demonstration copy reproduces the site as delivered, with the company's real information, and every page can be explored. Its WhatsApp, phone and e-mail buttons are disabled so your testing never reaches the client."
+      },
+      transparencyNote: {
+        fr: "Ce projet a été livré à un client réel. La copie de démonstration ci-dessous reproduit son site tel que livré : ouvrez-la et vérifiez vous-même ce qui est décrit ici.",
+        en: "This project was delivered to a real client. The demonstration copy below reproduces its site as delivered: open it and check what is described here for yourself."
       },
       fr: {
         title: "TRUTH Construction & Development",

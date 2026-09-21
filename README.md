@@ -41,7 +41,8 @@ labels translated to French and four extra jars generated to match.
 Every demo uses fictitious data and simulated payments, SMS, e-mails and Shopify, and says
 so in its banner. Client project pages describe only what the repositories and live
 sites show. Their main button opens the production address; any demonstration copy is
-labelled separately. Demonstrator project pages lead with the demo link. English pages
+labelled separately. A client project with no `liveUrl` publishes no production link: its
+page and card lead with the demonstration instead. Demonstrator project pages lead with the demo link. English pages
 open English demos where available and identify French-only examples.
 
 The navigation follows **Services → Work → a relevant example → Contact**. Pricing is
@@ -174,8 +175,10 @@ and English project-return paths through `portfolioHome` and `portfolioHomeEn`:
   yellow. The previous single-page version is kept in `demos/archive/site-corporate-v1.html`.
 
 - `demos/sites/truth/` — **TRUTH Construction & Development**, a *real* client, unlike the
-  demos above. Its project page leads with the production site; this is the separately
-  labelled demonstration copy. `snapshot/` is the client's own build output, copied unchanged
+  demos above. By choice, the portfolio links only this demonstration copy and never the
+  production site: the project sets no `liveUrl`, so its page and card open the copy, and it
+  supplies its own `transparencyNote` because the shared client sentence refers to an
+  address shown on the page. `snapshot/` is the client's own build output, copied unchanged
   by `sync.js`, so the client's repository carries no portfolio code. `build-truth.js` adds
   only what a copy on this domain needs: `noindex` on every page (a full copy of a real
   company's site must not compete with it in search; the canonicals already name the live

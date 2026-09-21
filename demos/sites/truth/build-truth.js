@@ -4,7 +4,6 @@
 // domain needs, so the client's repository carries no portfolio code.
 "use strict";
 const fs = require("fs"), path = require("path");
-const LIVE = "https://truth-construction.vercel.app/";
 const SNAPSHOT = path.join(__dirname, "snapshot");
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 // The site translates itself from data-fr/data-en, which it assigns as innerHTML, so
@@ -26,12 +25,11 @@ function bar(back, backEn) {
     both("span", "Site réalisé par IK Digital Solutions pour TRUTH Construction &amp; Development. Les boutons de contact sont désactivés.",
       "Built by IK Digital Solutions for TRUTH Construction &amp; Development. Contact buttons are disabled.") +
     '</span><span class="ikbar-links">' +
-    both("a", "Site en ligne " + ARROW, "Live site " + ARROW, ` href="${LIVE}" target="_blank" rel="noopener"`) +
     both("a", "← Retour au projet", "← Back to the project", ` href="${esc(back)}" data-fr-href="${esc(back)}" data-en-href="${esc(backEn)}"`) +
     "</span></div>";
 }
 
-exports.build = (out, { portfolioHome, portfolioHomeEn }) => {
+exports.build = (out, { portfolioHome, portfolioHomeEn, siteUrl }) => {
   if (!fs.existsSync(path.join(SNAPSHOT, "index.html"))) throw new Error("TRUTH snapshot missing: run node demos/sites/truth/sync.js <truth>/dist");
   copy(SNAPSHOT, out);
   fs.copyFileSync(path.join(__dirname, "style.css"), path.join(out, "portfolio-demo.css"));
@@ -46,6 +44,9 @@ exports.build = (out, { portfolioHome, portfolioHomeEn }) => {
     html = html.replace(/<meta name="robots"[^>]*>/g, "")
       .replace("<head>", '<head><meta name="robots" content="noindex,nofollow">')
       .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, "");
+    // The portfolio links only this copy. Facebook sends clicks on a shared link to its
+    // og:url, so the share tags name the copy; the canonical keeps naming the live site.
+    if (siteUrl) html = html.replace(/(<meta property="og:(?:url|image)" content=")https:\/\/truth-construction\.vercel\.app\//g, `$1${siteUrl}demos/truth-construction/`);
     // Loaded last so its rules win; a classic script still runs before the site's
     // deferred modules, which is what lets it set the language and catch contact links.
     html = html.replace("</head>", '<link rel="stylesheet" href="portfolio-demo.css"><script src="portfolio-demo.js"></script></head>');

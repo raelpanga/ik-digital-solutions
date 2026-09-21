@@ -69,7 +69,7 @@ for (const f of fs.readdirSync(path.join(__dirname, "demos", "src"))) {
   pages.push("demos/" + slug + "/");
 }
 for (const { slug, generate, collection } of generators) {
-  const n = generate(path.join(OUT, "demos", collection ? "" : slug), { portfolioHome: "../../projets/" + slug + ".html", portfolioHomeEn: "../../en/projects/" + slug + ".html" });
+  const n = generate(path.join(OUT, "demos", collection ? "" : slug), { portfolioHome: "../../projets/" + slug + ".html", portfolioHomeEn: "../../en/projects/" + slug + ".html", siteUrl: SITE_URL });
   const add = dir => {
     for (const entry of fs.readdirSync(path.join(OUT, dir), { withFileTypes: true })) {
       const rel = dir + "/" + entry.name;
