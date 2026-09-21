@@ -12,7 +12,10 @@ const SITE_URL = (arg("--base-url") || "").replace(/\/+$/, "") + (arg("--base-ur
 const OUT = path.resolve(__dirname, "docs");
 const Site = require("./site/pages")(D, SITE_URL);
 const { services, projectServices } = require("./site/content");
-const SITE_SLUGS = { kando: "kando-ressources", fleuve: "site-corporate", kimia: "kimia-express" };
+const SITE_SLUGS = { kando: "kando-ressources", fleuve: "site-corporate", kimia: "kimia-express", truth: "truth-construction" };
+// Copies of real client sites are noindex, so listing them in the sitemap would only
+// earn "submitted URL marked noindex" warnings.
+const NOINDEX_DEMOS = new Set(["truth-construction"]);
 // Validate source dependencies before replacing generated output.
 for (const p of D.projects) {
   if (!projectServices[p.slug]?.every(key => services.some(s => s.key === key))) throw new Error("Missing service assignment: " + p.slug);
@@ -75,7 +78,7 @@ for (const { slug, generate, collection } of generators) {
   };
   if (collection) {
     for (const concept of concepts.demos) add("demos/" + concept.slug);
-  } else add("demos/" + slug);
+  } else if (!NOINDEX_DEMOS.has(slug)) add("demos/" + slug);
   console.log("Demo " + slug + ": " + n + " pages");
 }
 write("404.html", Site.layout({ lang: "fr", route: "404.html", alternate: "404.html", key: "404", title: "Page introuvable", description: "Cette page n'existe pas.", body: '<section class="section"><div class="wrap"><h1>Page introuvable</h1><p><a href="index.html">Retour à l’accueil</a> · <a href="en/index.html">English home</a></p></div></section>' }).replace('<head>', '<head><base href="' + (SITE_URL || "/") + '">'));

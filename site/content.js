@@ -25,7 +25,7 @@ const routes = {
 const services = [
   {
     key: "websites",
-    examples: ["ets-financial", "kando-ressources", "site-corporate", "kimia-express"],
+    examples: ["ets-financial", "truth-construction", "kando-ressources", "site-corporate", "kimia-express"],
     fr: {
       title: "Sites web", brief: "Présentez votre entreprise avec un site clair, soigné et facile à consulter sur téléphone.",
       audience: "Pour les entreprises de services, les PME et les organisations qui veulent expliquer leur activité et recevoir des demandes qualifiées.",
@@ -97,7 +97,7 @@ const services = [
 ];
 const projectServices = {
   "genos-rentals": ["commerce", "applications"], "macclay-wedding-tracker": ["applications"],
-  "ets-financial": ["websites"], "kando-ressources": ["websites"],
+  "ets-financial": ["websites"], "truth-construction": ["websites"], "kando-ressources": ["websites"],
   "kimia-express": ["websites", "commerce"], "commande-distributeur": ["applications"],
   "portail-sous-traitant": ["applications"], "ndala-beauty": ["commerce"], "site-corporate": ["websites"]
 };

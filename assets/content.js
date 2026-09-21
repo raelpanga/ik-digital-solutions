@@ -597,6 +597,96 @@ window.KDS = {
       }
     },
     {
+      slug: "truth-construction",
+      status: "client",
+      liveUrl: "https://truth-construction.vercel.app/",
+      // A snapshot of the delivered site, labelled as a demonstration copy with its
+      // contact buttons disabled; the English route opens the copy in English.
+      demoUrl: "demos/truth-construction/",
+      demoUrls: { fr: "demos/truth-construction/", en: "demos/truth-construction/?lang=en" },
+      color: "#101F2B",
+      domain: "truth-construction.vercel.app",
+      shotExt: "jpg",
+      stack: ["HTML / CSS / JS statique", "Bilingue FR / EN", "Vercel", "WhatsApp", "Schema.org", "Open Graph", "Sitemap et SEO", "Accessibilité ARIA"],
+      timeline: { fr: "Site en ligne", en: "Live site" },
+      price: { fr: "sur devis", en: "on quote" },
+      monthly: { fr: "mises à jour à la demande", en: "updates on request" },
+      // The copy reproduces the real company's information, so the generic sentence
+      // about demonstration copies using fictional data would be untrue here.
+      exploreNote: {
+        fr: "Le lien de production ouvre le site en ligne de l'entreprise. La copie de démonstration reproduit le site tel que livré, avec les vraies informations de l'entreprise ; ses boutons WhatsApp, téléphone et e-mail sont désactivés pour que vos essais n'atteignent jamais le client.",
+        en: "The production link opens the company's live site. The demonstration copy reproduces the site as delivered, with the company's real information; its WhatsApp, phone and e-mail buttons are disabled so your testing never reaches the client."
+      },
+      fr: {
+        title: "TRUTH Construction & Development",
+        sector: "Construction et immobilier · Lubumbashi",
+        tagline: "Site bilingue de treize pages pour une entreprise de construction de Lubumbashi, conçu autour de WhatsApp et de ses chantiers.",
+        problem: [
+          "TRUTH Construction & Development conçoit et bâtit des résidences, des ensembles immobiliers et des ouvrages à Lubumbashi et à Kolwezi. L'entreprise avait besoin d'une présence en ligne à la hauteur de ses réalisations, en français et en anglais.",
+          "Dans ce marché, les demandes passent par WhatsApp et beaucoup de clients n'ont pas d'adresse e-mail : le site devait mener à une conversation plutôt qu'à un formulaire, et s'afficher vite sur les connexions mobiles."
+        ],
+        built: [
+          "Site statique bilingue : accueil, entreprise, réalisations, expertises, engagements, contact et sept pages de projet",
+          "Accueil plein écran avec diaporama des réalisations, en-tête transparent sur la photo et contrôle de pause",
+          "WhatsApp comme parcours principal : chaque bouton ouvre une conversation avec le sujet déjà rédigé, y compris depuis chaque projet et chaque expertise",
+          "Galeries photo avec visionneuse au clavier et au glissé, plan schématique des chantiers et plan du bureau chargé à la demande",
+          "Estimateur de coût au mètre carré, prêt à être activé dès que l'entreprise fournit ses tarifs"
+        ],
+        congo: [
+          "WhatsApp, téléphone et adresse e-mail à copier : aucun compte ni formulaire à remplir",
+          "Pages statiques sans framework ni dépendance, légères sur les connexions mobiles",
+          "Aperçus flous d'environ un kilo-octet : l'accueil prend les couleurs de la photo avant qu'elle ne soit chargée",
+          "Version anglaise pour les clients miniers, les expatriés et la diaspora"
+        ],
+        deploy: [
+          "Hébergement Vercel avec HTTPS et déploiement automatique depuis le dépôt GitHub",
+          "Générateur Node sans dépendance : une commande reconstruit l'ensemble du site",
+          "URL canoniques, balises Open Graph, données structurées schema.org et plan du site",
+          "Carte de partage aux couleurs de l'entreprise pour les liens envoyés sur WhatsApp"
+        ],
+        monitor: [
+          "Coordonnées, numéro WhatsApp et domaine regroupés dans un seul fichier de configuration",
+          "Aucune base de données ni serveur applicatif : rien à sauvegarder ni à redémarrer",
+          "Photographies issues de la plaquette de l'entreprise, sans banque d'images",
+          "Animations désactivées pour les visiteurs qui préfèrent réduire les mouvements"
+        ]
+      },
+      en: {
+        title: "TRUTH Construction & Development",
+        sector: "Construction and property · Lubumbashi",
+        tagline: "A thirteen-page bilingual site for a Lubumbashi construction company, built around WhatsApp and its own projects.",
+        problem: [
+          "TRUTH Construction & Development designs and builds homes, residential developments and infrastructure in Lubumbashi and Kolwezi. The company needed an online presence that matched the quality of its work, in French and English.",
+          "In this market enquiries happen on WhatsApp and many clients have no e-mail address, so the site had to lead to a conversation rather than a form, and load quickly on mobile connections."
+        ],
+        built: [
+          "Bilingual static site: home, company, projects, expertise, commitments, contact and seven project pages",
+          "Full-screen home page with a project slideshow, a transparent header over the photograph and a pause control",
+          "WhatsApp as the main route: every button opens a conversation with the subject already written, including from each project and each service",
+          "Photo galleries with a keyboard and swipe viewer, a schematic map of the projects and an office map loaded on request",
+          "A cost-per-square-metre estimator, ready to switch on as soon as the company supplies its rates"
+        ],
+        congo: [
+          "WhatsApp, telephone and an e-mail address to copy: no account and no form to fill in",
+          "Static pages with no framework or dependencies, light on mobile connections",
+          "Blurred previews of about one kilobyte, so the home page shows the photograph's colours before it has loaded",
+          "An English version for mining clients, expatriates and the diaspora"
+        ],
+        deploy: [
+          "Vercel hosting with HTTPS and automatic deployment from the GitHub repository",
+          "A dependency-free Node generator: one command rebuilds the whole site",
+          "Canonical URLs, Open Graph tags, schema.org structured data and a sitemap",
+          "A branded share card for links sent on WhatsApp"
+        ],
+        monitor: [
+          "Contact details, WhatsApp number and domain kept in a single configuration file",
+          "No database or application server: nothing to back up or restart",
+          "Photographs taken from the company's own profile, no stock imagery",
+          "Motion switched off for visitors who prefer reduced animation"
+        ]
+      }
+    },
+    {
       slug: "kando-ressources",
       status: "demo",
       demoUrl: "demos/kando-ressources/",

@@ -2,8 +2,8 @@
 
 A static website: HTML, CSS and JavaScript generated from shared page templates and
 bilingual content, hosted publicly on GitHub Pages. Every portfolio page has an English equivalent.
-Three client projects in production and six demonstrations, including three bilingual
-multi-page sites. The portfolio and demos are public; linked production systems may require an account.
+Four client projects in production and six demonstrations, including three bilingual
+multi-page sites, plus a demonstration copy of one client site. The portfolio and demos are public; linked production systems may require an account.
 
 **Public site:** https://iksolutions-inc.com/
 **Repository:** https://github.com/raelpanga/ik-digital-solutions
@@ -15,7 +15,7 @@ multi-page sites. The portfolio and demos are public; linked production systems 
 | Home (selected work, services, process, budget and contact) | `index.html` | `en/index.html` |
 | Services overview and four offers | `services/` | `en/services/` |
 | Work directory, sorted by kind with service and kind filters | `projets/` | `en/projects/` |
-| One page per project (9) | `projets/<slug>.html` | `en/projects/<slug>.html` |
+| One page per project (10) | `projets/<slug>.html` | `en/projects/<slug>.html` |
 | Our process | `methode.html` | `en/process.html` |
 | About | `a-propos.html` | `en/about.html` |
 | Contact, preserving service/project inquiry context | `contact.html` | `en/contact.html` |
@@ -23,6 +23,7 @@ multi-page sites. The portfolio and demos are public; linked production systems 
 | Single-page demo applications (5, French only) | `demos/<slug>/` | same |
 | Kando Ressources mining site (16 pages, bilingual) | `demos/kando-ressources/` | `demos/kando-ressources/en/` |
 | Cimenterie du Fleuve site (18 pages, bilingual) | `demos/site-corporate/` | `demos/site-corporate/en/` |
+| TRUTH Construction demonstration copy (13 pages, language toggle, noindex) | `demos/truth-construction/` | `demos/truth-construction/?lang=en` |
 | Kimia Express delivery site (18 pages, bilingual) | `demos/kimia-express/` | `demos/kimia-express/en/` |
 
 Demo routes: `kimia-express` (bilingual delivery site, replaced the pharmacy demo), `ndala-beauty`
@@ -171,6 +172,25 @@ and English project-return paths through `portfolioHome` and `portfolioHomeEn`:
   registration form), Contact (quote request, opening hours, legal notice) plus a consent
   banner. Its own identity: Archivo / Source Sans 3 / IBM Plex Mono, river blue and safety
   yellow. The previous single-page version is kept in `demos/archive/site-corporate-v1.html`.
+
+- `demos/sites/truth/` — **TRUTH Construction & Development**, a *real* client, unlike the
+  demos above. Its project page leads with the production site; this is the separately
+  labelled demonstration copy. `snapshot/` is the client's own build output, copied unchanged
+  by `sync.js`, so the client's repository carries no portfolio code. `build-truth.js` adds
+  only what a copy on this domain needs: `noindex` on every page (a full copy of a real
+  company's site must not compete with it in search; the canonicals already name the live
+  site), no schema.org business record, and a fixed `.ikbar` at the bottom (the client's
+  homepage header is fixed to the top). `site.js` intercepts WhatsApp, `tel:`, `mailto:` and
+  the copy-address button, showing a notice instead, so visitors never contact the client by
+  accident; it also reads `?lang=en` so the English project page opens the copy in English.
+  The copy is left out of the sitemap through `NOINDEX_DEMOS` in `build.js`, and the project
+  sets `exploreNote` because the generic sentence about demonstration copies using fictional
+  data is untrue here. To refresh it after the client site changes:
+
+```bash
+node demos/sites/truth/sync.js "../../contr/truth-construction-codex/truth-construction/dist"
+node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com
+```
 
 Mobile card screenshots: headless Chrome will not open a window narrower than about 500 px,
 so a plain `--window-size=430,900` shot is a crop of a 504 px layout. Use

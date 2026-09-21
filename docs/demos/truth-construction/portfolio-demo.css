@@ -1,0 +1,17 @@
+/* Demonstration layer for the portfolio copy. The bar sits at the bottom because the
+   client's homepage header is fixed to the top, and it cannot be scrolled away, so the
+   copy is never mistaken for the company's own site. */
+:root{--ikbar:42px}
+.ikbar{position:fixed;left:0;right:0;bottom:0;z-index:95;min-height:var(--ikbar);display:flex;align-items:center;justify-content:space-between;gap:.35rem 1.2rem;flex-wrap:wrap;padding:.5rem clamp(16px,4vw,40px);background:#F7E7DE;color:#17191C;border-top:1px solid #e3cfc3;font:500 12px/1.45 Manrope,Arial,sans-serif}
+.ikbar strong{color:#A84E27;font-weight:700}
+.ikbar-links{display:flex;gap:1.2rem;flex-wrap:wrap}
+.ikbar a{color:#17191C;text-decoration:underline;text-underline-offset:3px}
+.ikbar a:hover{color:#A84E27}
+body{padding-bottom:var(--ikbar)}
+/* The home hero fills the screen, so body padding alone leaves its footnote under the
+   bar. The hero keeps its own ~24px foot and gains the bar's height on top. */
+.home-hero{padding-bottom:calc(24px + var(--ikbar))}
+.whatsapp-float{bottom:calc(var(--ikbar) + 16px)!important}
+.ik-notice{position:fixed;left:50%;bottom:calc(var(--ikbar) + 18px);transform:translateX(-50%);z-index:96;width:max-content;max-width:min(92vw,440px);margin:0;padding:.8rem 1.1rem;background:#17191C;color:#fff;font:500 13px/1.5 Manrope,Arial,sans-serif;text-align:center}
+.ik-notice[hidden]{display:none}
+@media(max-width:700px){:root{--ikbar:62px}.ikbar{font-size:11px;padding:.45rem 16px}}
