@@ -435,7 +435,9 @@ window.KDS = {
       color: "#1B2433",
       domain: "weddings.macandclay.com",
       openLabel: { fr: "Ouvrir la démo", en: "Open the demo" },
-      note: { fr: "La démo reproduit l'outil de production avec des données fictives : créez un mariage, prenez les mesures, validez les pointages, envoyez un lien de paiement et voyez les brouillons Shopify se mettre à jour (simulé). L'outil réel est réservé au personnel.", en: "The demo reproduces the production tool with mock data: create a wedding, take measurements, validate check-ins, send a pay link and watch the Shopify drafts update (simulated). The real tool is staff-only." },
+      // The demonstration reproduces the interface in English, as the production tool is.
+      demoLang: "en",
+      note: { fr: "La démonstration rejoue l'outil de production avec des données inventées : parcourez le tableau de bord, ouvrez un cortège de onze personnes avec mesures, prix au comptoir et soldes, filtrez les retours par semaine d'échéance et lisez le journal de synchronisation Shopify. Les actions qui écrivent sont décrites au survol plutôt qu'exécutées. L'outil réel est réservé au personnel du magasin.", en: "The demonstration replays the production tool with invented data: browse the dashboard, open an eleven-person party with measurements, till prices and balances, filter returns by the week they were due and read the Shopify sync log. Actions that would write are described rather than performed. The real tool is reserved for store staff." },
       s3Label: { fr: "Ce qui est transférable en RDC", en: "What carries over to the DRC" },
       stack: ["Next.js 14", "React 18", "Supabase", "Shopify Admin API", "Resend", "Twilio", "Vercel"],
       timeline: { fr: "en production, évolutions en cours", en: "in production, evolving" },

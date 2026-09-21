@@ -48,12 +48,16 @@ for (const lang of ["fr", "en"]) {
   for (const [key, route] of Object.entries(Site.routes)) { write(route[lang], Site.page(key, lang)); pages.push(route[lang]); }
   for (const p of D.projects) { const route = Site.projectRoute(p, lang); write(route, Site.projectPage(p, lang)); pages.push(route); }
 }
+// Demos are French unless their interface reproduces an English-language production tool.
+const DEMO_LANG = { "macclay-wedding-tracker": "en" };
 function wrapDemo(src, slug) {
   const fragment = fs.readFileSync(src, "utf8"), marker = "<!-- /head -->", i = fragment.indexOf(marker);
   const head = i < 0 ? "" : fragment.slice(0, i), body = i < 0 ? fragment : fragment.slice(i + marker.length);
   // Preserve the demos' page content; return links now lead to their project story.
+  // The interface language is the demo's own; the return link always leads to the site's default.
+  const lang = DEMO_LANG[slug] || "fr";
   const back = "../../projets/" + slug + ".html";
-  return ('<!doctype html>\n<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' + head + '</head><body>' + body + '</body></html>\n').replace(/href="\.\.\/\.\.\/index\.html(?:#[^"]*)?"/g, 'href="' + back + '"');
+  return ('<!doctype html>\n<html lang="' + lang + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' + head + '</head><body>' + body + '</body></html>\n').replace(/href="\.\.\/\.\.\/index\.html(?:#[^"]*)?"/g, 'href="' + back + '"');
 }
 for (const f of fs.readdirSync(path.join(__dirname, "demos", "src"))) {
   if (!f.endsWith(".html")) continue;
