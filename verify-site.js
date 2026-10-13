@@ -12,7 +12,7 @@ const server = http.createServer((req, res) => {
   if (file !== root && !file.startsWith(root + path.sep)) { res.writeHead(403).end(); return; }
   if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, "index.html");
   if (!fs.existsSync(file)) { file = path.join(root, "404.html"); res.statusCode = 404; }
-  res.setHeader("Content-Type", ({ ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg" })[path.extname(file)] || "application/octet-stream");
+  res.setHeader("Content-Type", ({ ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".mp4": "video/mp4" })[path.extname(file)] || "application/octet-stream");
   fs.createReadStream(file).pipe(res);
 });
 const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]);
@@ -71,9 +71,16 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       }
       await goto(routes.home[lang]);
       assert.equal(await page.locator(".proof-strip a").count(), projects.filter(p => p.status === "client").length);
-      assert.equal(await page.locator(".hero-project").count(), 1);
+      assert.equal(await page.locator(".hero-motion").count(), 1);
       assert.equal(await page.locator(".hero-services a").count(), 3);
-      assert.equal(new URL(await page.locator(".hero-project").getAttribute("href"), page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + "ets-financial.html");
+      assert.equal(new URL(await page.locator(".hero-motion-video source").getAttribute("src"), page.url()).pathname, "/assets/media/hero-devices.mp4");
+      await page.waitForFunction(() => document.querySelector(".hero-motion-video").readyState >= 1);
+      assert.deepEqual(await page.locator(".hero-motion-video").evaluate(v => [v.videoWidth, v.videoHeight]), [1120, 980]);
+      await page.waitForFunction(() => !document.querySelector(".hero-motion-video").paused);
+      await page.locator(".hero-motion-toggle").click();
+      assert.equal(await page.locator(".hero-motion-video").evaluate(v => v.paused), true);
+      await page.locator(".hero-motion-toggle").click();
+      await page.waitForFunction(() => !document.querySelector(".hero-motion-video").paused);
       assert.equal(await page.locator(".wwd-card").count(), services.length + 1);
       assert.equal(await page.locator(".pill-client,.pill-demo").count(), 0);
       assert.equal(await page.locator(".integration-brands img").count(), 4);
@@ -117,11 +124,20 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       console.log("Projects, filters, inquiry context and demo returns: " + lang);
     }
     const noJS = await browser.newPage({ javaScriptEnabled: false });
+    await noJS.goto(origin + "/index.html");
+    assert.ok(await noJS.locator(".hero-motion-poster").isVisible());
+    assert.ok(await noJS.locator(".hero-motion-toggle").isHidden());
     await noJS.goto(origin + "/projets/index.html"); assert.equal(await noJS.locator(".concept-grid .work-card:visible").count(), projects.filter(p => p.isConcept).length);
     await noJS.goto(origin + "/contact.html");
     assert.ok((await noJS.locator("#contact-form").getAttribute("action")).startsWith("mailto:"));
     assert.equal(await noJS.locator("#contact-form").getAttribute("method"), "post");
     await noJS.close();
+    const reduced = await browser.newPage({ reducedMotion: "reduce" });
+    await reduced.goto(origin + "/index.html");
+    assert.ok(await reduced.locator(".hero-motion-poster").isVisible());
+    assert.ok(await reduced.locator(".hero-motion-video").isHidden());
+    assert.equal(await reduced.locator(".hero-motion-video").evaluate(v => v.paused), true);
+    await reduced.close();
     await page.setViewportSize({ width: 390, height: 844 });
     for (const file of portfolio) {
       await goto(path.relative(root, file).replace(/\\/g, "/"));

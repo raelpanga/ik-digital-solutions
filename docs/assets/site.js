@@ -67,6 +67,30 @@
     filter();
   }
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
+  const heroVideo = $(".hero-motion-video"), heroToggle = $(".hero-motion-toggle");
+  if (heroVideo && heroToggle) {
+    let userPaused = false;
+    const sync = () => {
+      const paused = heroVideo.paused;
+      heroToggle.querySelector("span").textContent = paused ? "▶" : "Ⅱ";
+      heroToggle.setAttribute("aria-label", paused ? heroToggle.dataset.play : heroToggle.dataset.pause);
+    };
+    const update = () => {
+      heroToggle.hidden = motion.matches;
+      if (motion.matches) heroVideo.pause();
+      else if (!userPaused) heroVideo.play().catch(sync);
+      sync();
+    };
+    heroToggle.addEventListener("click", () => {
+      if (heroVideo.paused) { userPaused = false; heroVideo.play().catch(sync); }
+      else { userPaused = true; heroVideo.pause(); }
+      sync();
+    });
+    heroVideo.addEventListener("play", sync);
+    heroVideo.addEventListener("pause", sync);
+    motion.addEventListener("change", update);
+    update();
+  }
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.isIntersecting) {
