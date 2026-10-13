@@ -72,6 +72,8 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       await goto(routes.home[lang]);
       assert.equal(await page.locator(".proof-strip a").count(), projects.filter(p => p.status === "client").length);
       assert.equal(await page.locator(".hero-project").count(), 1);
+      assert.equal(await page.locator(".hero-services a").count(), 3);
+      assert.equal(new URL(await page.locator(".hero-project").getAttribute("href"), page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + "ets-financial.html");
       assert.equal(await page.locator(".wwd-card").count(), services.length + 1);
       assert.equal(await page.locator(".pill-client,.pill-demo").count(), 0);
       assert.equal(await page.locator(".integration-brands img").count(), 4);
