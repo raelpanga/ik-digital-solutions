@@ -91,8 +91,8 @@
 .portfolio .work-card .pill-demo { background: #eee6db; color: #765422; }
 .portfolio .work-card .case-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
 .portfolio .work-card .case-action, .portfolio .work-card .case-live { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 8px 14px; border: 1px solid var(--ink); border-radius: 100px; font: 600 .76rem/1.2 var(--font-body); text-align: center; text-decoration: none; transition: background .2s, border-color .2s, color .2s; }
-.portfolio .work-card .case-action { color: var(--ink); }
-.portfolio .work-card:hover .case-action, .portfolio .work-card:focus-within .case-action { background: var(--acid); border-color: var(--acid); }
+.portfolio .work-card .case-action { position: relative; z-index: 2; color: var(--ink); }
+.portfolio .work-card .case-action:hover, .portfolio .work-card .case-action:focus-visible { background: var(--acid); border-color: var(--acid); color: var(--ink); }
 .portfolio .work-card .case-live { position: relative; z-index: 2; color: var(--cobalt); border-color: #254dcc80; }
 .portfolio .work-card .case-live:hover, .portfolio .work-card .case-live:focus-visible { color: white; background: var(--cobalt); border-color: var(--cobalt); }
 /* Every capture sits straight and fills its card. The shots are 1280x800, so at 1.6 nothing is cropped. */
@@ -304,21 +304,13 @@
 .portfolio .work-block-head { display:grid;gap:10px; }
 .portfolio .work-block-head .eyebrow { margin:0;color:var(--ink-3); }
 .portfolio .work-group-intro { max-width:60ch;color:var(--ink-2);margin:-10px 0 34px; }
-/* Client systems lead the page in the largest format; demonstrators and studies stay tighter. */
-.portfolio .work-clients { grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 30px; }
-.portfolio .work-group { grid-template-columns:repeat(3,minmax(0,1fr)); }
-.portfolio .concept-sectors { font:11px/1.55 var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);margin:-22px 0 32px; }
-.portfolio .concept-grid { grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 26px; }
-.portfolio .concept-grid .work-card h3 { font-size:1.1rem; }
-.portfolio .concept-grid .work-card .card-body p { padding-right:0;font-size:.78rem; }
 /* The whole card is clickable through the title link; the live link sits above it. */
 .portfolio .work-card { position:relative; }
 .portfolio .work-card h3 a { color:inherit;text-decoration:none; }
 .portfolio .work-card .case-link::after { content:"";position:absolute;inset:0;z-index:1;border-radius:8px; }
 .portfolio .work-card .pill-client { background:#e0ead2;color:#3c4a24; }
 .portfolio .work-card .pill-study { background:#e4e5ea;color:#4a4f5e; }
-@media(max-width:1100px) { .portfolio .work-group,.portfolio .concept-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media(max-width:760px) { .portfolio .work-clients,.portfolio .work-group,.portfolio .concept-grid { grid-template-columns:1fr; } .portfolio .work-tools { position:static;padding-block:10px 16px; } .portfolio #work-count { margin-left:0;width:100%; } }
+@media(max-width:760px) { .portfolio .work-tools { position:static;padding-block:10px 16px; } .portfolio #work-count { margin-left:0;width:100%; } }
 
 /* Home: "what we do" block - dark panel, ghost word, one card per service, closing invitation. */
 .portfolio .what-we-do { position:relative;overflow:hidden;background:var(--night);color:#fff;padding-block:clamp(56px,7vw,110px);padding-inline:clamp(20px,4vw,64px); }
@@ -423,12 +415,51 @@
   .portfolio .build-phase::after { transform:scaleX(1); }
 }
 
-/* Studies: the default view stops after four. The script adds this class, so no-JS keeps all eight. */
-/* Cut the collapsed grid at a full row: six across three columns, four across two, three on a phone. */
-.portfolio .concept-grid.is-collapsed > .work-card:nth-child(n+7) { display:none; }
-.portfolio .study-toggle { margin-top:40px; }
-@media(max-width:1100px) {
-  .portfolio .concept-grid.is-collapsed > .work-card:nth-child(n+5) { display:none; }
+/* One featured project per group. Native scrolling remains available without JavaScript. */
+.work-carousel { min-width:0; }
+.portfolio .work-carousel-track { display:flex;gap:24px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--ink-3) transparent;padding:3px 3px 12px;margin:-3px;cursor:grab; }
+.portfolio .work-carousel-track.is-dragging { scroll-snap-type:none;cursor:grabbing;user-select:none; }
+.portfolio .work-carousel-track > .work-card { flex:0 0 100%;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);align-items:center;scroll-snap-align:start;scroll-snap-stop:always;background:#e9ece4;border:1px solid var(--line);border-radius:12px;overflow:hidden; }
+.portfolio .work-carousel-track .case-cover { border-radius:0;align-self:stretch;aspect-ratio:1.6; }
+.portfolio .work-carousel-track .case-desktop { object-fit:contain;object-position:center; }
+.portfolio .work-carousel-track .work-card:hover .case-desktop { transform:none; }
+.portfolio .work-carousel-track .work-card .card-body { padding:clamp(24px,3.2vw,48px);gap:16px; }
+.portfolio .work-carousel-track .card-top { gap:8px 12px; }
+.portfolio .work-carousel-track .work-card h3 { font-size:clamp(1.8rem,2.8vw,2.8rem);line-height:1.08;letter-spacing:-.035em; }
+.portfolio .work-carousel-track .card-body p { font-size:.95rem;line-height:1.6; }
+.portfolio .work-carousel-track .case-link::after { content:none; }
+.portfolio .work-carousel-track .case-action { min-height:44px;padding:12px 22px;background:var(--ink);border-color:var(--ink);color:#fff; }
+.portfolio .work-carousel-track .case-action:hover,.portfolio .work-carousel-track .case-action:focus-visible { background:var(--acid);border-color:var(--acid);color:var(--ink); }
+.carousel-footer { display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:18px; }
+.carousel-hint { margin:0;color:var(--ink-2);font-size:.78rem; }
+.carousel-controls { display:flex;align-items:center;justify-content:flex-end;gap:18px; }
+.carousel-controls button { font:600 .76rem/1.2 var(--font-body);cursor:pointer; }
+.carousel-toggle,.carousel-nav button { min-height:44px;padding:10px 17px;border:1px solid var(--ink);border-radius:100px;background:transparent;color:var(--ink);transition:background .2s,color .2s; }
+.carousel-toggle { border-color:var(--line); }
+.carousel-nav { display:flex;gap:8px; }
+.carousel-nav button:hover:not(:disabled),.carousel-toggle:hover { background:var(--ink);color:#fff; }
+.carousel-nav button:disabled { opacity:.35;cursor:default; }
+.carousel-dots { display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0; }
+.carousel-dot { display:grid;place-items:center;width:24px;height:44px;padding:0;border:0;background:transparent; }
+.carousel-dot span { width:6px;height:6px;border-radius:100px;background:#a5ada4;transition:width .3s,background .3s; }
+.carousel-dot[aria-current="true"] span { width:18px;background:var(--ink); }
+.work-carousel :focus-visible { outline:2px solid var(--cobalt);outline-offset:2px; }
+@media(max-width:1000px) {
+  .carousel-footer { flex-wrap:wrap; }
+  .carousel-controls { flex:1; }
+  .portfolio .work-carousel-track > .work-card { grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); }
+  .portfolio .work-carousel-track .work-card .card-body { padding:24px; }
 }
-
-@media(max-width:760px) { .portfolio .concept-grid.is-collapsed > .work-card:nth-child(n+4) { display:none; } }
+@media(max-width:760px) {
+  .portfolio .work-carousel-track { gap:16px; }
+  .portfolio .work-carousel-track > .work-card { grid-template-columns:minmax(0,1fr);align-content:start; }
+  .portfolio .work-carousel-track .case-cover { width:100%; }
+  .portfolio .work-carousel-track .work-card .card-body { padding:24px;gap:12px; }
+  .portfolio .work-carousel-track .work-card h3 { font-size:1.85rem; }
+  .carousel-hint { width:100%; }
+  .carousel-controls { display:grid;grid-template-columns:auto 1fr;gap:10px;width:100%; }
+  .carousel-dots { grid-column:1/-1;grid-row:1;justify-content:flex-start; }
+  .carousel-toggle { justify-self:start; }
+  .carousel-nav { justify-self:end; }
+}
+@media(prefers-reduced-motion:reduce) { .carousel-dot span,.carousel-controls button { transition:none; } }

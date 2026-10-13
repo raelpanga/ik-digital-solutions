@@ -15,7 +15,7 @@ The design studies include Fieldstone Construction, an independently hosted conc
 |---|---|---|
 | Home (selected work, services, process, budget and contact) | `index.html` | `en/index.html` |
 | Services overview and four offers | `services/` | `en/services/` |
-| Work directory, sorted by kind with service and kind filters | `projets/` | `en/projects/` |
+| Work carousels for clients, demonstrators and studies, with service and kind filters | `projets/` | `en/projects/` |
 | One page per project | `projets/<slug>.html` | `en/projects/<slug>.html` |
 | Our process | `methode.html` | `en/process.html` |
 | About | `a-propos.html` | `en/about.html` |
@@ -43,13 +43,19 @@ Every demo uses fictitious data and simulated payments, SMS, e-mails and Shopify
 so in its banner. Client project pages describe only what the repositories and live
 sites show. Their main button opens the production address; any demonstration copy is
 labelled separately. A client project with no `liveUrl` publishes no production link: its
-page and card lead with the demonstration instead. Demonstrator project pages lead with the demo link. English pages
+page leads with the demonstration instead. Each Work carousel card opens the project story with a View project button. Demonstrator project pages lead with the demo link. English pages
 open English demos where available and identify French-only examples.
 
 The navigation follows **Services → Work → a relevant example → Contact**. Pricing is
 part of Services; delivery and security are explained under Our process. Existing
 homepage anchors and every existing project/demo route are preserved. Demo return links
 lead to the corresponding project story, in the selected language for bilingual demos.
+
+Each Work group shows one featured project at a time. Carousels support native touch swiping,
+mouse dragging, keyboard navigation, project selectors and previous/next buttons. Automatic
+advance runs only while the carousel is in view; interaction pauses it until Play is selected.
+Reduced-motion preferences disable automatic advance. Without JavaScript, all projects remain
+available in horizontally scrollable tracks.
 
 ## How it is built
 

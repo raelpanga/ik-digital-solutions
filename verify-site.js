@@ -105,6 +105,36 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       assert.equal(await page.locator(".concept-grid .work-card").count(), projects.filter(p => p.isConcept).length);
       assert.equal(await page.locator("#client .work-card").count(), projects.filter(p => p.status === "client").length);
       assert.equal(await page.locator("#demo .work-card").count(), projects.filter(p => p.status === "demo").length);
+      assert.equal(await page.locator("[data-carousel]").count(), 3);
+      for (const kind of ["client", "demo", "concept"]) {
+        const group = page.locator("#" + kind), track = group.locator(".work-carousel-track");
+        const first = await group.locator('.work-card[aria-hidden="false"]').getAttribute("data-project");
+        await group.locator("[data-carousel-next]").click();
+        await page.waitForFunction(id => {
+          const t = document.querySelector("#" + id + "-track");
+          return t.scrollLeft > t.clientWidth * .9;
+        }, kind);
+        assert.notEqual(await group.locator('.work-card[aria-hidden="false"]').getAttribute("data-project"), first);
+        await track.focus(); await page.keyboard.press("Home");
+        await page.waitForFunction(id => document.querySelector("#" + id + "-track").scrollLeft < 5, kind);
+        assert.equal(await group.locator('.work-card[aria-hidden="false"]').getAttribute("data-project"), first);
+        await page.keyboard.press("ArrowRight");
+        await page.waitForFunction(id => document.querySelector("#" + id + "-track").scrollLeft > 50, kind);
+        await group.locator("[data-carousel-prev]").click();
+        await page.waitForFunction(id => document.querySelector("#" + id + "-track").scrollLeft < 5, kind);
+        const button = group.locator('.work-card[aria-hidden="false"] .case-action');
+        assert.equal(await button.getAttribute("href"), await group.locator('.work-card[aria-hidden="false"] .case-link').getAttribute("href"));
+      }
+      await page.locator("#work-service").selectOption("websites");
+      assert.equal(await page.locator(".work-card:not([hidden])").count(), projects.filter(p => projectServices[p.slug].includes("websites")).length);
+      for (const group of await page.locator("[data-work-section]:not([hidden])").all()) {
+        assert.equal(await group.locator('.work-card[aria-hidden="false"]').count(), 1);
+        assert.ok(await group.locator(".work-carousel-track").evaluate(t => t.scrollLeft < 5));
+      }
+      await page.locator('[data-kind-filter="concept"]').click();
+      assert.equal(await page.locator("[data-work-section]:not([hidden])").count(), 1);
+      await page.locator('#concept .work-card[aria-hidden="false"] .case-action').click();
+      assert.ok(new URL(page.url()).pathname.match(/\/(projets|en\/projects)\/[^/]+\.html$/));
       await goto(routes.commerce[lang]);
       await page.locator('#contact a[href*="service=commerce"]').click();
       assert.equal(await page.locator("#f-service").inputValue(), "commerce");
@@ -148,7 +178,27 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
     assert.ok(await reduced.locator(".hero-motion-poster").isVisible());
     assert.ok(await reduced.locator(".hero-motion-video").isHidden());
     assert.equal(await reduced.locator(".hero-motion-video").evaluate(v => v.paused), true);
+    await reduced.goto(origin + "/projets/index.html");
+    assert.ok(await reduced.locator("#client [data-carousel-toggle]").isHidden());
+    await reduced.locator("#client [data-carousel-next]").click();
+    assert.ok(await reduced.locator("#client-track").evaluate(t => t.scrollLeft > t.clientWidth * .9));
     await reduced.close();
+    // Verify native touch scrolling, not just a scripted change to scrollLeft.
+    const touch = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+    await touch.goto(origin + "/projets/index.html");
+    await touch.locator("#client-track").scrollIntoViewIfNeeded();
+    const box = await touch.locator("#client-track .case-cover").first().boundingBox();
+    const session = await touch.context().newCDPSession(touch);
+    const swipeY = Math.max(120, box.y + box.height / 2);
+    await session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: 320, y: swipeY }] });
+    for (let x = 300; x >= 60; x -= 30) {
+      await session.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x, y: swipeY }] });
+      await touch.waitForTimeout(25);
+    }
+    await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+    await touch.waitForFunction(() => document.querySelector("#client-track").scrollLeft > 250);
+    assert.equal(await touch.locator("#client [data-carousel-toggle]").innerText(), "Lecture");
+    await touch.close();
     await page.setViewportSize({ width: 390, height: 844 });
     for (const file of portfolio) {
       await goto(path.relative(root, file).replace(/\\/g, "/"));
