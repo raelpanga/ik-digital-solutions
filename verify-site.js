@@ -23,6 +23,10 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
   let references = 0;
   for (const file of portfolio) {
     const relative = path.relative(root, file).replace(/\\/g, "/"), html = fs.readFileSync(file, "utf8");
+    for (const anchor of html.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/g)) {
+      const label = decode(anchor[1].replace(/<[^>]*>/g, ""));
+      assert.ok(!/[↗→←↓↑]/.test(label), relative + " has an arrow in link text: " + label.trim());
+    }
     for (const m of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
       const url = new URL(decode(m[1]), "https://test.local/" + relative);
       if (url.origin !== "https://test.local") continue;
@@ -70,6 +74,8 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
         assert.equal(await page.locator("body").getAttribute("data-page"), "project:" + p.slug);
       }
       await goto(routes.home[lang]);
+      assert.equal(await page.locator(".offer-number,.more-num,.case-index,.build-n,.local-principles > div > span,.compact-process li > span").count(), 0);
+      assert.equal(await page.locator(".eyebrow").evaluateAll(nodes => nodes.filter(n => /^0\d\s*\//.test(n.textContent.trim())).length), 0);
       assert.equal(await page.locator(".proof-strip a").count(), projects.filter(p => p.status === "client").length);
       assert.equal(await page.locator(".hero-motion").count(), 1);
       assert.equal(await page.locator(".hero-services a").count(), 3);

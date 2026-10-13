@@ -300,12 +300,8 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 
 /* ---------- Method ---------- */
 
-.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.2rem; counter-reset: step; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.2rem; }
 .steps li { display: grid; gap: .5rem; padding-top: .9rem; border-top: 1px solid var(--line); position: relative; }
-.steps li::before {
-  counter-increment: step; content: counter(step, decimal-leading-zero);
-  font-family: var(--font-mono); font-size: .78rem; color: var(--cobalt); letter-spacing: .08em;
-}
 .steps h3 { font-size: 1.05rem; }
 .steps .when { font-family: var(--font-mono); font-size: .74rem; color: var(--ink-3); }
 .steps p { font-size: .92rem; color: var(--ink-2); }
@@ -485,17 +481,15 @@ html { scroll-padding-top: 105px; }
 .offer-card:hover { border-color: var(--cobalt); }
 .offer-card h3 { font-size: 1.5rem; }
 .offer-card p { color: var(--ink-2); }
-.offer-number { color: var(--cobalt); font-family: var(--font-mono); font-size: .8rem; }
 .offer-card .open { color: var(--cobalt); font-weight: 600; }
 .budget-card { display: grid; gap: .6rem; padding: 1.2rem 1.4rem; border-left: 3px solid var(--cobalt); background: var(--surface); text-decoration: none; color: var(--ink); }
 .budget-card strong { font-family: var(--font-mono); font-size: 1.15rem; }
 .budget-card span { font-size: .9rem; color: var(--ink-2); }
-.process-list { list-style: none; padding: 0; display: grid; gap: 1.2rem; counter-reset: process; margin: 0 0 1.5rem; }
-.process-list li { padding: 1rem 1rem 1rem 3.6rem; border-top: 1px solid var(--line); position: relative; }
-.process-list li::before { counter-increment: process; content: "0" counter(process); position: absolute; left: .4rem; top: .95rem; color: var(--cobalt); font-family: var(--font-mono); }
+.process-list { list-style: none; padding: 0; display: grid; gap: 1.2rem; margin: 0 0 1.5rem; }
+.process-list li { padding: 1rem 0; border-top: 1px solid var(--line); }
 .process-list p { color: var(--ink-2); margin-top: .5rem; }
 .architecture-section > .wrap > .process-list { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-.architecture-section > .wrap > .process-list li { padding: 2.8rem 0 0; }
+.architecture-section > .wrap > .process-list li { padding: 1.2rem 0 0; }
 .content-panel { padding: 1.5rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: grid; align-content: start; gap: 1rem; }
 .content-panel p, .prose p, .content-panel li { color: var(--ink-2); }
 .content-panel ul { padding-left: 1.2rem; margin: 0; display: grid; gap: .8rem; }
@@ -559,6 +553,6 @@ html { scroll-padding-top: 105px; }
   .portfolio .nav.is-open { flex-direction: column; align-items: stretch; }
   .portfolio .nav a { padding: .45rem .2rem; }
   .architecture-section > .wrap > .process-list { grid-template-columns: 1fr; }
-  .architecture-section > .wrap > .process-list li { padding: 1rem 0 1rem 3.2rem; }
+  .architecture-section > .wrap > .process-list li { padding: 1rem 0; }
   .inquiry-band h2 { font-size: 1.6rem; }
 }
