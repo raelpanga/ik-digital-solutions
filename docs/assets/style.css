@@ -476,12 +476,7 @@ html { scroll-padding-top: 105px; }
 .project-sector { color: var(--ink-2); font-size: .8rem; }
 .work-card .card-body p { font-size: .94rem; }
 .work-card .open { margin-top: auto; padding-top: .5rem; font-weight: 600; }
-.offer-grid, .budget-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.3rem; }
-.offer-card { padding: 1.6rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; display: grid; gap: .9rem; color: var(--ink); transition: border-color .15s; }
-.offer-card:hover { border-color: var(--cobalt); }
-.offer-card h3 { font-size: 1.5rem; }
-.offer-card p { color: var(--ink-2); }
-.offer-card .open { color: var(--cobalt); font-weight: 600; }
+.budget-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.3rem; }
 .budget-card { display: grid; gap: .6rem; padding: 1.2rem 1.4rem; border-left: 3px solid var(--cobalt); background: var(--surface); text-decoration: none; color: var(--ink); }
 .budget-card strong { font-family: var(--font-mono); font-size: 1.15rem; }
 .budget-card span { font-size: .9rem; color: var(--ink-2); }
@@ -548,7 +543,7 @@ html { scroll-padding-top: 105px; }
   .architecture-section > .wrap > .process-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 520px) {
-  .offer-grid, .budget-grid { grid-template-columns: 1fr; }
+  .budget-grid { grid-template-columns: 1fr; }
   .portfolio .brand-sub { display: none; }
   .portfolio .nav.is-open { flex-direction: column; align-items: stretch; }
   .portfolio .nav a { padding: .45rem .2rem; }

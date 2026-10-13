@@ -90,8 +90,10 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       assert.equal(await page.locator(".wwd-card").count(), 0);
       assert.equal(await page.locator(".pill-client,.pill-demo").count(), 0);
       assert.equal(await page.locator(".integration-brands img").count(), 4);
+      assert.equal(await page.locator(".tech-band").count(), 0);
       await goto(routes.services[lang]);
       assert.equal(await page.locator("#services .wwd-card").count(), services.length + 1);
+      assert.equal(await page.locator(".tech-band").count(), 1);
       assert.equal(await page.locator(".visual-offers,.showcase-grid,.work-card").count(), 0);
       for (const key of ["payments", "whatsapp"]) {
         await goto(routes[key][lang]);

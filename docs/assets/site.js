@@ -98,7 +98,7 @@
         observer.unobserve(entry.target);
       }
     }), { threshold: 0.12 });
-    all(".work-card, .offer-card, .integration-feature, .local-principles > div").forEach(el => observer.observe(el));
+    all(".work-card, .integration-feature, .local-principles > div").forEach(el => observer.observe(el));
     motion.addEventListener("change", () => { if (motion.matches) document.getAnimations().forEach(a => a.cancel()); });
   }
   const form = $("#contact-form");
