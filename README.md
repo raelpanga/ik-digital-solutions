@@ -51,10 +51,12 @@ part of Services; delivery and security are explained under Our process. Existin
 homepage anchors and every existing project/demo route are preserved. Demo return links
 lead to the corresponding project story, in the selected language for bilingual demos.
 
-Each Work group shows one featured project at a time. Carousels support native touch swiping,
-mouse dragging, keyboard navigation, project selectors and previous/next buttons. Automatic
-advance runs only while the carousel is in view; interaction pauses it until Play is selected.
-Reduced-motion preferences disable automatic advance. Without JavaScript, all projects remain
+Each Work group is a continuously moving horizontal ribbon of project cards. The flow loops
+at a constant speed and supports native touch swiping, mouse dragging, keyboard navigation,
+project selectors and previous/next buttons. Motion runs only while the carousel is in view;
+hover pauses it temporarily, and interaction pauses it until Play is selected. Visual copies
+make the wrap seamless and are excluded from the keyboard and screen-reader sequence.
+Reduced-motion preferences disable automatic motion. Without JavaScript, all projects remain
 available in horizontally scrollable tracks.
 
 ## How it is built

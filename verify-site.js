@@ -102,38 +102,36 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
         assert.equal(await page.locator("#f-service").inputValue(), key);
       }
       await goto(routes.work[lang]);
-      assert.equal(await page.locator(".concept-grid .work-card").count(), projects.filter(p => p.isConcept).length);
-      assert.equal(await page.locator("#client .work-card").count(), projects.filter(p => p.status === "client").length);
-      assert.equal(await page.locator("#demo .work-card").count(), projects.filter(p => p.status === "demo").length);
+      assert.equal(await page.locator(".concept-grid .work-card[data-project]").count(), projects.filter(p => p.isConcept).length);
+      assert.equal(await page.locator("#client .work-card[data-project]").count(), projects.filter(p => p.status === "client").length);
+      assert.equal(await page.locator("#demo .work-card[data-project]").count(), projects.filter(p => p.status === "demo").length);
       assert.equal(await page.locator("[data-carousel]").count(), 3);
       for (const kind of ["client", "demo", "concept"]) {
         const group = page.locator("#" + kind), track = group.locator(".work-carousel-track");
-        const first = await group.locator('.work-card[aria-hidden="false"]').getAttribute("data-project");
+        const first = await group.locator('[data-carousel-project][aria-current="true"]').getAttribute("data-carousel-project");
         await group.locator("[data-carousel-next]").click();
-        await page.waitForFunction(id => {
-          const t = document.querySelector("#" + id + "-track");
-          return t.scrollLeft > t.clientWidth * .9;
-        }, kind);
-        assert.notEqual(await group.locator('.work-card[aria-hidden="false"]').getAttribute("data-project"), first);
+        await page.waitForFunction(({kind,first}) => document.querySelector('#'+kind+' [data-carousel-project][aria-current="true"]').dataset.carouselProject !== first, {kind,first});
         await track.focus(); await page.keyboard.press("Home");
-        await page.waitForFunction(id => document.querySelector("#" + id + "-track").scrollLeft < 5, kind);
-        assert.equal(await group.locator('.work-card[aria-hidden="false"]').getAttribute("data-project"), first);
-        await page.keyboard.press("ArrowRight");
-        await page.waitForFunction(id => document.querySelector("#" + id + "-track").scrollLeft > 50, kind);
+        await page.waitForFunction(({kind,first}) => document.querySelector('#'+kind+' [data-carousel-project][aria-current="true"]').dataset.carouselProject === first, {kind,first});
+        // Previous from the first project loops to the last one in the same direction.
         await group.locator("[data-carousel-prev]").click();
-        await page.waitForFunction(id => document.querySelector("#" + id + "-track").scrollLeft < 5, kind);
-        const button = group.locator('.work-card[aria-hidden="false"] .case-action');
-        assert.equal(await button.getAttribute("href"), await group.locator('.work-card[aria-hidden="false"] .case-link').getAttribute("href"));
+        const last = await group.locator("[data-carousel-project]").last().getAttribute("data-carousel-project");
+        await page.waitForFunction(({kind,last}) => document.querySelector('#'+kind+' [data-carousel-project][aria-current="true"]').dataset.carouselProject === last, {kind,last});
+        assert.ok(await group.locator("[data-carousel-next]").isEnabled());
+        for (const clone of await group.locator("[data-carousel-clone]").all()) {
+          assert.equal(await clone.getAttribute("aria-hidden"), "true");
+          assert.equal(await clone.locator('a:not([tabindex="-1"])').count(), 0);
+        }
       }
       await page.locator("#work-service").selectOption("websites");
-      assert.equal(await page.locator(".work-card:not([hidden])").count(), projects.filter(p => projectServices[p.slug].includes("websites")).length);
+      assert.equal(await page.locator(".work-card[data-project]:not([hidden])").count(), projects.filter(p => projectServices[p.slug].includes("websites")).length);
       for (const group of await page.locator("[data-work-section]:not([hidden])").all()) {
-        assert.equal(await group.locator('.work-card[aria-hidden="false"]').count(), 1);
-        assert.ok(await group.locator(".work-carousel-track").evaluate(t => t.scrollLeft < 5));
+        const current = await group.locator('[data-carousel-project][aria-current="true"]').getAttribute("data-carousel-project");
+        assert.equal(current, await group.locator('[data-project]:not([hidden])').first().getAttribute('data-project'));
       }
       await page.locator('[data-kind-filter="concept"]').click();
       assert.equal(await page.locator("[data-work-section]:not([hidden])").count(), 1);
-      await page.locator('#concept .work-card[aria-hidden="false"] .case-action').click();
+      await page.locator('#concept .work-card[data-project]:not([hidden]) .case-action').first().click();
       assert.ok(new URL(page.url()).pathname.match(/\/(projets|en\/projects)\/[^/]+\.html$/));
       await goto(routes.commerce[lang]);
       await page.locator('#contact a[href*="service=commerce"]').click();
@@ -180,14 +178,16 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
     assert.equal(await reduced.locator(".hero-motion-video").evaluate(v => v.paused), true);
     await reduced.goto(origin + "/projets/index.html");
     assert.ok(await reduced.locator("#client [data-carousel-toggle]").isHidden());
+    const reducedStart = await reduced.locator("#client-track").evaluate(t => t.scrollLeft);
     await reduced.locator("#client [data-carousel-next]").click();
-    assert.ok(await reduced.locator("#client-track").evaluate(t => t.scrollLeft > t.clientWidth * .9));
+    assert.ok(await reduced.locator("#client-track").evaluate((t,start) => t.scrollLeft > start + 100, reducedStart));
     await reduced.close();
     // Verify native touch scrolling, not just a scripted change to scrollLeft.
     const touch = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
     await touch.goto(origin + "/projets/index.html");
     await touch.locator("#client-track").scrollIntoViewIfNeeded();
-    const box = await touch.locator("#client-track .case-cover").first().boundingBox();
+    const box = await touch.locator("#client-track [data-project] .case-cover").first().boundingBox();
+    const touchStart = await touch.locator("#client-track").evaluate(t => t.scrollLeft);
     const session = await touch.context().newCDPSession(touch);
     const swipeY = Math.max(120, box.y + box.height / 2);
     await session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: 320, y: swipeY }] });
@@ -196,7 +196,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       await touch.waitForTimeout(25);
     }
     await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
-    await touch.waitForFunction(() => document.querySelector("#client-track").scrollLeft > 250);
+    await touch.waitForFunction(start => document.querySelector("#client-track").scrollLeft > start + 100, touchStart);
     assert.equal(await touch.locator("#client [data-carousel-toggle]").innerText(), "Lecture");
     await touch.close();
     await page.setViewportSize({ width: 390, height: 844 });
