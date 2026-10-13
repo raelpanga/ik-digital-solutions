@@ -87,9 +87,12 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       assert.equal(await page.locator(".hero-motion-video").evaluate(v => v.paused), true);
       await page.locator(".hero-motion-toggle").click();
       await page.waitForFunction(() => !document.querySelector(".hero-motion-video").paused);
-      assert.equal(await page.locator(".wwd-card").count(), services.length + 1);
+      assert.equal(await page.locator(".wwd-card").count(), 0);
       assert.equal(await page.locator(".pill-client,.pill-demo").count(), 0);
       assert.equal(await page.locator(".integration-brands img").count(), 4);
+      await goto(routes.services[lang]);
+      assert.equal(await page.locator("#services .wwd-card").count(), services.length + 1);
+      assert.equal(await page.locator(".visual-offers,.showcase-grid,.work-card").count(), 0);
       for (const key of ["payments", "whatsapp"]) {
         await goto(routes[key][lang]);
         assert.ok(!/\d[\d ,–-]*\sUSD|USD\s[\d]/.test(await page.locator("main").innerText()));
@@ -152,9 +155,10 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       await page.locator(".nav-toggle").click(); assert.ok(await page.locator("#main-nav").isVisible());
       await page.keyboard.press("Escape"); assert.equal(await page.locator(".nav-toggle").getAttribute("aria-expanded"), "false");
     }
-    for (const anchor of ["services", "preuves", "methode", "conformite", "tarifs", "contact"]) {
+    for (const anchor of ["preuves", "methode", "conformite", "tarifs", "contact"]) {
       await goto("index.html#" + anchor); assert.equal(await page.locator("#" + anchor).count(), 1);
     }
+    await goto("services/index.html#services"); assert.equal(await page.locator("#services").count(), 1);
     if (process.argv.includes("--screenshots")) {
       const dest = path.join(os.tmpdir(), "ik-architecture-preview"); fs.mkdirSync(dest, { recursive: true });
       for (const [kind, width, height] of [["desktop", 1440, 1000], ["mobile", 390, 844]]) {
