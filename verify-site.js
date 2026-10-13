@@ -36,7 +36,8 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
   const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
   const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
   assert.equal(new Set(locations).size, locations.length, "Duplicate sitemap routes");
-  assert.equal(locations.length, walk(root).filter(f => f.endsWith(".html") && !f.endsWith("404.html")).length);
+  // The TRUTH client-site copy is intentionally noindex and absent from the sitemap.
+  assert.equal(locations.length, walk(root).filter(f => f.endsWith(".html") && !f.endsWith("404.html") && !f.includes(path.sep + "demos" + path.sep + "truth-construction" + path.sep)).length);
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
   const browser = await chromium.launch({ channel: "chrome", headless: true });
@@ -62,14 +63,15 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       for (const p of projects) {
         const route = (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html";
         await goto(route);
-        const expected = p.liveUrl || p.demoUrls?.[lang] || p.demoUrl;
+        const expected = p.liveNeedsAccount ? (p.demoUrls?.[lang] || p.demoUrl) : (p.liveUrl || p.demoUrls?.[lang] || p.demoUrl);
         const actual = await page.locator(".spec .actions .btn-primary").getAttribute("href");
         assert.equal(new URL(actual, page.url()).href, /^https?:/.test(expected) ? expected : origin + "/" + expected);
         await page.locator(`[data-language][lang="${other}"]`).click();
         assert.equal(await page.locator("body").getAttribute("data-page"), "project:" + p.slug);
       }
       await goto(routes.home[lang]);
-      assert.equal(await page.locator(".selected-work .work-card").count(), projects.filter(p => p.status === "client").length);
+      assert.equal(await page.locator(".proof-strip a").count(), projects.filter(p => p.status === "client").length);
+      assert.equal(await page.locator(".hero-project").count(), 1);
       assert.equal(await page.locator(".wwd-card").count(), services.length + 1);
       assert.equal(await page.locator(".pill-client,.pill-demo").count(), 0);
       assert.equal(await page.locator(".integration-brands img").count(), 4);
@@ -81,8 +83,8 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       }
       await goto(routes.work[lang]);
       assert.equal(await page.locator(".concept-grid .work-card").count(), projects.filter(p => p.isConcept).length);
-      assert.equal(await page.locator(".work-feature-card .work-card").count(), 1);
-      assert.equal(await page.locator("#work-group-0 .work-card").count(), 3);
+      assert.equal(await page.locator("#client .work-card").count(), projects.filter(p => p.status === "client").length);
+      assert.equal(await page.locator("#demo .work-card").count(), projects.filter(p => p.status === "demo").length);
       await goto(routes.commerce[lang]);
       await page.locator('#contact a[href*="service=commerce"]').click();
       assert.equal(await page.locator("#f-service").inputValue(), "commerce");
@@ -105,7 +107,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
         await page.locator(".ikbar a").click();
         assert.equal(new URL(page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html");
       }
-      for (const p of projects.filter(p => p.isConcept)) {
+      for (const p of projects.filter(p => p.isConcept && !/^https?:/.test(p.demoUrls?.[lang] || p.demoUrl || ""))) {
         await goto(p.demoUrls[lang]);
         const href = await page.locator(".notice > a").getAttribute("href");
         assert.equal(new URL(href, page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html");
@@ -126,7 +128,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       await page.locator(".nav-toggle").click(); assert.ok(await page.locator("#main-nav").isVisible());
       await page.keyboard.press("Escape"); assert.equal(await page.locator(".nav-toggle").getAttribute("aria-expanded"), "false");
     }
-    for (const anchor of ["services", "projets", "preuves", "methode", "conformite", "tarifs", "contact"]) {
+    for (const anchor of ["services", "preuves", "methode", "conformite", "tarifs", "contact"]) {
       await goto("index.html#" + anchor); assert.equal(await page.locator("#" + anchor).count(), 1);
     }
     if (process.argv.includes("--screenshots")) {

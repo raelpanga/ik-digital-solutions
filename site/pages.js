@@ -5,7 +5,7 @@ const { routes, services, projectServices, labels } = require("./content");
 const assetStamp = (() => {
   let h = 5381;
   for (const f of ["style.css", "visual.css", "site.js"]) {
-    const s = fs.readFileSync(path.join(__dirname, "..", "assets", f), "utf8");
+    const s = fs.readFileSync(path.join(__dirname, "..", "assets", f), "utf8").replace(/\r\n/g, "\n");
     for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
   }
   return h.toString(36);
@@ -55,6 +55,7 @@ module.exports = function createPages(D, siteUrl) {
   const OPEN_LABEL = (p, lang) => restrictedLive(p)
     ? tr(lang, "Essayer la démonstration", "Try the demonstration")
     : kindOf(p) === "client" && !productionOf(p) ? tr(lang, "Ouvrir la démonstration", "Open the demonstration")
+    : kindOf(p) === "concept" && p.externalConcept ? tr(lang, "Ouvrir le site concept", "Open concept website")
     : ({ client: tr(lang, "Site en ligne", "Live site"), demo: tr(lang, "Ouvrir la démonstration", "Open the demonstration"), concept: tr(lang, "Ouvrir l’étude", "Open the study") })[kindOf(p)];
   function card(p, lang, base, open = false) {
     const x = projectCopy[p.slug], ext = p.shotExt || "png", kind = kindOf(p);
@@ -128,6 +129,7 @@ module.exports = function createPages(D, siteUrl) {
     const external = /^https?:/.test(main || "");
     const mainLabel = restricted
       ? tr(lang, "Essayer la démonstration", "Try the demonstration")
+      : p.externalConcept ? tr(lang, "Ouvrir le site concept", "Open concept website")
       : tr(lang, production ? "Ouvrir le site de production" : concept ? "Ouvrir l’étude statique" : "Ouvrir la démo", production ? "Open production site" : concept ? "Open static study" : "Open demo");
     const mainButton = main ? `<a class="btn btn-primary" href="${esc(main)}"${external ? ' target="_blank" rel="noopener"' : ""}>${esc(mainLabel)} ↗</a>` : "";
     const secondary = restricted
@@ -146,7 +148,7 @@ module.exports = function createPages(D, siteUrl) {
       block(p.s3Label?.[lang] || tr(lang, "Les choix d'usage", "Designing for everyday use"), list(x.congo)) +
       // A project may state its own terms; a copy of a real client's site does not use fictional data.
       block(tr(lang, "Ce que vous pouvez explorer", "What you can explore"), `<p>${p.exploreNote ? esc(p.exploreNote[lang]) : tr(lang, client ? "Le lien de production permet de consulter le système public ou son écran d'accès. Lorsqu'une copie de démonstration est proposée, elle utilise des données fictives." : "Le démonstrateur présente les parcours avec des données fictives. Les paiements, messages et intégrations indiqués comme simulés ne déclenchent aucune opération réelle.", client ? "The production link opens the public system or its access screen. Where a demonstration copy is available, it uses fictional data." : "The demonstrator presents journeys with fictional data. Payments, messages and integrations marked as simulated do not perform real operations.")}</p><div class="cta-row">${mainButton}${secondary}</div>`) +
-      block(tr(lang, client ? "Livraison et exploitation" : "Pour une mise en production", client ? "Delivery and operation" : "For a production implementation"), (client ? "" : `<p class="hint">${tr(lang, "Les éléments suivants décrivent le déploiement et le suivi à prévoir pour un projet client ; ils ne constituent pas des mesures de service du démonstrateur.", "The following describes deployment and support to plan for a client implementation; it is not measured service evidence for this demo.")}</p>`) + list(x.deploy) + list(x.monitor)) +
+      block(tr(lang, client ? "Livraison et exploitation" : p.externalConcept ? "Publication du concept" : "Pour une mise en production", client ? "Delivery and operation" : p.externalConcept ? "Concept publication" : "For a production implementation"), (client || p.externalConcept ? "" : `<p class="hint">${tr(lang, "Les éléments suivants décrivent le déploiement et le suivi à prévoir pour un projet client ; ils ne constituent pas des mesures de service du démonstrateur.", "The following describes deployment and support to plan for a client implementation; it is not measured service evidence for this demo.")}</p>`) + list(x.deploy) + list(x.monitor)) +
       block(tr(lang, "Technologies du projet", "Project technologies"), `<div class="chips">${p.stack.map(s => `<span class="chip">${esc(s)}</span>`).join("")}</div>`) +
       block(tr(lang,"Et pour votre entreprise ?","What about your business?"), `<p>${tr(lang, "Partons de vos besoins pour adapter les parcours, les intégrations et l’accompagnement. Les services associés vous aident à préparer notre premier échange.", "Start with your needs to shape the journeys, integrations and ongoing support. Related services help you prepare for our first conversation.")}</p>`) + `</div></div>` + contactBand(lang, base, projectServices[p.slug][0], p.slug);
   }

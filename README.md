@@ -4,6 +4,7 @@ A static website: HTML, CSS and JavaScript generated from shared page templates 
 bilingual content, hosted publicly on GitHub Pages. Every portfolio page has an English equivalent.
 Four client projects in production and six demonstrations, including three bilingual
 multi-page sites, plus a demonstration copy of one client site. The portfolio and demos are public; linked production systems may require an account.
+The design studies include Fieldstone Construction, an independently hosted concept for a fictional home-remodeling and rural-construction brand.
 
 **Public site:** https://iksolutions-inc.com/
 **Repository:** https://github.com/raelpanga/ik-digital-solutions
@@ -15,7 +16,7 @@ multi-page sites, plus a demonstration copy of one client site. The portfolio an
 | Home (selected work, services, process, budget and contact) | `index.html` | `en/index.html` |
 | Services overview and four offers | `services/` | `en/services/` |
 | Work directory, sorted by kind with service and kind filters | `projets/` | `en/projects/` |
-| One page per project (10) | `projets/<slug>.html` | `en/projects/<slug>.html` |
+| One page per project | `projets/<slug>.html` | `en/projects/<slug>.html` |
 | Our process | `methode.html` | `en/process.html` |
 | About | `a-propos.html` | `en/about.html` |
 | Contact, preserving service/project inquiry context | `contact.html` | `en/contact.html` |
