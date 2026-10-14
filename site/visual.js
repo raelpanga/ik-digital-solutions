@@ -1,6 +1,7 @@
 "use strict";
 // Editorial presentation, using IK's own project captures and credited DRC photography.
 const projectCopy = {
+  "fuel-fortress": { title: "Fuel Fortress", fr: "L’énergie d’une salle de Lexington, dès le premier écran.", en: "The energy of a Lexington gym, from the first screen.", type: ["Fitness · Kentucky", "Fitness · Kentucky"], facts: ["Vidéo", "Galeries", "Adhésions"], factsEn: ["Video", "Galleries", "Memberships"], tint: "#dce2e5" },
   "genos-rentals": { title: "Geno’s × MAC&CLAY", fr: "De la réservation au costume prêt à porter.", en: "From wedding booking to the perfect fit.", type: ["Commerce & gestion", "Commerce & operations"], facts: ["Stripe", "SMS", "Workflow"], tint: "#e4dfd4" },
   "macclay-wedding-tracker": { title: "MAC&CLAY · Wedding tracker", fr: "Toute une équipe. Un seul tableau de suivi.", en: "One team. One view of every wedding party.", type: ["Application métier", "Business application"], facts: ["Shopify", "Workflow", "SMS"], tint: "#dce5e5" },
   "ets-financial": { title: "ETS Financial", fr: "Une présence bilingue pour un cabinet de Lubumbashi.", en: "A bilingual presence for a Lubumbashi advisory firm.", type: ["Site web · RDC", "Website · DRC"], facts: ["FR / EN", "12 pages", "WhatsApp"], tint: "#dbe4f2" },

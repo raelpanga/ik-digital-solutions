@@ -691,6 +691,63 @@ window.KDS = {
       }
     },
     {
+      slug: "fuel-fortress",
+      status: "client",
+      liveUrl: "https://fuel-fortress-website.vercel.app/",
+      demoUrl: "https://fuel-fortress-website.vercel.app/",
+      demoLang: "en",
+      color: "#0A0C0D",
+      domain: "fuel-fortress-website.vercel.app",
+      shotExt: "jpg",
+      stack: ["Next.js", "JavaScript", "HTML5 video", "Vercel"],
+      timeline: { fr: "Site en ligne", en: "Live site" },
+      price: { fr: "sur devis", en: "on quote" },
+      monthly: { fr: "selon le périmètre", en: "according to scope" },
+      note: { fr: "Le site du client est en anglais.", en: "The client website is in English." },
+      exploreNote: {
+        fr: "Découvrez les espaces, les équipements, les cours de combat, la récupération et les vêtements Fuel Fortress. Les offres d’adhésion ouvrent le parcours Gym Insight ; la demande de visite prépare un e-mail à envoyer à l’équipe.",
+        en: "Explore the spaces, equipment, combat classes, recovery facilities and Fuel Fortress apparel. Membership offers open the Gym Insight enrollment journey; the tour request prepares an email to send to the team."
+      },
+      fr: {
+        title: "Fuel Fortress Lexington",
+        sector: "Fitness et bien-être · Lexington, Kentucky",
+        tagline: "Une présence immersive pour une salle de sport de Lexington : vidéo, galeries et parcours vers la visite et l’adhésion.",
+        problem: ["Présenter l’identité et les espaces de Fuel Fortress Lexington, puis aider les futurs membres à découvrir les équipements, les cours, les services de récupération et les formules d’adhésion."],
+        built: [
+          "Accueil avec vidéo en arrière-plan, typographie expressive et contrôle de lecture",
+          "Galeries photo et défilement continu des équipements, avec commandes de navigation",
+          "Présentation des entraînements, des cours de combat, du sauna, des douches et des vêtements",
+          "Formules d’adhésion reliées à Gym Insight et demande de visite préparée par e-mail"
+        ],
+        congo: [
+          "Navigation adaptée au téléphone et aux grands écrans",
+          "Accès direct aux espaces, aux cours, à la récupération et aux adhésions",
+          "Adresse, horaires de présence de l’équipe et lien d’itinéraire réunis dans la section visite"
+        ],
+        deploy: ["Site public en anglais, hébergé sur Vercel et accessible en HTTPS."],
+        monitor: ["Les inscriptions sont dirigées vers Gym Insight ; les demandes de visite passent par la messagerie du visiteur."]
+      },
+      en: {
+        title: "Fuel Fortress Lexington",
+        sector: "Fitness and wellness · Lexington, Kentucky",
+        tagline: "An immersive presence for a Lexington gym: video, galleries and clear paths to a tour and membership.",
+        problem: ["Present the identity and spaces of Fuel Fortress Lexington, then help prospective members discover the equipment, classes, recovery facilities and membership options."],
+        built: [
+          "A video-led homepage with expressive typography and a playback control",
+          "Photo galleries and a continuous equipment showcase with navigation controls",
+          "Sections for training, combat classes, the sauna, showers and apparel",
+          "Membership options linked to Gym Insight and an email-based tour request"
+        ],
+        congo: [
+          "Navigation adapted to phones and larger screens",
+          "Direct routes to the spaces, classes, recovery facilities and memberships",
+          "Address, staffed hours and a directions link gathered in the visit section"
+        ],
+        deploy: ["A public English-language website hosted on Vercel and served over HTTPS."],
+        monitor: ["Enrollment opens Gym Insight; tour requests are prepared in the visitor’s email app."]
+      }
+    },
+    {
       slug: "kando-ressources",
       status: "demo",
       demoUrl: "demos/kando-ressources/",

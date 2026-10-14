@@ -96,6 +96,7 @@ const services = [
   }
 ];
 const projectServices = {
+  "fuel-fortress": ["websites"],
   "genos-rentals": ["commerce", "applications"], "macclay-wedding-tracker": ["applications"],
   "ets-financial": ["websites"], "truth-construction": ["websites"], "kando-ressources": ["websites"],
   "kimia-express": ["websites", "commerce"], "commande-distributeur": ["applications"],

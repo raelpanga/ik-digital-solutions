@@ -2,9 +2,10 @@
 
 A static website: HTML, CSS and JavaScript generated from shared page templates and
 bilingual content, hosted publicly on GitHub Pages. Every portfolio page has an English equivalent.
-Four client projects in production and six demonstrations, including three bilingual
+Five client projects in production and six demonstrations, including three bilingual
 multi-page sites, plus a demonstration copy of one client site. The portfolio and demos are public; linked production systems may require an account.
 The design studies include Fieldstone Construction, an independently hosted concept for a fictional home-remodeling and rural-construction brand.
+Client projects also include Fuel Fortress Lexington, with French and English portfolio stories linking to its English-language website.
 
 **Public site:** https://iksolutions-inc.com/
 **Repository:** https://github.com/raelpanga/ik-digital-solutions
