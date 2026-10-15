@@ -1,4 +1,4 @@
-/* Portfolio interactions: navigation, progressive project filters and local message preparation. */
+/* Portfolio interactions: navigation, progressive project filters, contact form delivery (Web3Forms) and WhatsApp message preparation. */
 "use strict";
 (() => {
   const $ = s => document.querySelector(s);
@@ -93,13 +93,28 @@
       return (fr ? "Bonjour IK Digital Solutions,\n\nNom : " : "Hello IK Digital Solutions,\n\nName: ") + name + "\n" + (fr ? "Entreprise : " : "Company: ") + company + "\n" +
         (fr ? "Service : " : "Service: ") + service.selectedOptions[0].textContent + "\n" + (fr ? "Projet de référence : " : "Reference project: ") + project.selectedOptions[0].textContent + "\n\n" + need;
     };
-    form.addEventListener("submit", e => {
+    const status = $("#f-status"), submit = form.querySelector('button[type="submit"]');
+    const notify = (text, kind) => { status.textContent = text; status.classList.toggle("is-success", kind === "success"); status.classList.toggle("is-error", kind === "error"); status.hidden = false; };
+    form.addEventListener("submit", async e => {
       e.preventDefault(); if (!form.reportValidity()) return;
-      const subject = (fr ? "Projet : " : "Project: ") + ($("#f-company").value.trim() || $("#f-name").value.trim());
-      location.href = "mailto:" + form.dataset.email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(message());
+      // Web3Forms delivers the fields by e-mail; readable labels replace the option keys.
+      const data = Object.fromEntries(new FormData(form));
+      data.subject = (fr ? "Projet : " : "Project: ") + ($("#f-company").value.trim() || $("#f-name").value.trim());
+      data.service = service.selectedOptions[0].textContent; data.project = project.selectedOptions[0].textContent; data.language = lang;
+      submit.disabled = true; submit.textContent = submit.dataset.busy; status.hidden = true;
+      try {
+        const res = await fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(data) });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || json.success === false) throw new Error(json.message || res.statusText);
+        form.reset(); context();
+        notify(fr ? "Merci, votre demande est envoyée. Nous vous répondons par e-mail." : "Thank you, your inquiry has been sent. We will reply by e-mail.", "success");
+      } catch (err) {
+        notify((fr ? "L'envoi a échoué. Écrivez-nous directement à " : "Sending failed. Write to us directly at ") + form.dataset.email + (fr ? " ou préparez un message WhatsApp." : " or prepare a WhatsApp message."), "error");
+      } finally { submit.disabled = false; submit.textContent = submit.dataset.label; }
     });
     $("#f-whatsapp").addEventListener("click", () => {
-      if (!form.reportValidity()) return;
+      // WhatsApp needs no e-mail address: only the name and the request are checked.
+      if (!$("#f-name").reportValidity() || !$("#f-need").reportValidity()) return;
       window.open("https://wa.me/" + form.dataset.whatsapp + "?text=" + encodeURIComponent(message()), "_blank", "noopener,noreferrer");
     });
   }

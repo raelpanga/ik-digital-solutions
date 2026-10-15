@@ -60,7 +60,7 @@ lead to the corresponding project story, in the selected language for bilingual 
 | `site/expansion.js` | The five services without a showcase project yet: mobile apps, AI & automation, audit & advice, modernisation & integrations, team augmentation. Each entry carries a `panel` shown where project examples would go, plus its short card promise. |
 | `site/tech.js` | The technology names and icon paths used by the scrolling band. Icons come from Simple Icons (CC0) on a 24×24 grid; add or remove a line and rebuild to change the band. |
 | `build.js` | Validates source dependencies, generates `docs/`, runs registered demo generators and writes the sitemap. |
-| `assets/style.css`, `assets/site.js`, `assets/favicon.svg` | Stylesheet, mobile navigation, progressive project filters, local email/WhatsApp preparation and icon. |
+| `assets/style.css`, `assets/site.js`, `assets/favicon.svg` | Stylesheet, mobile navigation, progressive project filters, contact form delivery through Web3Forms, WhatsApp message preparation and icon. |
 | `shots/` | Screenshots used on the cards. Copied into `docs/shots/`. |
 | `demos/src/<slug>.html` | Demo sources (head + body fragment). Wrapped into `docs/demos/<slug>/index.html`. |
 | `demos/sites/<name>/` | Bilingual demo generators and assets; public route mapping in `build.js`. |
@@ -115,6 +115,25 @@ The check serves `docs` locally, follows all 18 FR/EN language switches, checks 
 asset and fragment links, exercises simulated booking/tracking and filters, and checks
 mobile navigation and overflow. Screenshots use real 1280 × 800 and 430 × 900 browser
 viewports. The final build copies both new card images from `shots/` into `docs/shots/`.
+
+## Contact form: Web3Forms
+
+The contact page posts to Web3Forms (`https://api.web3forms.com/submit`), which delivers
+each inquiry by e-mail to the address in `config.email`. There is no server in this
+repository and nothing is stored on the site.
+
+1. Create an access key at https://web3forms.com using `consultation@iksolutions-inc.com`.
+   The key arrives by e-mail at that address.
+2. Paste it into `config.web3formsKey` in `assets/content.js`. The key is designed to be
+   public: it only identifies the inbox that receives the form.
+3. Rebuild. `build.js` warns while the key is empty, and the live form then shows an error
+   with the e-mail address and WhatsApp as fallbacks.
+
+With JavaScript, `assets/site.js` sends the fields as JSON and shows the result inline; the
+e-mail subject is "Projet : <company or name>" and the visitor's address is the reply-to.
+Without JavaScript the form posts directly and Web3Forms shows its own confirmation page.
+The hidden `botcheck` checkbox is the Web3Forms honeypot. `verify-site.js` intercepts the
+endpoint, so test runs never deliver anything.
 
 ## Custom domain: iksolutions-inc.com (GoDaddy)
 

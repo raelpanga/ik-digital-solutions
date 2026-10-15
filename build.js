@@ -5,6 +5,7 @@ const fs = require("fs"), path = require("path");
 global.window = {};
 require("./assets/content.js");
 const D = window.KDS;
+if (!D.config.web3formsKey) console.warn("Warning: config.web3formsKey is empty in assets/content.js. The contact form cannot deliver inquiries until a Web3Forms access key is set.");
 const concepts = require("./site/concepts");
 D.projects.push(...concepts.projects);
 const arg = name => { const i = process.argv.indexOf(name); return i < 0 ? null : process.argv[i + 1]; };

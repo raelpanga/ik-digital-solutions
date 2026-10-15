@@ -36,7 +36,9 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
   const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
   const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
   assert.equal(new Set(locations).size, locations.length, "Duplicate sitemap routes");
-  assert.equal(locations.length, walk(root).filter(f => f.endsWith(".html") && !f.endsWith("404.html")).length);
+  // Demonstration copies marked noindex are deliberately left out of the sitemap.
+  const indexable = f => f.endsWith(".html") && !f.endsWith("404.html") && !/<meta name="robots" content="[^"]*noindex/.test(fs.readFileSync(f, "utf8"));
+  assert.equal(locations.length, walk(root).filter(indexable).length);
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
   const browser = await chromium.launch({ channel: "chrome", headless: true });
@@ -62,7 +64,8 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       for (const p of projects) {
         const route = (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html";
         await goto(route);
-        const expected = p.liveUrl || p.demoUrls?.[lang] || p.demoUrl;
+        // A production site behind the client's own login leads with the demonstration instead.
+        const expected = (p.liveUrl && !p.liveNeedsAccount) ? p.liveUrl : (p.demoUrls?.[lang] || p.demoUrl || p.liveUrl);
         const actual = await page.locator(".spec .actions .btn-primary").getAttribute("href");
         assert.equal(new URL(actual, page.url()).href, /^https?:/.test(expected) ? expected : origin + "/" + expected);
         await page.locator(`[data-language][lang="${other}"]`).click();
@@ -94,8 +97,27 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       await page.evaluate(() => { window.open = url => { window.__preparedMessage = url; }; });
       await page.locator("#f-whatsapp").click();
       const message = await page.evaluate(() => window.__preparedMessage);
+      assert.ok(message, "WhatsApp preparation must not require an e-mail address");
       assert.ok(new URL(message).searchParams.get("text").includes("Kimia Express"));
       assert.ok(new URL(message).searchParams.get("text").includes("Example inquiry only"));
+      // Intercept the Web3Forms endpoint: the submission is inspected locally and never delivered.
+      const endpoint = "https://api.web3forms.com/**";
+      let delivered = null;
+      await page.route(endpoint, route => { delivered = route.request().postDataJSON(); route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ success: true, message: "ok" }) }); });
+      await page.locator("#f-email").fill("visitor@example.com");
+      await page.locator('#contact-form button[type="submit"]').click();
+      await page.locator("#f-status.is-success").waitFor();
+      assert.equal(delivered.email, "visitor@example.com"); assert.equal(delivered.message, "Example inquiry only");
+      assert.ok(delivered.project.includes("Kimia Express")); assert.ok(delivered.subject.includes("Test visitor"));
+      assert.equal(delivered.botcheck, undefined, "An unchecked honeypot sends nothing");
+      assert.equal(await page.locator("#f-need").inputValue(), "", "The form resets after a delivered inquiry");
+      await page.unroute(endpoint);
+      await page.route(endpoint, route => route.fulfill({ status: 500, contentType: "application/json", body: JSON.stringify({ success: false, message: "down" }) }));
+      await page.locator("#f-name").fill("Test visitor"); await page.locator("#f-email").fill("visitor@example.com"); await page.locator("#f-need").fill("Example inquiry only");
+      await page.locator('#contact-form button[type="submit"]').click();
+      await page.locator("#f-status.is-error").waitFor();
+      assert.equal(await page.locator("#f-need").inputValue(), "Example inquiry only", "A failed delivery keeps the visitor's text");
+      await page.unroute(endpoint);
       assert.ok(!page.url().includes("Test"), "Personal contact fields must not enter the URL");
       await goto(routes.contact[lang] + "?service=invalid&project=%3Cscript%3E");
       assert.equal(await page.locator("#f-service").inputValue(), ""); assert.equal(await page.locator("#f-project").inputValue(), "");
@@ -115,8 +137,10 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
     const noJS = await browser.newPage({ javaScriptEnabled: false });
     await noJS.goto(origin + "/projets/index.html"); assert.equal(await noJS.locator(".concept-grid .work-card:visible").count(), projects.filter(p => p.isConcept).length);
     await noJS.goto(origin + "/contact.html");
-    assert.ok((await noJS.locator("#contact-form").getAttribute("action")).startsWith("mailto:"));
+    assert.equal(await noJS.locator("#contact-form").getAttribute("action"), "https://api.web3forms.com/submit");
     assert.equal(await noJS.locator("#contact-form").getAttribute("method"), "post");
+    assert.equal(await noJS.locator('#contact-form input[name="access_key"]').count(), 1);
+    assert.ok(await noJS.locator('#contact-form input[name="botcheck"]').isHidden(), "The honeypot must stay invisible");
     await noJS.close();
     await page.setViewportSize({ width: 390, height: 844 });
     for (const file of portfolio) {

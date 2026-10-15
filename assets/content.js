@@ -12,6 +12,9 @@ window.KDS = {
     // WhatsApp number in international format without "+".
     whatsapp: "18593825280",
     email: "consultation@iksolutions-inc.com",
+    // Web3Forms access key: create one at https://web3forms.com with the address above.
+    // Form submissions are delivered to that address. The key is designed to be public.
+    web3formsKey: "64e46a57-5655-4025-950f-280a5de426d4 ",
     location: { fr: "Kentucky, États-Unis", en: "Kentucky, United States" }
   },
 
@@ -145,7 +148,7 @@ window.KDS = {
         lead: "Le plus simple est WhatsApp. Sinon, laissez-nous trois lignes et nous vous rappelons.",
         emailLabel: "E-mail",
         cityLabel: "Bureau",
-        form: { name: "Votre nom", company: "Entreprise ou organisation", need: "Votre besoin en quelques mots", needPh: "Ex. : site pour notre école avec paiement des frais par mobile money", send: "Envoyer par e-mail", hint: "Le bouton ouvre votre messagerie avec le message pré-rempli. Rien n'est envoyé sans votre accord." }
+        form: { name: "Votre nom", company: "Entreprise ou organisation", need: "Votre besoin en quelques mots", needPh: "Ex. : site pour notre école avec paiement des frais par mobile money", send: "Envoyer la demande", hint: "Votre demande nous parvient directement par e-mail." }
       },
       project: {
         back: "Toutes les réalisations",
@@ -305,7 +308,7 @@ window.KDS = {
         lead: "WhatsApp is the easiest. Otherwise, leave us three lines and we will call you back.",
         emailLabel: "E-mail",
         cityLabel: "Office",
-        form: { name: "Your name", company: "Company or organisation", need: "Your need in a few words", needPh: "E.g. a website for our school with fee payment by mobile money", send: "Send by e-mail", hint: "The button opens your e-mail app with the message pre-filled. Nothing is sent without your consent." }
+        form: { name: "Your name", company: "Company or organisation", need: "Your need in a few words", needPh: "E.g. a website for our school with fee payment by mobile money", send: "Send inquiry", hint: "Your inquiry reaches us directly by e-mail." }
       },
       project: {
         back: "All work",
