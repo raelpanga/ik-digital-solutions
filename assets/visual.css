@@ -72,10 +72,6 @@
 }
 .photo-credit { display: inline-flex; align-items: center; min-height: 28px; padding: 5px 10px; border: 1px solid #ffffff80; border-radius: 100px; background: #142128de; color: white; font-size: .63rem; font-weight: 600; text-decoration: none; }
 .photo-credit:hover { background: #142128; color: var(--acid); }
-.proof-strip { display: grid; grid-template-columns: 1fr repeat(3,1.5fr); gap: 25px; align-items: center; padding-block: 32px; border-bottom: 1px solid var(--line); }
-.proof-strip p { text-transform: uppercase; letter-spacing: .12em; font-size: .62rem; color: var(--ink-2); }
-.proof-strip a { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 10px 16px; border: 1px solid var(--line); border-radius: 100px; color: var(--ink); background: white; text-align: center; text-decoration: none; font-family: var(--font-display); font-size: clamp(.85rem,1.2vw,1.1rem); line-height: 1.2; transition: background .2s, border-color .2s; }
-.proof-strip a:hover { background: var(--acid); border-color: var(--acid); }
 .editorial-heading { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 42px; }
 .editorial-heading .eyebrow { margin-bottom: 20px; color: var(--ink-2); }
 .editorial-heading > p { max-width: 36ch; color: var(--ink-2); font-size: .95rem; }
@@ -215,8 +211,6 @@
   .hero-services a { font-size: .73rem; }
   .hero-motion-caption strong { font-size: clamp(1.25rem, 4vw, 1.5rem); }
   .hero-scroll { justify-self: start; }
-  .proof-strip { grid-template-columns: 1fr 1fr; padding-block: 24px; gap: 22px; }
-  .proof-strip a { font-size: .91rem; }
   .editorial-heading { align-items: start; flex-direction: column; gap: 20px; margin-bottom: 30px; }
   .portfolio .showcase-grid { grid-template-columns: 1fr; gap: 35px; }
   .case-cover { aspect-ratio: 1.6; }

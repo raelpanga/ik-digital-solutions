@@ -76,7 +76,6 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       await goto(routes.home[lang]);
       assert.equal(await page.locator(".offer-number,.more-num,.case-index,.build-n,.local-principles > div > span,.compact-process li > span").count(), 0);
       assert.equal(await page.locator(".eyebrow").evaluateAll(nodes => nodes.filter(n => /^0\d\s*\//.test(n.textContent.trim())).length), 0);
-      assert.equal(await page.locator(".proof-strip a").count(), projects.filter(p => p.status === "client").length);
       assert.equal(await page.locator(".hero-motion").count(), 1);
       assert.equal(await page.locator(".hero-services a").count(), 3);
       assert.equal(new URL(await page.locator(".hero-motion-video source").getAttribute("src"), page.url()).pathname, "/assets/media/hero-devices.mp4");
@@ -263,7 +262,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       await page.locator(".nav-toggle").click(); assert.ok(await page.locator("#main-nav").isVisible());
       await page.keyboard.press("Escape"); assert.equal(await page.locator(".nav-toggle").getAttribute("aria-expanded"), "false");
     }
-    for (const anchor of ["preuves", "methode", "conformite", "tarifs", "contact"]) {
+    for (const anchor of ["methode", "conformite", "tarifs", "contact"]) {
       await goto("index.html#" + anchor); assert.equal(await page.locator("#" + anchor).count(), 1);
     }
     await goto("services/index.html#services"); assert.equal(await page.locator("#services").count(), 1);
