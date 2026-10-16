@@ -6,3 +6,6 @@ demos/assets/kimia/raw/
 demos/assets/*/raw/
 demos/sites/*/raw/
 .concept-preview/
+.vercel/
+.vercel
+.env*

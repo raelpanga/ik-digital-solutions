@@ -1,14 +1,19 @@
 # IK Digital Solutions — website
 
 A static website: HTML, CSS and JavaScript generated from shared page templates and
-bilingual content, hosted publicly on GitHub Pages. Every portfolio page has an English equivalent.
+bilingual content, deployed publicly on Vercel. Every portfolio page has an English equivalent.
 Five client projects in production and six demonstrations, including three bilingual
 multi-page sites, plus a demonstration copy of one client site. The portfolio and demos are public; linked production systems may require an account.
 The design studies include Fieldstone Construction, an independently hosted concept for a fictional home-remodeling and rural-construction brand.
 Client projects also include Fuel Fortress Lexington, with French and English portfolio stories linking to its English-language website.
 
 **Public site:** https://iksolutions-inc.com/
+**Vercel production:** https://ik-digital-solutions.vercel.app/
+**Vercel project:** https://vercel.com/geno-s/ik-digital-solutions
 **Repository:** https://github.com/raelpanga/ik-digital-solutions
+
+Hosting moved to Vercel on 16 October 2026. Both custom domains are configured,
+HTTPS is enabled, and GitHub Pages is disabled. GitHub retains the source repository.
 
 ## What the site contains
 
@@ -75,7 +80,9 @@ available in horizontally scrollable tracks.
 | `shots/` | Screenshots used on the cards. Copied into `docs/shots/`. |
 | `demos/src/<slug>.html` | Demo sources (head + body fragment). Wrapped into `docs/demos/<slug>/index.html`. |
 | `demos/sites/<name>/` | Bilingual demo generators and assets; public route mapping in `build.js`. |
-| `docs/` | The generated site. GitHub Pages serves this folder. Do not edit by hand. |
+| `docs/` | The generated site. Vercel builds and serves this folder. Do not edit by hand. |
+| `vercel.json` | Vercel's build command, output folder and URL settings. |
+| `.vercelignore` | Excludes generated output, local drafts and development-only files from CLI uploads. |
 | `check.js` | Syntax-checks inline scripts: `node check.js demos/src/*.html`. |
 | `verify-site.js` | Browser checks for navigation, paired languages, links, filters, inquiry context, demo returns and mobile overflow. |
 | `tojpg.js` | Converts a PNG screenshot to JPEG through headless Chrome. |
@@ -84,7 +91,7 @@ available in horizontally scrollable tracks.
 ## Updating the site
 
 1. Edit the relevant content or template in `site/`, `assets/content.js`, or a demo source.
-2. Run `node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com` for the current custom domain.
+2. Run `node build.js --base-url https://iksolutions-inc.com/` for the current custom domain.
 3. Run `node verify-site.js` and `node verify-kimia.js` (Playwright and Google Chrome required;
    set `NODE_PATH` to the installed package directory if needed). `verify-site.js --screenshots`
    saves desktop/mobile review images in the OS temporary directory under `ik-architecture-preview/`.
@@ -96,7 +103,19 @@ git commit -m "Update"
 git push
 ```
 
-GitHub Pages republishes within about a minute.
+Vercel builds and publishes pushes to `main` through the connected GitHub repository.
+GitHub stores the source; Vercel hosts the website. The framework preset is **Other**,
+the build command is `node build.js --base-url https://iksolutions-inc.com/`,
+the output directory is `docs`, and no dependency installation is required.
+Existing `.html` and directory URLs are preserved.
+
+For a manual production deployment from a linked checkout:
+
+```bash
+vercel deploy --prod --scope geno-s
+```
+
+Keep `.vercel/` and `.env*` local and untracked.
 
 ## Adding a project
 
@@ -119,9 +138,9 @@ Kimia's repeatable browser verification and card capture (requires Playwright an
 Google Chrome; `NODE_PATH` can point to the installed Playwright package directory):
 
 ```bash
-node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com
+node build.js --base-url https://iksolutions-inc.com/
 node verify-kimia.js --screenshots
-node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com
+node build.js --base-url https://iksolutions-inc.com/
 ```
 
 The check serves `docs` locally, follows all 18 FR/EN language switches, checks page,
@@ -153,26 +172,27 @@ endpoint, so test runs never deliver anything.
 
 ## Custom domain: iksolutions-inc.com (GoDaddy)
 
-DNS records at GoDaddy (leave every mail record untouched):
+Vercel's recommended DNS records for this project (checked 16 October 2026).
+Keep the domain registered at GoDaddy and leave every mail record untouched:
 
 | Type | Name | Data |
 |---|---|---|
-| A | @ | 185.199.108.153 |
-| A | @ | 185.199.109.153 |
-| A | @ | 185.199.110.153 |
-| A | @ | 185.199.111.153 |
-| CNAME | www | raelpanga.github.io |
+| A | @ | 216.198.79.1 |
+| A | @ | 64.29.17.1 |
+| CNAME | www | 35e47ffddb1b5bd6.vercel-dns-017.com |
 
-Delete the existing `A @ WebsiteBuilder Site` record and change the existing `www`
-CNAME (it currently points to the apex). Then, once `nslookup iksolutions-inc.com`
-returns a 185.199.x.153 address, set the custom domain on GitHub (Settings → Pages →
-Custom domain → `iksolutions-inc.com`, then tick Enforce HTTPS after the certificate is
-issued) and rebuild with the CNAME file:
+The two A records above replace the four legacy GitHub Pages `185.199.x.153`
+records; `www` no longer points to `raelpanga.github.io`. Keep the existing
+nameservers, MX, SPF, DKIM and DMARC. Both domains are attached to the Vercel production project;
+`www` redirects permanently to `iksolutions-inc.com`.
 
 ```bash
-node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com
-git add -A && git commit -m "Custom domain" && git push
+vercel domains verify iksolutions-inc.com --scope geno-s
+vercel domains verify www.iksolutions-inc.com --scope geno-s
 ```
+
+GitHub Pages is disabled and its legacy `docs/CNAME` file has been removed.
+The repository and its history stay on GitHub. Vercel does not use a `CNAME` file.
 
 ## Multi-page demo sites (`demos/sites/`)
 
