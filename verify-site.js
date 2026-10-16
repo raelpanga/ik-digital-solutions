@@ -12,7 +12,7 @@ const server = http.createServer((req, res) => {
   if (file !== root && !file.startsWith(root + path.sep)) { res.writeHead(403).end(); return; }
   if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, "index.html");
   if (!fs.existsSync(file)) { file = path.join(root, "404.html"); res.statusCode = 404; }
-  res.setHeader("Content-Type", ({ ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg" })[path.extname(file)] || "application/octet-stream");
+  res.setHeader("Content-Type", ({ ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".mp4": "video/mp4" })[path.extname(file)] || "application/octet-stream");
   fs.createReadStream(file).pipe(res);
 });
 const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]);
@@ -23,6 +23,10 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
   let references = 0;
   for (const file of portfolio) {
     const relative = path.relative(root, file).replace(/\\/g, "/"), html = fs.readFileSync(file, "utf8");
+    for (const anchor of html.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/g)) {
+      const label = decode(anchor[1].replace(/<[^>]*>/g, ""));
+      assert.ok(!/[↗→←↓↑]/.test(label), relative + " has an arrow in link text: " + label.trim());
+    }
     for (const m of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
       const url = new URL(decode(m[1]), "https://test.local/" + relative);
       if (url.origin !== "https://test.local") continue;
@@ -36,9 +40,8 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
   const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
   const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
   assert.equal(new Set(locations).size, locations.length, "Duplicate sitemap routes");
-  // Demonstration copies marked noindex are deliberately left out of the sitemap.
-  const indexable = f => f.endsWith(".html") && !f.endsWith("404.html") && !/<meta name="robots" content="[^"]*noindex/.test(fs.readFileSync(f, "utf8"));
-  assert.equal(locations.length, walk(root).filter(indexable).length);
+  // The TRUTH client-site copy is intentionally noindex and absent from the sitemap.
+  assert.equal(locations.length, walk(root).filter(f => f.endsWith(".html") && !f.endsWith("404.html") && !f.includes(path.sep + "demos" + path.sep + "truth-construction" + path.sep)).length);
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
   const browser = await chromium.launch({ channel: "chrome", headless: true });
@@ -64,18 +67,34 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       for (const p of projects) {
         const route = (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html";
         await goto(route);
-        // A production site behind the client's own login leads with the demonstration instead.
-        const expected = (p.liveUrl && !p.liveNeedsAccount) ? p.liveUrl : (p.demoUrls?.[lang] || p.demoUrl || p.liveUrl);
+        const expected = p.liveNeedsAccount ? (p.demoUrls?.[lang] || p.demoUrl) : (p.liveUrl || p.demoUrls?.[lang] || p.demoUrl);
         const actual = await page.locator(".spec .actions .btn-primary").getAttribute("href");
         assert.equal(new URL(actual, page.url()).href, /^https?:/.test(expected) ? expected : origin + "/" + expected);
         await page.locator(`[data-language][lang="${other}"]`).click();
         assert.equal(await page.locator("body").getAttribute("data-page"), "project:" + p.slug);
       }
       await goto(routes.home[lang]);
-      assert.equal(await page.locator(".selected-work .work-card").count(), projects.filter(p => p.status === "client").length);
-      assert.equal(await page.locator(".wwd-card").count(), services.length + 1);
+      assert.equal(await page.locator(".offer-number,.more-num,.case-index,.build-n,.local-principles > div > span,.compact-process li > span").count(), 0);
+      assert.equal(await page.locator(".eyebrow").evaluateAll(nodes => nodes.filter(n => /^0\d\s*\//.test(n.textContent.trim())).length), 0);
+      assert.equal(await page.locator(".proof-strip a").count(), projects.filter(p => p.status === "client").length);
+      assert.equal(await page.locator(".hero-motion").count(), 1);
+      assert.equal(await page.locator(".hero-services a").count(), 3);
+      assert.equal(new URL(await page.locator(".hero-motion-video source").getAttribute("src"), page.url()).pathname, "/assets/media/hero-devices.mp4");
+      await page.waitForFunction(() => document.querySelector(".hero-motion-video").readyState >= 1);
+      assert.deepEqual(await page.locator(".hero-motion-video").evaluate(v => [v.videoWidth, v.videoHeight]), [1120, 980]);
+      await page.waitForFunction(() => !document.querySelector(".hero-motion-video").paused);
+      await page.locator(".hero-motion-toggle").click();
+      assert.equal(await page.locator(".hero-motion-video").evaluate(v => v.paused), true);
+      await page.locator(".hero-motion-toggle").click();
+      await page.waitForFunction(() => !document.querySelector(".hero-motion-video").paused);
+      assert.equal(await page.locator(".wwd-card").count(), 0);
       assert.equal(await page.locator(".pill-client,.pill-demo").count(), 0);
       assert.equal(await page.locator(".integration-brands img").count(), 4);
+      assert.equal(await page.locator(".tech-band").count(), 0);
+      await goto(routes.services[lang]);
+      assert.equal(await page.locator("#services .wwd-card").count(), services.length + 1);
+      assert.equal(await page.locator(".tech-band").count(), 1);
+      assert.equal(await page.locator(".visual-offers,.showcase-grid,.work-card").count(), 0);
       for (const key of ["payments", "whatsapp"]) {
         await goto(routes[key][lang]);
         assert.ok(!/\d[\d ,–-]*\sUSD|USD\s[\d]/.test(await page.locator("main").innerText()));
@@ -83,9 +102,37 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
         assert.equal(await page.locator("#f-service").inputValue(), key);
       }
       await goto(routes.work[lang]);
-      assert.equal(await page.locator(".concept-grid .work-card").count(), projects.filter(p => p.isConcept).length);
-      assert.equal(await page.locator(".work-feature-card .work-card").count(), 1);
-      assert.equal(await page.locator("#work-group-0 .work-card").count(), 3);
+      assert.equal(await page.locator(".concept-grid .work-card[data-project]").count(), projects.filter(p => p.isConcept).length);
+      assert.equal(await page.locator("#client .work-card[data-project]").count(), projects.filter(p => p.status === "client").length);
+      assert.equal(await page.locator("#demo .work-card[data-project]").count(), projects.filter(p => p.status === "demo").length);
+      assert.equal(await page.locator("[data-carousel]").count(), 3);
+      for (const kind of ["client", "demo", "concept"]) {
+        const group = page.locator("#" + kind), track = group.locator(".work-carousel-track");
+        const first = await group.locator('[data-carousel-project][aria-current="true"]').getAttribute("data-carousel-project");
+        await group.locator("[data-carousel-next]").click();
+        await page.waitForFunction(({kind,first}) => document.querySelector('#'+kind+' [data-carousel-project][aria-current="true"]').dataset.carouselProject !== first, {kind,first});
+        await track.focus(); await page.keyboard.press("Home");
+        await page.waitForFunction(({kind,first}) => document.querySelector('#'+kind+' [data-carousel-project][aria-current="true"]').dataset.carouselProject === first, {kind,first});
+        // Previous from the first project loops to the last one in the same direction.
+        await group.locator("[data-carousel-prev]").click();
+        const last = await group.locator("[data-carousel-project]").last().getAttribute("data-carousel-project");
+        await page.waitForFunction(({kind,last}) => document.querySelector('#'+kind+' [data-carousel-project][aria-current="true"]').dataset.carouselProject === last, {kind,last});
+        assert.ok(await group.locator("[data-carousel-next]").isEnabled());
+        for (const clone of await group.locator("[data-carousel-clone]").all()) {
+          assert.equal(await clone.getAttribute("aria-hidden"), "true");
+          assert.equal(await clone.locator('a:not([tabindex="-1"])').count(), 0);
+        }
+      }
+      await page.locator("#work-service").selectOption("websites");
+      assert.equal(await page.locator(".work-card[data-project]:not([hidden])").count(), projects.filter(p => projectServices[p.slug].includes("websites")).length);
+      for (const group of await page.locator("[data-work-section]:not([hidden])").all()) {
+        const current = await group.locator('[data-carousel-project][aria-current="true"]').getAttribute("data-carousel-project");
+        assert.equal(current, await group.locator('[data-project]:not([hidden])').first().getAttribute('data-project'));
+      }
+      await page.locator('[data-kind-filter="concept"]').click();
+      assert.equal(await page.locator("[data-work-section]:not([hidden])").count(), 1);
+      await page.locator('#concept .work-card[data-project]:not([hidden]) .case-action').first().click();
+      assert.ok(new URL(page.url()).pathname.match(/\/(projets|en\/projects)\/[^/]+\.html$/));
       await goto(routes.commerce[lang]);
       await page.locator('#contact a[href*="service=commerce"]').click();
       assert.equal(await page.locator("#f-service").inputValue(), "commerce");
@@ -127,7 +174,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
         await page.locator(".ikbar a").click();
         assert.equal(new URL(page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html");
       }
-      for (const p of projects.filter(p => p.isConcept)) {
+      for (const p of projects.filter(p => p.isConcept && !/^https?:/.test(p.demoUrls?.[lang] || p.demoUrl || ""))) {
         await goto(p.demoUrls[lang]);
         const href = await page.locator(".notice > a").getAttribute("href");
         assert.equal(new URL(href, page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html");
@@ -135,6 +182,9 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       console.log("Projects, filters, inquiry context and demo returns: " + lang);
     }
     const noJS = await browser.newPage({ javaScriptEnabled: false });
+    await noJS.goto(origin + "/index.html");
+    assert.ok(await noJS.locator(".hero-motion-poster").isVisible());
+    assert.ok(await noJS.locator(".hero-motion-toggle").isHidden());
     await noJS.goto(origin + "/projets/index.html"); assert.equal(await noJS.locator(".concept-grid .work-card:visible").count(), projects.filter(p => p.isConcept).length);
     await noJS.goto(origin + "/contact.html");
     assert.equal(await noJS.locator("#contact-form").getAttribute("action"), "https://api.web3forms.com/submit");
@@ -142,6 +192,34 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
     assert.equal(await noJS.locator('#contact-form input[name="access_key"]').count(), 1);
     assert.ok(await noJS.locator('#contact-form input[name="botcheck"]').isHidden(), "The honeypot must stay invisible");
     await noJS.close();
+    const reduced = await browser.newPage({ reducedMotion: "reduce" });
+    await reduced.goto(origin + "/index.html");
+    assert.ok(await reduced.locator(".hero-motion-poster").isVisible());
+    assert.ok(await reduced.locator(".hero-motion-video").isHidden());
+    assert.equal(await reduced.locator(".hero-motion-video").evaluate(v => v.paused), true);
+    await reduced.goto(origin + "/projets/index.html");
+    assert.ok(await reduced.locator("#client [data-carousel-toggle]").isHidden());
+    const reducedStart = await reduced.locator("#client-track").evaluate(t => t.scrollLeft);
+    await reduced.locator("#client [data-carousel-next]").click();
+    assert.ok(await reduced.locator("#client-track").evaluate((t,start) => t.scrollLeft > start + 100, reducedStart));
+    await reduced.close();
+    // Verify native touch scrolling, not just a scripted change to scrollLeft.
+    const touch = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+    await touch.goto(origin + "/projets/index.html");
+    await touch.locator("#client-track").scrollIntoViewIfNeeded();
+    const box = await touch.locator("#client-track [data-project] .case-cover").first().boundingBox();
+    const touchStart = await touch.locator("#client-track").evaluate(t => t.scrollLeft);
+    const session = await touch.context().newCDPSession(touch);
+    const swipeY = Math.max(120, box.y + box.height / 2);
+    await session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: 320, y: swipeY }] });
+    for (let x = 300; x >= 60; x -= 30) {
+      await session.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x, y: swipeY }] });
+      await touch.waitForTimeout(25);
+    }
+    await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+    await touch.waitForFunction(start => document.querySelector("#client-track").scrollLeft > start + 100, touchStart);
+    assert.equal(await touch.locator("#client [data-carousel-toggle]").innerText(), "Lecture");
+    await touch.close();
     await page.setViewportSize({ width: 390, height: 844 });
     for (const file of portfolio) {
       await goto(path.relative(root, file).replace(/\\/g, "/"));
@@ -150,9 +228,10 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       await page.locator(".nav-toggle").click(); assert.ok(await page.locator("#main-nav").isVisible());
       await page.keyboard.press("Escape"); assert.equal(await page.locator(".nav-toggle").getAttribute("aria-expanded"), "false");
     }
-    for (const anchor of ["services", "projets", "preuves", "methode", "conformite", "tarifs", "contact"]) {
+    for (const anchor of ["preuves", "methode", "conformite", "tarifs", "contact"]) {
       await goto("index.html#" + anchor); assert.equal(await page.locator("#" + anchor).count(), 1);
     }
+    await goto("services/index.html#services"); assert.equal(await page.locator("#services").count(), 1);
     if (process.argv.includes("--screenshots")) {
       const dest = path.join(os.tmpdir(), "ik-architecture-preview"); fs.mkdirSync(dest, { recursive: true });
       for (const [kind, width, height] of [["desktop", 1440, 1000], ["mobile", 390, 844]]) {

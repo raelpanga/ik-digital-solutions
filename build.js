@@ -5,6 +5,7 @@ const fs = require("fs"), path = require("path");
 global.window = {};
 require("./assets/content.js");
 const D = window.KDS;
+D.config.web3formsKey = String(D.config.web3formsKey || "").trim();
 if (!D.config.web3formsKey) console.warn("Warning: config.web3formsKey is empty in assets/content.js. The contact form cannot deliver inquiries until a Web3Forms access key is set.");
 const concepts = require("./site/concepts");
 D.projects.push(...concepts.projects);

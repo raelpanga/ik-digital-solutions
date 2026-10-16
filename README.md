@@ -2,8 +2,10 @@
 
 A static website: HTML, CSS and JavaScript generated from shared page templates and
 bilingual content, hosted publicly on GitHub Pages. Every portfolio page has an English equivalent.
-Four client projects in production and six demonstrations, including three bilingual
+Five client projects in production and six demonstrations, including three bilingual
 multi-page sites, plus a demonstration copy of one client site. The portfolio and demos are public; linked production systems may require an account.
+The design studies include Fieldstone Construction, an independently hosted concept for a fictional home-remodeling and rural-construction brand.
+Client projects also include Fuel Fortress Lexington, with French and English portfolio stories linking to its English-language website.
 
 **Public site:** https://iksolutions-inc.com/
 **Repository:** https://github.com/raelpanga/ik-digital-solutions
@@ -14,8 +16,8 @@ multi-page sites, plus a demonstration copy of one client site. The portfolio an
 |---|---|---|
 | Home (selected work, services, process, budget and contact) | `index.html` | `en/index.html` |
 | Services overview and four offers | `services/` | `en/services/` |
-| Work directory, sorted by kind with service and kind filters | `projets/` | `en/projects/` |
-| One page per project (10) | `projets/<slug>.html` | `en/projects/<slug>.html` |
+| Work carousels for clients, demonstrators and studies, with service and kind filters | `projets/` | `en/projects/` |
+| One page per project | `projets/<slug>.html` | `en/projects/<slug>.html` |
 | Our process | `methode.html` | `en/process.html` |
 | About | `a-propos.html` | `en/about.html` |
 | Contact, preserving service/project inquiry context | `contact.html` | `en/contact.html` |
@@ -42,13 +44,21 @@ Every demo uses fictitious data and simulated payments, SMS, e-mails and Shopify
 so in its banner. Client project pages describe only what the repositories and live
 sites show. Their main button opens the production address; any demonstration copy is
 labelled separately. A client project with no `liveUrl` publishes no production link: its
-page and card lead with the demonstration instead. Demonstrator project pages lead with the demo link. English pages
+page leads with the demonstration instead. Each Work carousel card opens the project story with a View project button. Demonstrator project pages lead with the demo link. English pages
 open English demos where available and identify French-only examples.
 
 The navigation follows **Services → Work → a relevant example → Contact**. Pricing is
 part of Services; delivery and security are explained under Our process. Existing
 homepage anchors and every existing project/demo route are preserved. Demo return links
 lead to the corresponding project story, in the selected language for bilingual demos.
+
+Each Work group is a continuously moving horizontal ribbon of project cards. The flow loops
+at a constant speed and supports native touch swiping, mouse dragging, keyboard navigation,
+project selectors and previous/next buttons. Motion runs only while the carousel is in view;
+hover pauses it temporarily, and interaction pauses it until Play is selected. Visual copies
+make the wrap seamless and are excluded from the keyboard and screen-reader sequence.
+Reduced-motion preferences disable automatic motion. Without JavaScript, all projects remain
+available in horizontally scrollable tracks.
 
 ## How it is built
 

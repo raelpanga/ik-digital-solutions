@@ -1,4 +1,10 @@
-# Portfolio photography
+# Portfolio media
+
+The homepage hero animation (`hero-devices.mp4`) and its poster
+(`hero-devices-poster.webp`) are original renders of a three-device composition
+using screenshots from this portfolio. The Adobe Stock references supplied for
+direction are not included. Rebuild both files with
+`node tools/hero-motion/render.cjs` (Chrome and Playwright required).
 
 These images are locally optimized WebP copies of photographs already used in the
 Kimia demonstration. They illustrate the place; they are not photographs of IK staff,
