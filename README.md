@@ -12,8 +12,8 @@ Client projects also include Fuel Fortress Lexington, with French and English po
 **Vercel project:** https://vercel.com/geno-s/ik-digital-solutions
 **Repository:** https://github.com/raelpanga/ik-digital-solutions
 
-The Vercel deployment is ready. The custom-domain cutover is awaiting DNS validation;
-GitHub Pages remains available until the domain serves successfully from Vercel.
+Hosting moved to Vercel on 16 October 2026. Both custom domains are configured,
+HTTPS is enabled, and GitHub Pages is disabled. GitHub retains the source repository.
 
 ## What the site contains
 
@@ -91,7 +91,7 @@ available in horizontally scrollable tracks.
 ## Updating the site
 
 1. Edit the relevant content or template in `site/`, `assets/content.js`, or a demo source.
-2. Run `node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com` for the current custom domain.
+2. Run `node build.js --base-url https://iksolutions-inc.com/` for the current custom domain.
 3. Run `node verify-site.js` and `node verify-kimia.js` (Playwright and Google Chrome required;
    set `NODE_PATH` to the installed package directory if needed). `verify-site.js --screenshots`
    saves desktop/mobile review images in the OS temporary directory under `ik-architecture-preview/`.
@@ -107,8 +107,7 @@ Vercel builds and publishes pushes to `main` through the connected GitHub reposi
 GitHub stores the source; Vercel hosts the website. The framework preset is **Other**,
 the build command is `node build.js --base-url https://iksolutions-inc.com/`,
 the output directory is `docs`, and no dependency installation is required.
-Existing `.html` and directory URLs are preserved. The `--cname` flag in the local
-build commands is only needed while GitHub Pages remains available during migration.
+Existing `.html` and directory URLs are preserved.
 
 For a manual production deployment from a linked checkout:
 
@@ -139,9 +138,9 @@ Kimia's repeatable browser verification and card capture (requires Playwright an
 Google Chrome; `NODE_PATH` can point to the installed Playwright package directory):
 
 ```bash
-node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com
+node build.js --base-url https://iksolutions-inc.com/
 node verify-kimia.js --screenshots
-node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com
+node build.js --base-url https://iksolutions-inc.com/
 ```
 
 The check serves `docs` locally, follows all 18 FR/EN language switches, checks page,
@@ -182,9 +181,9 @@ Keep the domain registered at GoDaddy and leave every mail record untouched:
 | A | @ | 64.29.17.1 |
 | CNAME | www | 35e47ffddb1b5bd6.vercel-dns-017.com |
 
-Replace the four legacy GitHub Pages `185.199.x.153` A records with the two records
-above, and replace `www`'s old `raelpanga.github.io` target. Do not change nameservers,
-MX, SPF, DKIM or DMARC. Both domains are attached to the Vercel production project;
+The two A records above replace the four legacy GitHub Pages `185.199.x.153`
+records; `www` no longer points to `raelpanga.github.io`. Keep the existing
+nameservers, MX, SPF, DKIM and DMARC. Both domains are attached to the Vercel production project;
 `www` redirects permanently to `iksolutions-inc.com`.
 
 ```bash
@@ -192,9 +191,8 @@ vercel domains verify iksolutions-inc.com --scope geno-s
 vercel domains verify www.iksolutions-inc.com --scope geno-s
 ```
 
-After DNS and HTTPS work on Vercel, disable GitHub Pages in repository Settings →
-Pages and remove its legacy `docs/CNAME` file. The repository and its history stay
-on GitHub. Vercel does not use a `CNAME` file.
+GitHub Pages is disabled and its legacy `docs/CNAME` file has been removed.
+The repository and its history stay on GitHub. Vercel does not use a `CNAME` file.
 
 ## Multi-page demo sites (`demos/sites/`)
 

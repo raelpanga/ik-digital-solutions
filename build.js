@@ -1,5 +1,5 @@
 // Generate the bilingual portfolio and its independent demonstrations into docs/.
-// Usage: node build.js --base-url https://iksolutions-inc.com/ --cname iksolutions-inc.com
+// Usage: node build.js --base-url https://iksolutions-inc.com/
 "use strict";
 const fs = require("fs"), path = require("path");
 global.window = {};
