@@ -2,6 +2,7 @@
 // Usage: node build.js --base-url https://iksolutions-inc.com/
 "use strict";
 const fs = require("fs"), path = require("path");
+const { publicPath, finalizeUrls } = require("./site/urls");
 global.window = {};
 require("./assets/content.js");
 const D = window.KDS;
@@ -71,7 +72,7 @@ for (const f of fs.readdirSync(path.join(__dirname, "demos", "src"))) {
   pages.push("demos/" + slug + "/");
 }
 for (const { slug, generate, collection } of generators) {
-  const n = generate(path.join(OUT, "demos", collection ? "" : slug), { portfolioHome: "../../projets/" + slug + ".html", portfolioHomeEn: "../../en/projects/" + slug + ".html", siteUrl: SITE_URL });
+  const n = generate(path.join(OUT, "demos", collection ? "" : slug), { portfolioHome: "../../projets/" + slug + ".html", portfolioHomeEn: "../../en/projects/" + slug + ".html", siteUrl: SITE_URL, publicBase: "/demos/" + slug });
   const add = dir => {
     for (const entry of fs.readdirSync(path.join(OUT, dir), { withFileTypes: true })) {
       const rel = dir + "/" + entry.name;
@@ -84,8 +85,9 @@ for (const { slug, generate, collection } of generators) {
   console.log("Demo " + slug + ": " + n + " pages");
 }
 write("404.html", Site.layout({ lang: "fr", route: "404.html", alternate: "404.html", key: "404", title: "Page introuvable", description: "Cette page n'existe pas.", body: '<section class="section"><div class="wrap"><h1>Page introuvable</h1><p><a href="index.html">Retour à l’accueil</a> · <a href="en/index.html">English home</a></p></div></section>' }).replace('<head>', '<head><base href="' + (SITE_URL || "/") + '">'));
+finalizeUrls(OUT, SITE_URL);
 if (SITE_URL) {
-  write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + pages.map(p => '  <url><loc>' + SITE_URL + p + '</loc></url>').join("\n") + '\n</urlset>\n');
+  write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + pages.map(p => '  <url><loc>' + SITE_URL.replace(/\/$/, "") + publicPath("/" + p) + '</loc></url>').join("\n") + '\n</urlset>\n');
 }
 write("robots.txt", "User-agent: *\nAllow: /\n" + (SITE_URL ? "Sitemap: " + SITE_URL + "sitemap.xml\n" : ""));
 console.log("Built " + pages.length + " pages + 404 in docs/");

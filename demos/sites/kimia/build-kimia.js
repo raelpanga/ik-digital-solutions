@@ -15,10 +15,14 @@ const TITLES = {
 const RECOLOR = [["#1d4ed8", "#0E5A43"], ["#f7b500", "#FF6A1A"], ["#e3a600", "#E0540A"], ["#14213d", "#10201A"], ["#f5f7fb", "#F4F1EA"], ["#e8eefc", "#DDEFE6"], ["#d7e0f3", "#C9E3D6"], ["#c9d3e6", "#D6D0C4"], ["#cfe1ff", "#BFE3D1"], ["#fff4d6", "#FFE6D6"], ["#16a34a", "#1E7F48"], ["#5f6b85", "#45534C"]];
 const ILLUS_EN = [["En transit", "In transit"], ["Arrivée aujourd'hui, 14 h – 16 h", "Arriving today, 2 – 4 pm"], ["Partager le lien de suivi", "Share tracking link"]];
 
-function dataJs() {
+function dataJs(publicBase) {
   const pick = ["rate", "sizes", "prices", "cities", "relays", "payments", "shipments", "js"];
   const D = {}; for (const k of pick) D[k] = C[k];
-  D.files = K.FILES;
+  D.files = publicBase ? Object.fromEntries(Object.entries(K.FILES).map(([lang, routes]) => [lang,
+    Object.fromEntries(Object.entries(routes).map(([key, file]) => [key,
+      publicBase + "/" + (lang === "en" ? "en/" : "") + file.replace(/index\.html$/, "").replace(/\.html$/, "")
+    ]))
+  ])) : K.FILES;
   return "/* Generated from content.js by build-kimia.js. Do not edit. */\nwindow.KX = " + JSON.stringify(D) + ";\n";
 }
 
@@ -37,7 +41,7 @@ function build(outDir, opts) {
       n++;
     }
   }
-  fs.writeFileSync(path.join(outDir, "data.js"), dataJs());
+  fs.writeFileSync(path.join(outDir, "data.js"), dataJs(opts?.publicBase));
   for (const f of ["style.css", "site.js"]) fs.copyFileSync(path.join(__dirname, f), path.join(outDir, f));
   for (const f of fs.readdirSync(path.join(__dirname, "img"))) fs.copyFileSync(path.join(__dirname, "img", f), path.join(outDir, "img", f));
   const illus = path.join(__dirname, "..", "..", "assets", "kimia");

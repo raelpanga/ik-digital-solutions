@@ -5,14 +5,9 @@
 const fs = require("fs"), path = require("path"), http = require("http"), assert = require("node:assert/strict");
 const { chromium } = require("playwright");
 const root = path.join(__dirname, "docs"), K = require("./demos/sites/kimia/lib");
-const server = http.createServer((req, res) => {
-  let file = path.resolve(root, "." + decodeURIComponent(new URL(req.url, "http://localhost").pathname));
-  if (!file.startsWith(root + path.sep)) { res.writeHead(403).end(); return; }
-  if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, "index.html");
-  if (!fs.existsSync(file)) { res.writeHead(404).end(); return; }
-  const mime = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg" };
-  res.setHeader("Content-Type", mime[path.extname(file)] || "application/octet-stream"); fs.createReadStream(file).pipe(res);
-});
+const { publicPath } = require("./site/urls");
+const { resolveFile, handler } = require("./tools/static-server");
+const server = http.createServer(handler(root));
 (async () => {
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
@@ -34,8 +29,7 @@ const server = http.createServer((req, res) => {
         const refs = await page.locator("a[href],link[href],img[src],script[src],form[action]").evaluateAll(els => els.map(el => el.href || el.src || el.action));
         for (const ref of refs) {
           const u = new URL(ref); if (u.origin !== origin) continue;
-          let file = path.join(root, decodeURIComponent(u.pathname));
-          if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, "index.html");
+          const file = resolveFile(root, u.pathname);
           assert.ok(fs.existsSync(file), `${route}: missing ${u.pathname}`);
           if (u.hash && path.extname(file) === ".html") {
             const html = fs.readFileSync(file, "utf8"), id = decodeURIComponent(u.hash.slice(1));
@@ -70,7 +64,7 @@ const server = http.createServer((req, res) => {
       await page.locator("[data-doc]").first().click(); assert.ok(await page.locator("dialog").isVisible()); await page.keyboard.press("Escape");
     }
     for (const [route, expected] of [["/projets/kimia-express.html", "/demos/kimia-express/"], ["/en/projects/kimia-express.html", "/demos/kimia-express/en/"]]) {
-      await page.goto(origin + route); await page.locator(".spec .actions .btn-primary").click(); assert.equal(new URL(page.url()).pathname, expected);
+      await page.goto(origin + route); await page.locator(".spec .actions .btn-primary").click(); assert.equal(new URL(page.url()).pathname, publicPath(expected));
     }
     await page.setViewportSize({ width: 430, height: 900 });
     for (const lang of ["fr", "en"]) for (const key of K.KEYS) {

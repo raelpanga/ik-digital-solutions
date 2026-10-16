@@ -7,14 +7,9 @@ const { routes, services, projectServices } = require("./site/content");
 global.window = {}; require("./assets/content");
 window.KDS.projects.push(...require("./site/concepts").projects);
 const projects = window.KDS.projects, root = path.join(__dirname, "docs");
-const server = http.createServer((req, res) => {
-  let file = path.resolve(root, "." + decodeURIComponent(new URL(req.url, "http://localhost").pathname));
-  if (file !== root && !file.startsWith(root + path.sep)) { res.writeHead(403).end(); return; }
-  if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, "index.html");
-  if (!fs.existsSync(file)) { file = path.join(root, "404.html"); res.statusCode = 404; }
-  res.setHeader("Content-Type", ({ ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".mp4": "video/mp4" })[path.extname(file)] || "application/octet-stream");
-  fs.createReadStream(file).pipe(res);
-});
+const { publicPath } = require("./site/urls");
+const { resolveFile, handler } = require("./tools/static-server");
+const server = http.createServer(handler(root));
 const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]);
 const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, '"');
 (async () => {
@@ -30,8 +25,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
     for (const m of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
       const url = new URL(decode(m[1]), "https://test.local/" + relative);
       if (url.origin !== "https://test.local") continue;
-      let target = path.join(root, decodeURIComponent(url.pathname));
-      if (fs.existsSync(target) && fs.statSync(target).isDirectory()) target = path.join(target, "index.html");
+      const target = resolveFile(root, url.pathname);
       assert.ok(fs.existsSync(target), relative + " has missing link " + m[1]);
       if (url.hash && target.endsWith(".html")) assert.ok(fs.readFileSync(target, "utf8").includes('id="' + decodeURIComponent(url.hash.slice(1)) + '"'), relative + " has missing fragment " + m[1]);
       references++;
@@ -60,7 +54,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
         assert.equal(await page.locator("#main-nav a").count(), 6);
         if (key !== "home" && !["privacy", "legal"].includes(key)) assert.equal(await page.locator('#main-nav [aria-current="page"]').count(), 1);
         await page.locator(`[data-language][lang="${other}"]`).click();
-        assert.equal(new URL(page.url()).pathname, "/" + urls[other]);
+        assert.equal(new URL(page.url()).pathname, publicPath("/" + urls[other]));
         assert.equal(await page.locator("html").getAttribute("lang"), other);
       }
       console.log("Page pairs and navigation: " + lang);
@@ -69,7 +63,9 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
         await goto(route);
         const expected = p.liveNeedsAccount ? (p.demoUrls?.[lang] || p.demoUrl) : (p.liveUrl || p.demoUrls?.[lang] || p.demoUrl);
         const actual = await page.locator(".spec .actions .btn-primary").getAttribute("href");
-        assert.equal(new URL(actual, page.url()).href, /^https?:/.test(expected) ? expected : origin + "/" + expected);
+        const expectedUrl = new URL(expected, origin + "/");
+        if (expectedUrl.origin === origin) expectedUrl.pathname = publicPath(expectedUrl.pathname);
+        assert.equal(new URL(actual, page.url()).href, expectedUrl.href);
         await page.locator(`[data-language][lang="${other}"]`).click();
         assert.equal(await page.locator("body").getAttribute("data-page"), "project:" + p.slug);
       }
@@ -131,7 +127,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       await page.locator('[data-kind-filter="concept"]').click();
       assert.equal(await page.locator("[data-work-section]:not([hidden])").count(), 1);
       await page.locator('#concept .work-card[data-project]:not([hidden]) .case-action').first().click();
-      assert.ok(new URL(page.url()).pathname.match(/\/(projets|en\/projects)\/[^/]+\.html$/));
+      assert.ok(new URL(page.url()).pathname.match(/\/(projets|en\/projects)\/[^/.]+$/));
       await goto(routes.commerce[lang]);
       await page.locator('#contact a[href*="service=commerce"]').click();
       assert.equal(await page.locator("#f-service").inputValue(), "commerce");
@@ -200,12 +196,12 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       for (const p of projects.filter(p => p.demoUrls?.en && !p.isConcept)) {
         await goto(p.demoUrls[lang]);
         await page.locator(".ikbar a").click();
-        assert.equal(new URL(page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html");
+        assert.equal(new URL(page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + p.slug);
       }
       for (const p of projects.filter(p => p.isConcept && !/^https?:/.test(p.demoUrls?.[lang] || p.demoUrl || ""))) {
         await goto(p.demoUrls[lang]);
         const href = await page.locator(".notice > a").getAttribute("href");
-        assert.equal(new URL(href, page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + p.slug + ".html");
+        assert.equal(new URL(href, page.url()).pathname, "/" + (lang === "fr" ? "projets/" : "en/projects/") + p.slug);
       }
       console.log("Projects, filters, inquiry context and demo returns: " + lang);
     }

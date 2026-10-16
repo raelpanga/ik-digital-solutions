@@ -14,25 +14,28 @@ Client projects also include Fuel Fortress Lexington, with French and English po
 
 Hosting moved to Vercel on 16 October 2026. Both custom domains are configured,
 HTTPS is enabled, and GitHub Pages is disabled. GitHub retains the source repository.
+Canonical public URLs omit `.html` and trailing slashes (except `/`). Vercel permanently
+redirects old HTML addresses. The build normalizes links, assets, canonical URLs and the
+sitemap through `site/urls.js`; physical files in `docs/` still end in `.html`.
 
 ## What the site contains
 
 | Page | French | English |
 |---|---|---|
-| Home (selected work, services, process, budget and contact) | `index.html` | `en/index.html` |
-| Services overview and four offers | `services/` | `en/services/` |
-| Work carousels for clients, demonstrators and studies, with service and kind filters | `projets/` | `en/projects/` |
-| One page per project | `projets/<slug>.html` | `en/projects/<slug>.html` |
-| Our process | `methode.html` | `en/process.html` |
-| About | `a-propos.html` | `en/about.html` |
-| Contact, preserving service/project inquiry context | `contact.html` | `en/contact.html` |
-| Job posting for one field sales representative, with application form | `agents-commerciaux.html` | `en/sales-agents.html` |
-| Legal notice and privacy | `mentions-legales.html`, `confidentialite.html` | `en/legal.html`, `en/privacy.html` |
-| Single-page demo applications (5, French only) | `demos/<slug>/` | same |
-| Kando Ressources mining site (16 pages, bilingual) | `demos/kando-ressources/` | `demos/kando-ressources/en/` |
-| Cimenterie du Fleuve site (18 pages, bilingual) | `demos/site-corporate/` | `demos/site-corporate/en/` |
-| TRUTH Construction demonstration copy (13 pages, language toggle, noindex) | `demos/truth-construction/` | `demos/truth-construction/?lang=en` |
-| Kimia Express delivery site (18 pages, bilingual) | `demos/kimia-express/` | `demos/kimia-express/en/` |
+| Home (selected work, services, process, budget and contact) | `/` | `/en` |
+| Services overview and four offers | `services` | `en/services` |
+| Work carousels for clients, demonstrators and studies, with service and kind filters | `projets` | `en/projects` |
+| One page per project | `projets/<slug>` | `en/projects/<slug>` |
+| Our process | `methode` | `en/process` |
+| About | `a-propos` | `en/about` |
+| Contact, preserving service/project inquiry context | `contact` | `en/contact` |
+| Job posting for one field sales representative, with application form | `agents-commerciaux` | `en/sales-agents` |
+| Legal notice and privacy | `mentions-legales`, `confidentialite` | `en/legal`, `en/privacy` |
+| Single-page demo applications (5, French only) | `demos/<slug>` | same |
+| Kando Ressources mining site (16 pages, bilingual) | `demos/kando-ressources` | `demos/kando-ressources/en` |
+| Cimenterie du Fleuve site (18 pages, bilingual) | `demos/site-corporate` | `demos/site-corporate/en` |
+| TRUTH Construction demonstration copy (13 pages, language toggle, noindex) | `demos/truth-construction` | `demos/truth-construction?lang=en` |
+| Kimia Express delivery site (18 pages, bilingual) | `demos/kimia-express` | `demos/kimia-express/en` |
 
 Demo routes: `kimia-express` (bilingual delivery site, replaced the pharmacy demo), `ndala-beauty`
 (skincare shop, replaced the school demo), `commande-distributeur`, `portail-sous-traitant`,
@@ -81,6 +84,8 @@ available in horizontally scrollable tracks.
 | `demos/src/<slug>.html` | Demo sources (head + body fragment). Wrapped into `docs/demos/<slug>/index.html`. |
 | `demos/sites/<name>/` | Bilingual demo generators and assets; public route mapping in `build.js`. |
 | `docs/` | The generated site. Vercel builds and serves this folder. Do not edit by hand. |
+| `site/urls.js` | Finalizes public URLs while preserving external destinations, fragments and query strings. |
+| `tools/static-server.js` | Serves clean URLs and legacy redirects for local browser tests. |
 | `vercel.json` | Vercel's build command, output folder and URL settings. |
 | `.vercelignore` | Excludes generated output, local drafts and development-only files from CLI uploads. |
 | `check.js` | Syntax-checks inline scripts: `node check.js demos/src/*.html`. |

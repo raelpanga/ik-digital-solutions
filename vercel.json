@@ -4,5 +4,5 @@
   "buildCommand": "node build.js --base-url https://iksolutions-inc.com/",
   "outputDirectory": "docs",
   "installCommand": "",
-  "cleanUrls": false
+  "cleanUrls": true
 }
