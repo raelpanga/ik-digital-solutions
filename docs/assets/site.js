@@ -1,4 +1,4 @@
-/* Portfolio interactions: navigation, progressive project filters, Web3Forms delivery for the contact and agent application forms, and WhatsApp message preparation. */
+/* Portfolio interactions: navigation, progressive project filters, Web3Forms delivery for the contact and field sales application forms, and WhatsApp message preparation. */
 "use strict";
 (() => {
   const $ = s => document.querySelector(s);
@@ -288,14 +288,14 @@
     $("#a-whatsapp").hidden = false;
     const v = id => $(id).value.trim();
     wireWeb3Form(apply, {
-      prepare: data => { data.subject = (fr ? "Candidature agent : " : "Agent application: ") + v("#a-name") + " · " + v("#a-city"); },
+      prepare: data => { data.subject = (fr ? "Candidature commercial(e) terrain : " : "Field sales application: ") + v("#a-name") + " · " + v("#a-city"); },
       successText: fr ? "Merci, votre candidature est envoyée. Nous vous contactons sur WhatsApp." : "Thank you, your application has been sent. We will contact you on WhatsApp.",
       errorText: (fr ? "L'envoi a échoué. Écrivez-nous sur WhatsApp ou à " : "Sending failed. Message us on WhatsApp or write to ") + apply.dataset.email + "."
     });
     $("#a-whatsapp").addEventListener("click", () => {
       // The WhatsApp shortcut needs no e-mail address: name, city, number and the note are checked.
       if (!["#a-name", "#a-city", "#a-phone", "#a-network"].every(id => $(id).reportValidity())) return;
-      const text = (fr ? "Bonjour IK Digital Solutions, je souhaite devenir agent commercial terrain.\n\nNom : " : "Hello IK Digital Solutions, I would like to become a field sales agent.\n\nName: ") + v("#a-name") + "\n" + (fr ? "Ville : " : "City: ") + v("#a-city") + "\nWhatsApp : " + v("#a-phone") + "\n\n" + v("#a-network");
+      const text = (fr ? "Bonjour IK Digital Solutions, je postule au poste de commercial(e) terrain.\n\nNom : " : "Hello IK Digital Solutions, I am applying for the field sales position.\n\nName: ") + v("#a-name") + "\n" + (fr ? "Ville : " : "City: ") + v("#a-city") + "\nWhatsApp : " + v("#a-phone") + "\n\n" + v("#a-network");
       window.open("https://wa.me/" + apply.dataset.whatsapp + "?text=" + encodeURIComponent(text), "_blank", "noopener,noreferrer");
     });
   }

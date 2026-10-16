@@ -166,10 +166,14 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       assert.equal(await page.locator("#f-need").inputValue(), "Example inquiry only", "A failed delivery keeps the visitor's text");
       await page.unroute(endpoint);
       assert.ok(!page.url().includes("Test"), "Personal contact fields must not enter the URL");
-      // Recruiting page: no pay terms, a WhatsApp shortcut, and an application form on the same intercepted endpoint.
+      // Job posting page: no pay terms, a summary card with a WhatsApp shortcut, and an application form on the same intercepted endpoint.
       await goto(routes.agents[lang]);
       const recruiting = await page.locator("main").innerText();
       assert.ok(!/\d[\d ,.]*\s?(USD|CDF|FC|\$|%)|\b(commissions?|primes?|salaire|rémunération|bonus|salary|salaries)\b/i.test(recruiting), "The recruiting page must not mention pay");
+      assert.equal(await page.locator(".job-grid .spec .btn-wa").count(), 1, "The summary card offers WhatsApp");
+      assert.equal(await page.locator("#candidature #apply-form").count(), 1, "The application form sits under #candidature");
+      assert.equal(await page.locator(".inquiry-band, .content-panel h3 a").count(), 0, "No closing band and no service tiles on the job posting");
+      if (lang === "fr") assert.ok(/commercial/i.test(await page.locator("h1").innerText()), "Singular job title");
       const fillApplication = async () => { await page.locator("#a-name").fill("Test agent"); await page.locator("#a-city").fill("Lubumbashi"); await page.locator("#a-phone").fill("+243 000 000 000"); await page.locator("#a-network").fill("Example network only"); };
       await fillApplication();
       await page.evaluate(() => { window.open = url => { window.__preparedMessage = url; }; });
@@ -267,7 +271,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       const dest = path.join(os.tmpdir(), "ik-architecture-preview"); fs.mkdirSync(dest, { recursive: true });
       for (const [kind, width, height] of [["desktop", 1440, 1000], ["mobile", 390, 844]]) {
         await page.setViewportSize({ width, height });
-        for (const key of ["home", "services", "work", "commerce", "contact"]) {
+        for (const key of ["home", "services", "work", "commerce", "contact", "agents"]) {
           await goto(routes[key].fr); await page.evaluate(() => document.fonts.ready);
           await page.evaluate(async () => {
             const images = [...document.images]; images.forEach(image => image.loading = "eager");

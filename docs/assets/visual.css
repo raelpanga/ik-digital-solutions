@@ -173,6 +173,15 @@
 .guide-layout .prose p { font-size: 1rem; }
 .photo-credits { font-size: .8rem; }
 .photo-credits a { overflow-wrap: anywhere; }
+/* Job posting: summary card beside the narrative, then the application form. */
+.portfolio .page-intro .project-highlights { margin: 4px 0 0; }
+.portfolio .job-banner { margin-bottom: clamp(28px, 4vw, 48px); }
+.portfolio .job-banner img { object-position: center 45%; }
+.portfolio .job-grid { padding-bottom: clamp(16px, 3vw, 32px); }
+.portfolio .job-grid .process-list { margin-bottom: 0; }
+.portfolio .job-grid .process-list li { padding: .9rem 0 0; }
+.portfolio .job-grid .process-list h3 { font-size: 1.05rem; }
+@media (min-width: 861px) { .portfolio .job-grid .spec { position: sticky; top: 104px; } }
 @media (min-width: 1700px) { .hero-grid { min-height: 640px; } }
 @media (max-width: 1100px) {
   .portfolio .header-row { min-height: 76px; }
