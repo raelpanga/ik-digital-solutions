@@ -1,5 +1,6 @@
 "use strict";
 const fs = require("fs"), path = require("path");
+const iconStamp = require("crypto").createHash("sha256").update(fs.readFileSync(path.join(__dirname, "..", "assets", "favicon.svg"))).digest("hex").slice(0, 10);
 const { routes, services, projectServices, labels } = require("./content");
 // Content stamp appended to stylesheet and script URLs: a rebuilt asset is never served from a stale cache.
 const assetStamp = (() => {
@@ -227,7 +228,7 @@ module.exports = function createPages(D, siteUrl) {
 <title>${esc(title)} · ${esc(C.company)}</title><meta name="description" content="${esc(description)}">
 ${siteUrl ? `<link rel="canonical" href="${siteUrl + route}"><link rel="alternate" hreflang="${lang}" href="${siteUrl + route}"><link rel="alternate" hreflang="${other}" href="${siteUrl + alternate}">` : ""}
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:image" content="${(siteUrl || base) + image}"><meta property="og:type" content="website">
-<link rel="icon" href="${base}assets/favicon.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/png" sizes="32x32" href="${base}assets/favicon-32.png?v=${iconStamp}"><link rel="icon" type="image/svg+xml" sizes="any" href="${base}assets/favicon.svg?v=${iconStamp}"><link rel="apple-touch-icon" sizes="180x180" href="${base}assets/apple-touch-icon.png?v=${iconStamp}"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link href="${base}assets/style.css?v=${assetStamp}" rel="stylesheet"><link href="${base}assets/visual.css?v=${assetStamp}" rel="stylesheet">
 </head><body class="portfolio" data-page="${esc(key)}"><a class="skip" href="#main">${tr(lang, "Aller au contenu", "Skip to content")}</a>
 <header class="site-header"><div class="wrap header-row"><a class="brand" href="${link(base, lang, "home")}" aria-label="${esc(C.company)}"><span class="brand-name">IK</span><span class="brand-sub">Digital Solutions</span></a><button class="nav-toggle" aria-controls="main-nav" aria-expanded="false" data-open="${esc(L.menu)}" data-close="${esc(L.close)}">${L.menu}</button><nav class="nav" id="main-nav" aria-label="${tr(lang, "Navigation principale", "Main navigation")}">${nav}</nav><div class="header-tools"><div class="lang" aria-label="Language"><a data-language href="${langHref("fr")}" lang="fr"${lang === "fr" ? ' aria-current="true"' : ""}>FR</a><a data-language href="${langHref("en")}" lang="en"${lang === "en" ? ' aria-current="true"' : ""}>EN</a></div>${button(inquiry(base, lang), L.discuss, "btn-primary header-inquiry")}</div></div></header>
