@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "node build.js --base-url https://iksolutions-inc.com/",
+  "outputDirectory": "docs",
+  "installCommand": "",
+  "cleanUrls": false
+}
