@@ -9,6 +9,7 @@ const routes = {
   process: { fr: "methode.html", en: "en/process.html" },
   about: { fr: "a-propos.html", en: "en/about.html" },
   contact: { fr: "contact.html", en: "en/contact.html" },
+  agents: { fr: "agents-commerciaux.html", en: "en/sales-agents.html" },
   legal: { fr: "mentions-legales.html", en: "en/legal.html" },
   privacy: { fr: "confidentialite.html", en: "en/privacy.html" },
   guide: { fr: "guides/construire-pour-la-rdc.html", en: "en/guides/building-for-the-drc.html" },
@@ -103,8 +104,8 @@ const projectServices = {
   "portail-sous-traitant": ["applications"], "ndala-beauty": ["commerce"], "site-corporate": ["websites"]
 };
 const labels = {
-  fr: { home: "Accueil", services: "Services", work: "Réalisations", process: "Notre méthode", about: "À propos", contact: "Contact", legal: "Mentions légales", privacy: "Confidentialité", discuss: "Parlons de votre projet", view: "Voir le projet", allWork: "Toutes les réalisations", allServices: "Tous les services", client: "Projet client", demo: "Démonstrateur", scope: "Ce que vous recevez", needs: "Ce que nous préparons ensemble", budget: "Budget & accompagnement", examples: "Des exemples à explorer", questions: "Questions fréquentes", build: "Construction / mise en place", monthly: "Accompagnement mensuel", related: "Services associés", menu: "Menu", close: "Fermer le menu" },
-  en: { home: "Home", services: "Services", work: "Work", process: "Our process", about: "About", contact: "Contact", legal: "Legal notice", privacy: "Privacy", discuss: "Discuss your project", view: "View project", allWork: "All work", allServices: "All services", client: "Client project", demo: "Demonstrator", scope: "What you receive", needs: "What we prepare together", budget: "Budget & support", examples: "Examples to explore", questions: "Frequently asked questions", build: "Build / setup", monthly: "Monthly support", related: "Related services", menu: "Menu", close: "Close menu" }
+  fr: { home: "Accueil", services: "Services", work: "Réalisations", process: "Notre méthode", about: "À propos", contact: "Contact", agents: "Recrutement", legal: "Mentions légales", privacy: "Confidentialité", discuss: "Parlons de votre projet", view: "Voir le projet", allWork: "Toutes les réalisations", allServices: "Tous les services", client: "Projet client", demo: "Démonstrateur", scope: "Ce que vous recevez", needs: "Ce que nous préparons ensemble", budget: "Budget & accompagnement", examples: "Des exemples à explorer", questions: "Questions fréquentes", build: "Construction / mise en place", monthly: "Accompagnement mensuel", related: "Services associés", menu: "Menu", close: "Fermer le menu" },
+  en: { home: "Home", services: "Services", work: "Work", process: "Our process", about: "About", contact: "Contact", agents: "Join us", legal: "Legal notice", privacy: "Privacy", discuss: "Discuss your project", view: "View project", allWork: "All work", allServices: "All services", client: "Client project", demo: "Demonstrator", scope: "What you receive", needs: "What we prepare together", budget: "Budget & support", examples: "Examples to explore", questions: "Frequently asked questions", build: "Build / setup", monthly: "Monthly support", related: "Related services", menu: "Menu", close: "Close menu" }
 };
 services.push(...require("./integrations").services);
 services.push(...require("./expansion").services);

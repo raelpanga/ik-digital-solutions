@@ -27,6 +27,7 @@
 .portfolio .brand-name { font-size: 2.4rem; letter-spacing: -.12em; padding-right: .1em; }
 .portfolio .brand-sub { font-family: var(--font-body); font-size: .63rem; letter-spacing: .04em; max-width: 70px; line-height: 1.3; color: var(--ink); }
 .portfolio .nav { gap: 1.6rem; }
+@media (max-width: 1280px) { .portfolio .nav { gap: 1.15rem; } }
 .portfolio .nav a { font-size: .83rem; }
 .portfolio .header-inquiry { font-size: .76rem; padding: .7rem 1rem; }
 .portfolio .lang { border: 0; }

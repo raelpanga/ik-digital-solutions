@@ -1,4 +1,4 @@
-/* Portfolio interactions: navigation, progressive project filters, contact form delivery (Web3Forms) and WhatsApp message preparation. */
+/* Portfolio interactions: navigation, progressive project filters, Web3Forms delivery for the contact and agent application forms, and WhatsApp message preparation. */
 "use strict";
 (() => {
   const $ = s => document.querySelector(s);
@@ -236,6 +236,24 @@
     all(".work-card:not([data-carousel-clone]), .integration-feature, .local-principles > div").forEach(el => observer.observe(el));
     motion.addEventListener("change", () => { if (motion.matches) document.getAnimations().forEach(a => a.cancel()); });
   }
+  // Shared Web3Forms delivery: JSON post, inline status, visitor text kept on failure.
+  const wireWeb3Form = (form, { prepare, onSent, successText, errorText }) => {
+    const status = form.querySelector(".form-status"), submit = form.querySelector('button[type="submit"]');
+    const notify = (text, kind) => { status.textContent = text; status.classList.toggle("is-success", kind === "success"); status.classList.toggle("is-error", kind === "error"); status.hidden = false; };
+    form.addEventListener("submit", async e => {
+      e.preventDefault(); if (!form.reportValidity()) return;
+      const data = Object.fromEntries(new FormData(form)); data.language = lang; prepare(data);
+      submit.disabled = true; submit.textContent = submit.dataset.busy; status.hidden = true;
+      try {
+        const res = await fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(data) });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || json.success === false) throw new Error(json.message || res.statusText);
+        form.reset(); if (onSent) onSent();
+        notify(successText, "success");
+      } catch (err) { notify(errorText, "error"); }
+      finally { submit.disabled = false; submit.textContent = submit.dataset.label; }
+    });
+  };
   const form = $("#contact-form");
   if (form) {
     $("#f-whatsapp").hidden = false;
@@ -252,29 +270,33 @@
       return (fr ? "Bonjour IK Digital Solutions,\n\nNom : " : "Hello IK Digital Solutions,\n\nName: ") + name + "\n" + (fr ? "Entreprise : " : "Company: ") + company + "\n" +
         (fr ? "Service : " : "Service: ") + service.selectedOptions[0].textContent + "\n" + (fr ? "Projet de référence : " : "Reference project: ") + project.selectedOptions[0].textContent + "\n\n" + need;
     };
-    const status = $("#f-status"), submit = form.querySelector('button[type="submit"]');
-    const notify = (text, kind) => { status.textContent = text; status.classList.toggle("is-success", kind === "success"); status.classList.toggle("is-error", kind === "error"); status.hidden = false; };
-    form.addEventListener("submit", async e => {
-      e.preventDefault(); if (!form.reportValidity()) return;
-      // Web3Forms delivers the fields by e-mail; readable labels replace the option keys.
-      const data = Object.fromEntries(new FormData(form));
-      data.subject = (fr ? "Projet : " : "Project: ") + ($("#f-company").value.trim() || $("#f-name").value.trim());
-      data.service = service.selectedOptions[0].textContent; data.project = project.selectedOptions[0].textContent; data.language = lang;
-      submit.disabled = true; submit.textContent = submit.dataset.busy; status.hidden = true;
-      try {
-        const res = await fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(data) });
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok || json.success === false) throw new Error(json.message || res.statusText);
-        form.reset(); context();
-        notify(fr ? "Merci, votre demande est envoyée. Nous vous répondons par e-mail." : "Thank you, your inquiry has been sent. We will reply by e-mail.", "success");
-      } catch (err) {
-        notify((fr ? "L'envoi a échoué. Écrivez-nous directement à " : "Sending failed. Write to us directly at ") + form.dataset.email + (fr ? " ou préparez un message WhatsApp." : " or prepare a WhatsApp message."), "error");
-      } finally { submit.disabled = false; submit.textContent = submit.dataset.label; }
+    // Web3Forms delivers the fields by e-mail; readable labels replace the option keys.
+    wireWeb3Form(form, {
+      prepare: data => { data.subject = (fr ? "Projet : " : "Project: ") + ($("#f-company").value.trim() || $("#f-name").value.trim()); data.service = service.selectedOptions[0].textContent; data.project = project.selectedOptions[0].textContent; },
+      onSent: context,
+      successText: fr ? "Merci, votre demande est envoyée. Nous vous répondons par e-mail." : "Thank you, your inquiry has been sent. We will reply by e-mail.",
+      errorText: (fr ? "L'envoi a échoué. Écrivez-nous directement à " : "Sending failed. Write to us directly at ") + form.dataset.email + (fr ? " ou préparez un message WhatsApp." : " or prepare a WhatsApp message.")
     });
     $("#f-whatsapp").addEventListener("click", () => {
       // WhatsApp needs no e-mail address: only the name and the request are checked.
       if (!$("#f-name").reportValidity() || !$("#f-need").reportValidity()) return;
       window.open("https://wa.me/" + form.dataset.whatsapp + "?text=" + encodeURIComponent(message()), "_blank", "noopener,noreferrer");
+    });
+  }
+  const apply = $("#apply-form");
+  if (apply) {
+    $("#a-whatsapp").hidden = false;
+    const v = id => $(id).value.trim();
+    wireWeb3Form(apply, {
+      prepare: data => { data.subject = (fr ? "Candidature agent : " : "Agent application: ") + v("#a-name") + " · " + v("#a-city"); },
+      successText: fr ? "Merci, votre candidature est envoyée. Nous vous contactons sur WhatsApp." : "Thank you, your application has been sent. We will contact you on WhatsApp.",
+      errorText: (fr ? "L'envoi a échoué. Écrivez-nous sur WhatsApp ou à " : "Sending failed. Message us on WhatsApp or write to ") + apply.dataset.email + "."
+    });
+    $("#a-whatsapp").addEventListener("click", () => {
+      // The WhatsApp shortcut needs no e-mail address: name, city, number and the note are checked.
+      if (!["#a-name", "#a-city", "#a-phone", "#a-network"].every(id => $(id).reportValidity())) return;
+      const text = (fr ? "Bonjour IK Digital Solutions, je souhaite devenir agent commercial terrain.\n\nNom : " : "Hello IK Digital Solutions, I would like to become a field sales agent.\n\nName: ") + v("#a-name") + "\n" + (fr ? "Ville : " : "City: ") + v("#a-city") + "\nWhatsApp : " + v("#a-phone") + "\n\n" + v("#a-network");
+      window.open("https://wa.me/" + apply.dataset.whatsapp + "?text=" + encodeURIComponent(text), "_blank", "noopener,noreferrer");
     });
   }
 })();

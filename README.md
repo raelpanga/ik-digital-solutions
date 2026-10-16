@@ -21,6 +21,7 @@ Client projects also include Fuel Fortress Lexington, with French and English po
 | Our process | `methode.html` | `en/process.html` |
 | About | `a-propos.html` | `en/about.html` |
 | Contact, preserving service/project inquiry context | `contact.html` | `en/contact.html` |
+| Recruiting field sales agents, with application form | `agents-commerciaux.html` | `en/sales-agents.html` |
 | Legal notice and privacy | `mentions-legales.html`, `confidentialite.html` | `en/legal.html`, `en/privacy.html` |
 | Single-page demo applications (5, French only) | `demos/<slug>/` | same |
 | Kando Ressources mining site (16 pages, bilingual) | `demos/kando-ressources/` | `demos/kando-ressources/en/` |
@@ -108,7 +109,9 @@ and `fr` / `en` blocks with `title`, `sector`, `tagline`, `problem`, `built`, `c
 `deploy`, `monitor`. Add two screenshots to `shots/` named `<slug>-desktop.png` and
 `<slug>-mobile.png`. Assign the slug to one or more services in `site/content.js`;
 add it to an offer's `examples` when appropriate, then rebuild. A new portfolio page
-needs paired routes in `site/content.js` and a renderer in `site/pages.js`.
+needs paired routes and nav labels in `site/content.js`, a renderer registered in
+`renderers` in `site/pages.js` (plus both nav arrays there if it is a header item) and,
+for a header item, the `#main-nav a` count in `verify-site.js`.
 
 ## Screenshots
 
@@ -128,9 +131,10 @@ viewports. The final build copies both new card images from `shots/` into `docs/
 
 ## Contact form: Web3Forms
 
-The contact page posts to Web3Forms (`https://api.web3forms.com/submit`), which delivers
-each inquiry by e-mail to the address in `config.email`. There is no server in this
-repository and nothing is stored on the site.
+The contact page and the agent application page (`agents-commerciaux.html`) post to
+Web3Forms (`https://api.web3forms.com/submit`), which delivers each message by e-mail to
+the address in `config.email`. There is no server in this repository and nothing is stored
+on the site.
 
 1. Create an access key at https://web3forms.com using `consultation@iksolutions-inc.com`.
    The key arrives by e-mail at that address.
@@ -139,8 +143,10 @@ repository and nothing is stored on the site.
 3. Rebuild. `build.js` warns while the key is empty, and the live form then shows an error
    with the e-mail address and WhatsApp as fallbacks.
 
-With JavaScript, `assets/site.js` sends the fields as JSON and shows the result inline; the
-e-mail subject is "Projet : <company or name>" and the visitor's address is the reply-to.
+With JavaScript, the shared `wireWeb3Form` helper in `assets/site.js` sends the fields as
+JSON and shows the result inline. Subjects: "Projet : <company or name>" for inquiries and
+"Candidature agent : <name> · <city>" for applications; the visitor's e-mail, when given, is
+the reply-to. `build.js` trims the key.
 Without JavaScript the form posts directly and Web3Forms shows its own confirmation page.
 The hidden `botcheck` checkbox is the Web3Forms honeypot. `verify-site.js` intercepts the
 endpoint, so test runs never deliver anything.
@@ -244,7 +250,7 @@ own work or labelled demonstrations. Competitor projects and images are not reus
   `en/guides/building-for-the-drc.html`: mobile money, offline planning and Digital
   Code questions, with official source links and project-specific legal validation.
 
-The generator produces 48 portfolio pages and 57 demo pages, plus the 404 page.
+The generator produces 82 portfolio pages and 73 demo pages, plus the 404 page.
 Existing demo and project URLs remain stable. Photo credits appear on the legal
 pages. Testimonials, a real founder portrait and measured client outcomes require
 approved source material; no placeholder quotes or invented results are published.

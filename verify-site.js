@@ -57,7 +57,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
         await goto(urls[lang]);
         assert.equal(await page.locator("h1").count(), 1);
         assert.equal(await page.locator("body").getAttribute("data-page"), key);
-        assert.equal(await page.locator("#main-nav a").count(), 5);
+        assert.equal(await page.locator("#main-nav a").count(), 6);
         if (key !== "home" && !["privacy", "legal"].includes(key)) assert.equal(await page.locator('#main-nav [aria-current="page"]').count(), 1);
         await page.locator(`[data-language][lang="${other}"]`).click();
         assert.equal(new URL(page.url()).pathname, "/" + urls[other]);
@@ -166,6 +166,31 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       assert.equal(await page.locator("#f-need").inputValue(), "Example inquiry only", "A failed delivery keeps the visitor's text");
       await page.unroute(endpoint);
       assert.ok(!page.url().includes("Test"), "Personal contact fields must not enter the URL");
+      // Recruiting page: no pay terms, a WhatsApp shortcut, and an application form on the same intercepted endpoint.
+      await goto(routes.agents[lang]);
+      const recruiting = await page.locator("main").innerText();
+      assert.ok(!/\d[\d ,.]*\s?(USD|CDF|FC|\$|%)|\b(commissions?|primes?|salaire|rémunération|bonus|salary|salaries)\b/i.test(recruiting), "The recruiting page must not mention pay");
+      const fillApplication = async () => { await page.locator("#a-name").fill("Test agent"); await page.locator("#a-city").fill("Lubumbashi"); await page.locator("#a-phone").fill("+243 000 000 000"); await page.locator("#a-network").fill("Example network only"); };
+      await fillApplication();
+      await page.evaluate(() => { window.open = url => { window.__preparedMessage = url; }; });
+      await page.locator("#a-whatsapp").click();
+      const applyText = new URL(await page.evaluate(() => window.__preparedMessage)).searchParams.get("text");
+      assert.ok(applyText.includes("Lubumbashi") && applyText.includes("Example network only"), "The WhatsApp application is prepared without an e-mail address");
+      let application = null;
+      await page.route(endpoint, route => { application = route.request().postDataJSON(); route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ success: true, message: "ok" }) }); });
+      await page.locator('#apply-form button[type="submit"]').click();
+      await page.locator("#a-status.is-success").waitFor();
+      assert.equal(application.city, "Lubumbashi"); assert.equal(application.whatsapp, "+243 000 000 000"); assert.equal(application.message, "Example network only");
+      assert.ok(application.subject.includes("Test agent")); assert.equal(application.botcheck, undefined);
+      assert.equal(await page.locator("#a-network").inputValue(), "", "The application form resets after delivery");
+      await page.unroute(endpoint);
+      await page.route(endpoint, route => route.fulfill({ status: 500, contentType: "application/json", body: JSON.stringify({ success: false, message: "down" }) }));
+      await fillApplication();
+      await page.locator('#apply-form button[type="submit"]').click();
+      await page.locator("#a-status.is-error").waitFor();
+      assert.equal(await page.locator("#a-network").inputValue(), "Example network only", "A failed delivery keeps the candidate's text");
+      await page.unroute(endpoint);
+      assert.ok(!page.url().includes("Test") && !page.url().includes("Lubumbashi"), "Candidate fields must not enter the URL");
       await goto(routes.contact[lang] + "?service=invalid&project=%3Cscript%3E");
       assert.equal(await page.locator("#f-service").inputValue(), ""); assert.equal(await page.locator("#f-project").inputValue(), "");
       // All bilingual demos must return to the corresponding project story.
@@ -191,6 +216,12 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
     assert.equal(await noJS.locator("#contact-form").getAttribute("method"), "post");
     assert.equal(await noJS.locator('#contact-form input[name="access_key"]').count(), 1);
     assert.ok(await noJS.locator('#contact-form input[name="botcheck"]').isHidden(), "The honeypot must stay invisible");
+    await noJS.goto(origin + "/agents-commerciaux.html");
+    assert.equal(await noJS.locator("#apply-form").getAttribute("action"), "https://api.web3forms.com/submit");
+    assert.equal(await noJS.locator("#apply-form").getAttribute("method"), "post");
+    assert.equal(await noJS.locator('#apply-form input[name="access_key"]').count(), 1);
+    assert.ok(await noJS.locator('#apply-form input[name="botcheck"]').isHidden(), "The application honeypot must stay invisible");
+    assert.equal(await noJS.locator("#main-nav a").count(), 6);
     await noJS.close();
     const reduced = await browser.newPage({ reducedMotion: "reduce" });
     await reduced.goto(origin + "/index.html");
