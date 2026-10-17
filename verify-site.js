@@ -40,6 +40,7 @@ const PAY = /\d[\d ,.]*\s?(USD|CDF|FC|\$|%)|\b(commissions?|primes?|salaire|rém
     const lang = html.match(/<html lang="(\w+)"/)[1];
     const title = decode((html.match(/<title>(.*?) · IK Digital Solutions<\/title>/) || [])[1] || "");
     assert.ok(title.length > 0 && title.length <= 70, relative + " title length: " + title.length);
+    assert.ok(!html.includes("fonts.googleapis.com") && html.includes("assets/fonts.css"), relative + " must use the self-hosted fonts");
     const description = decode((html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "");
     assert.ok(description.length >= 50 && description.length <= 160, relative + " description length: " + description.length);
     assert.ok(!seen[lang].has(description), relative + " shares its description with another page"); seen[lang].add(description);
@@ -84,6 +85,8 @@ const PAY = /\d[\d ,.]*\s?(USD|CDF|FC|\$|%)|\b(commissions?|primes?|salaire|rém
         assert.equal(await page.locator("h1").count(), 1);
         assert.equal(await page.locator("body").getAttribute("data-page"), key);
         assert.equal(await page.locator("#main-nav a").count(), 6);
+        assert.equal(await page.locator(".wa-float").count(), 1, "Floating WhatsApp shortcut on every page");
+        assert.ok((await page.locator(".wa-float").getAttribute("href")).startsWith("https://wa.me/18593825280?text="), "WhatsApp shortcut carries a prepared message");
         if (key !== "home" && !["privacy", "legal"].includes(key)) assert.equal(await page.locator('#main-nav [aria-current="page"]').count(), 1);
         await page.locator(`[data-language][lang="${other}"]`).click();
         assert.equal(new URL(page.url()).pathname, publicPath("/" + urls[other]));
@@ -106,6 +109,8 @@ const PAY = /\d[\d ,.]*\s?(USD|CDF|FC|\$|%)|\b(commissions?|primes?|salaire|rém
       assert.equal(await page.locator(".eyebrow").evaluateAll(nodes => nodes.filter(n => /^0\d\s*\//.test(n.textContent.trim())).length), 0);
       assert.equal(await page.locator(".hero-motion").count(), 1);
       assert.equal(await page.locator(".hero-services a").count(), 3);
+      assert.ok(/RDC|DRC/.test(await page.locator(".hero-copy h1").innerText()), "The hero states the market in its first line");
+      assert.equal(await page.locator(".why-us .content-panel").count(), 4, "Four reasons in the Pourquoi nous block");
       assert.equal(new URL(await page.locator(".hero-motion-video source").getAttribute("src"), page.url()).pathname, "/assets/media/hero-devices.mp4");
       await page.waitForFunction(() => document.querySelector(".hero-motion-video").readyState >= 1);
       assert.deepEqual(await page.locator(".hero-motion-video").evaluate(v => [v.videoWidth, v.videoHeight]), [1120, 980]);

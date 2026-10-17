@@ -185,6 +185,17 @@
 .portfolio .job-grid .process-list h3 { font-size: 1.05rem; }
 @media (min-width: 861px) { .portfolio .job-grid .spec { position: sticky; top: 104px; } }
 .portfolio .page-intro .service-intro { margin-top: -.4rem; }
+/* "Pourquoi nous" on the home page. */
+.portfolio .why-grid .content-panel h3 { font-size: 1.15rem; }
+.portfolio .why-grid .content-panel p { color: var(--ink-2); }
+/* Floating WhatsApp shortcut: the DRC's contact channel, reachable from every page. Label on desktop, icon only on phones. */
+.wa-float { position: fixed; right: 18px; bottom: 18px; z-index: 60; display: inline-flex; align-items: center; gap: 10px; padding: 11px 18px 11px 13px; border-radius: 100px; background: var(--ok); color: #fff; font-weight: 600; font-size: .9rem; text-decoration: none; box-shadow: 0 10px 28px rgba(16, 29, 36, .28); }
+.wa-float:hover { filter: brightness(1.08); }
+.wa-float img { width: 28px; height: 28px; display: block; }
+@media (max-width: 760px) {
+  .wa-float { right: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); padding: 13px; }
+  .wa-float span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
 @media (min-width: 1700px) { .hero-grid { min-height: 640px; } }
 @media (max-width: 1100px) {
   .portfolio .header-row { min-height: 76px; }
@@ -354,13 +365,14 @@
 .portfolio .build-grid { display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(30px,5vw,76px);align-items:start; }
 .portfolio .build-lead { max-width:44ch;color:var(--ink-2);margin:0 0 30px; }
 .portfolio .build-steps { list-style:none;margin:0 0 28px;padding:0;display:grid;gap:20px; }
-.portfolio .build-steps li { display:block;opacity:.36;animation:buildStep var(--bd) infinite; }
+.portfolio .build-steps li { display:block;color:var(--ink-3);animation:buildStep var(--bd) infinite; }
 .portfolio .build-steps li:nth-child(2) { animation-delay:calc(var(--bd) / 4); }
 .portfolio .build-steps li:nth-child(3) { animation-delay:calc(var(--bd) / 2); }
 .portfolio .build-steps li:nth-child(4) { animation-delay:calc(var(--bd) * .75); }
-.portfolio .build-steps h3 { font-size:1.05rem;margin:0 0 4px; }
-.portfolio .build-steps p { font-size:.85rem;color:var(--ink-2);margin:0;max-width:40ch; }
-@keyframes buildStep { 0% { opacity:.36 } 3%,22% { opacity:1 } 25%,100% { opacity:.36 } }
+.portfolio .build-steps h3 { font-size:1.05rem;margin:0 0 4px;color:inherit; }
+.portfolio .build-steps p { font-size:.85rem;color:inherit;margin:0;max-width:40ch; }
+/* Inactive steps stay readable (ink-3 on the page background passes 4.5:1); the active one darkens to ink. */
+@keyframes buildStep { 0% { color:var(--ink-3) } 3%,22% { color:var(--ink) } 25%,100% { color:var(--ink-3) } }
 .portfolio .build-canvas { margin:0;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:clamp(18px,2.6vw,38px); }
 .portfolio .build-screen { position:relative;aspect-ratio:16/10.4;border-radius:9px;overflow:hidden;background:#faf9f5;animation:buildScreen var(--bd) infinite; }
 @keyframes buildScreen {
@@ -419,7 +431,7 @@
   .portfolio .build-screen { background:#fff;box-shadow:0 16px 40px #1420231f,inset 0 0 0 1px #e6e8e3; }
   .portfolio .build-chrome i, .portfolio .build-url, .portfolio .bl-hero::after, .portfolio .bl-cta::before { opacity:1; }
   .portfolio .build-cursor { display:none; }
-  .portfolio .build-steps li { opacity:1; }
+  .portfolio .build-steps li { color:var(--ink); }
   .portfolio .build-phase { height:auto; }
   .portfolio .build-phase span { position:static;opacity:1; }
   .portfolio .build-phase span + span::before { content:" · "; }

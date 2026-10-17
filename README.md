@@ -80,6 +80,7 @@ available in horizontally scrollable tracks.
 | `site/tech.js` | The technology names and icon paths used by the scrolling band. Icons come from Simple Icons (CC0) on a 24×24 grid; add or remove a line and rebuild to change the band. |
 | `build.js` | Validates source dependencies, generates `docs/`, runs registered demo generators and writes the sitemap. |
 | `assets/style.css`, `assets/site.js`, `assets/favicon.svg` | Stylesheet, mobile navigation, progressive project filters, contact form delivery through Web3Forms, WhatsApp message preparation and icon. |
+| `assets/fonts.css`, `assets/fonts/` | Self-hosted typefaces (Bricolage Grotesque, Instrument Sans, IBM Plex Mono; SIL Open Font License), latin and latin-ext subsets, served with the site instead of Google Fonts. |
 | `shots/` | Screenshots used on the cards. Copied into `docs/shots/`. |
 | `demos/src/<slug>.html` | Demo sources (head + body fragment). Wrapped into `docs/demos/<slug>/index.html`. |
 | `demos/sites/<name>/` | Bilingual demo generators and assets; public route mapping in `build.js`. |
