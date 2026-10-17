@@ -26,6 +26,10 @@ const routes = {
 const services = [
   {
     key: "websites",
+    seo: {
+      fr: { title: "Création de site web à Kinshasa, Lubumbashi et en RDC", description: "Agence web pour la RDC : sites vitrines bilingues pour les entreprises de Kinshasa, de Lubumbashi et de toute la RDC, pensés pour le mobile et WhatsApp.", intro: "Nous créons des sites web pour les entreprises de Kinshasa, de Lubumbashi et de toute la RDC, en français et en anglais." },
+      en: { title: "Website design in Kinshasa, Lubumbashi and across the DRC", description: "Web agency for the DRC: bilingual business websites for companies in Kinshasa, Lubumbashi and across the Congo, built for mobile and WhatsApp contact.", intro: "We build websites for businesses in Kinshasa, Lubumbashi and across the DRC, in French and English." }
+    },
     examples: ["ets-financial", "truth-construction", "kando-ressources", "site-corporate", "kimia-express"],
     fr: {
       title: "Sites web", brief: "Présentez votre entreprise avec un site clair, soigné et facile à consulter sur téléphone.",
@@ -44,6 +48,10 @@ const services = [
   },
   {
     key: "commerce",
+    seo: {
+      fr: { title: "Boutique en ligne et réservations à Kinshasa et en RDC", description: "Boutique en ligne ou réservation pour les commerces et services de Kinshasa, Lubumbashi et de toute la RDC : catalogue, commande et paiement mobile money.", intro: "Nous construisons des boutiques en ligne et des parcours de réservation pour les commerces de Kinshasa, de Lubumbashi et de toute la RDC." },
+      en: { title: "E-commerce and online booking websites in the DRC", description: "Online shop or booking journey for retailers and services in Kinshasa, Lubumbashi and across the DRC: catalogue, ordering and mobile money payment.", intro: "We build online shops and booking journeys for retailers in Kinshasa, Lubumbashi and across the DRC." }
+    },
     examples: ["genos-rentals", "ndala-beauty", "kimia-express"],
     fr: {
       title: "E-commerce & réservations", brief: "Transformez votre catalogue en un parcours de commande ou de réservation, du choix à la confirmation.",
@@ -62,6 +70,10 @@ const services = [
   },
   {
     key: "applications",
+    seo: {
+      fr: { title: "Application métier sur mesure pour entreprises en RDC", description: "Applications métier sur mesure pour distributeurs, équipes terrain et PME de Kinshasa, Lubumbashi et de la RDC : rôles, dossiers, exports, hors ligne.", intro: "Nous développons des applications métier pour les distributeurs, les équipes terrain et les PME de Kinshasa, de Lubumbashi et de toute la RDC." },
+      en: { title: "Custom business applications for companies in the DRC", description: "Custom business applications for distributors, field teams and SMEs in Kinshasa, Lubumbashi and across the DRC: roles, records, exports, offline.", intro: "We develop business applications for distributors, field teams and SMEs in Kinshasa, Lubumbashi and across the DRC." }
+    },
     examples: ["macclay-wedding-tracker", "commande-distributeur", "portail-sous-traitant"],
     fr: {
       title: "Applications métier", brief: "Réunissez les dossiers, les tâches et les décisions de votre équipe dans un outil adapté à son travail.",
@@ -80,6 +92,10 @@ const services = [
   },
   {
     key: "hosting", examples: [],
+    seo: {
+      fr: { title: "Hébergement et maintenance de site web en RDC", description: "Hébergement, mises à jour et maintenance de votre site ou application en RDC : accès, sauvegardes, déploiement et retour arrière définis au contrat.", intro: "Nous hébergeons et maintenons des sites et des applications pour des entreprises de Kinshasa, de Lubumbashi et de toute la RDC." },
+      en: { title: "Website hosting and maintenance in the DRC", description: "Hosting, updates and maintenance for your website or application in the DRC: access, backups, deployment and rollback steps defined in the contract.", intro: "We host and maintain websites and applications for companies in Kinshasa, Lubumbashi and across the DRC." }
+    },
     fr: {
       title: "Hébergement & maintenance", brief: "Organisez la mise en ligne, les mises à jour et le suivi de votre site ou application existante.",
       audience: "Pour les entreprises qui ont déjà un système et souhaitent clarifier qui le maintient, où il fonctionne et comment réagir à un incident.",
@@ -111,4 +127,28 @@ services.push(...require("./integrations").services);
 services.push(...require("./expansion").services);
 Object.assign(projectServices, require("./concepts").projectServices);
 projectServices["commande-distributeur"].push("payments");
-module.exports = { routes, services, projectServices, labels };
+// Search titles and descriptions for the pages that are not services (services carry their own `seo`).
+// Titles stay under 60 characters before the " · IK Digital Solutions" suffix; descriptions between 120 and 155.
+const pageSeo = {
+  home: { fr: { title: "Agence web en RDC · Sites web, applications et mobile money", description: "Sites web, applications métier et paiements mobile money conçus pour les entreprises de Kinshasa, de Lubumbashi et de toute la RDC, en français et anglais." },
+    en: { title: "Web agency for the DRC · Websites, apps and mobile money", description: "IK Digital Solutions designs websites, business applications and mobile money payment journeys for companies in Kinshasa, Lubumbashi and across the DRC." } },
+  services: { fr: { title: "Services web et digitaux pour entreprises en RDC", description: "Sites web, e-commerce, applications métier, mobile money, WhatsApp, hébergement et audit : nos services pour les entreprises de toute la RDC." },
+    en: { title: "Web and digital services for companies in the DRC", description: "Websites, e-commerce, business applications, mobile money, WhatsApp, hosting and audits: our services for companies across the DRC." } },
+  work: { fr: { title: "Réalisations : sites et applications pour la RDC", description: "Projets clients, démonstrateurs et études de conception : sites web et applications réalisés pour des entreprises de Lubumbashi, Kinshasa et d'ailleurs." },
+    en: { title: "Work: websites and applications for the DRC", description: "Client projects in production, open demonstrators and design studies: websites and applications built for companies in Lubumbashi, Kinshasa and elsewhere." } },
+  process: { fr: { title: "Notre méthode : cadrer, concevoir, construire, livrer", description: "Cinq étapes, du cadrage à l'accompagnement, pour un site ou une application livrés avec périmètre écrit, tests et procédure de retour arrière." },
+    en: { title: "Our process: scope, design, build, launch, support", description: "Five steps from scoping to support for a website or application delivered with a written scope, testing and a rollback procedure." } },
+  about: { fr: { title: "À propos d'IK Digital Solutions, studio web pour la RDC", description: "Studio de développement fondé par Israel Kapanga, basé au Kentucky et au service des entreprises de Kinshasa, Lubumbashi et de toute la RDC." },
+    en: { title: "About IK Digital Solutions, a web studio for the DRC", description: "A development studio founded by Israel Kapanga, based in Kentucky and serving companies in Kinshasa, Lubumbashi and across the DRC, in French and English." } },
+  contact: { fr: { title: "Contact · Devis site web ou application en RDC", description: "Décrivez votre projet de site, d'application ou de paiement mobile money : nous répondons par e-mail ou WhatsApp aux entreprises de toute la RDC." },
+    en: { title: "Contact · Quote for a website or application in the DRC", description: "Describe your website, application or mobile money project: we reply by e-mail or WhatsApp to companies in Kinshasa, Lubumbashi and across the DRC." } },
+  guide: { fr: { title: "Guide : construire un site ou une application pour la RDC", description: "Mobile money, hors ligne et Code du numérique : les questions à poser avant de construire un site ou une application pour la RDC, avec sources officielles." },
+    en: { title: "Guide: building a website or application for the DRC", description: "Mobile money, offline operation and the Digital Code: the questions to ask before building a website or application for the DRC, with official sources." } },
+  legal: { fr: { title: "Mentions légales", description: "Éditeur, hébergement, projets et démonstrations, contenus et crédits photographiques du site d'IK Digital Solutions, studio web au service de la RDC." },
+    en: { title: "Legal notice", description: "Publisher, hosting, projects and demonstrations, content and photography credits for the IK Digital Solutions website, a web studio serving the DRC." } },
+  privacy: { fr: { title: "Confidentialité", description: "Ce site n'utilise ni traceur ni mesure d'audience. Formulaire acheminé par Web3Forms, bouton WhatsApp, Google Fonts et stockage local des démonstrateurs." },
+    en: { title: "Privacy", description: "This website uses no trackers or audience analytics. The form is delivered through Web3Forms; WhatsApp, Google Fonts and local storage in the demos." } },
+  agents: { fr: { title: "Commercial(e) terrain en RDC · poste à pourvoir", description: "Poste à pourvoir en RDC : un(e) commercial(e) terrain indépendant(e), dans votre ville, pour présenter nos sites web et applications aux entreprises." },
+    en: { title: "Field sales representative in the DRC · open position", description: "Open position in the DRC: one independent field sales representative, in your city, to introduce our websites and applications to businesses." } }
+};
+module.exports = { routes, services, projectServices, labels, pageSeo };

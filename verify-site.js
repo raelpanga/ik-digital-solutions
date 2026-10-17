@@ -12,6 +12,7 @@ const { resolveFile, handler } = require("./tools/static-server");
 const server = http.createServer(handler(root));
 const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]);
 const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+const PAY = /\d[\d ,.]*\s?(USD|CDF|FC|\$|%)|\b(commissions?|primes?|salaire|rémunération|bonus|salary|salaries)\b/i;
 (async () => {
   // Verify all generated portfolio references without contacting client systems.
   const portfolio = walk(root).filter(f => f.endsWith(".html") && !f.includes(path.sep + "demos" + path.sep) && !f.endsWith("404.html"));
@@ -31,11 +32,41 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       references++;
     }
   }
+  // Head metadata and structured data: unique, sized copy and clean absolute URLs on every portfolio page.
+  const seen = { fr: new Set(), en: new Set() }, site = "https://iksolutions-inc.com";
+  for (const file of portfolio) {
+    const relative = path.relative(root, file).replace(/\\/g, "/"), html = fs.readFileSync(file, "utf8");
+    const lang = html.match(/<html lang="(\w+)"/)[1];
+    const title = decode((html.match(/<title>(.*?) · IK Digital Solutions<\/title>/) || [])[1] || "");
+    assert.ok(title.length > 0 && title.length <= 70, relative + " title length: " + title.length);
+    const description = decode((html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "");
+    assert.ok(description.length >= 50 && description.length <= 160, relative + " description length: " + description.length);
+    assert.ok(!seen[lang].has(description), relative + " shares its description with another page"); seen[lang].add(description);
+    const canonical = (html.match(/<link rel="canonical" href="([^"]*)"/) || [])[1];
+    const frHref = (html.match(/hreflang="fr" href="([^"]*)"/) || [])[1], xDefault = (html.match(/hreflang="x-default" href="([^"]*)"/) || [])[1];
+    assert.ok(canonical && canonical.startsWith(site) && !canonical.endsWith(".html"), relative + " canonical: " + canonical);
+    assert.equal(xDefault, frHref, relative + " x-default must point at the French page");
+    const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+    assert.equal(blocks.length, 1, relative + " must carry one JSON-LD block");
+    const graph = JSON.parse(blocks[0][1])["@graph"], types = graph.map(n => n["@type"]);
+    assert.ok(types.includes("ProfessionalService") && types.includes("WebPage"), relative + " JSON-LD types: " + types.join(","));
+    assert.equal(graph.find(n => n["@type"] === "WebPage").url, canonical, relative + " WebPage url must equal the canonical");
+    for (const m of JSON.stringify(graph).matchAll(/"(?:url|@id|item|logo)":"([^"]+)"/g)) assert.ok(m[1].startsWith(site) && !/\.html(?:$|#)/.test(m[1]), relative + " unclean URL in JSON-LD: " + m[1]);
+    if (/agents-commerciaux|sales-agents/.test(relative)) {
+      const job = graph.find(n => n["@type"] === "JobPosting");
+      assert.ok(job && !JSON.stringify(job).includes("baseSalary") && !PAY.test(job.description), relative + " JobPosting must exist without pay terms");
+    }
+  }
+  for (const s of services) for (const lang of ["fr", "en"]) assert.ok(decode(fs.readFileSync(path.join(root, routes[s.key][lang]), "utf8")).includes(s.seo[lang].intro), s.key + " " + lang + " must show its city sentence");
+  for (const file of walk(path.join(root, "demos")).filter(f => f.endsWith(".html"))) assert.ok(/<meta name="robots" content="noindex[^"]*">/.test(fs.readFileSync(file, "utf8")), path.relative(root, file) + " must be noindex");
+  const notFound = fs.readFileSync(path.join(root, "404.html"), "utf8");
+  assert.ok(notFound.includes('content="noindex"') && !notFound.includes('rel="canonical"'), "404 must be noindex without a canonical");
   const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
   const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
   assert.equal(new Set(locations).size, locations.length, "Duplicate sitemap routes");
-  // The TRUTH client-site copy is intentionally noindex and absent from the sitemap.
-  assert.equal(locations.length, walk(root).filter(f => f.endsWith(".html") && !f.endsWith("404.html") && !f.includes(path.sep + "demos" + path.sep + "truth-construction" + path.sep)).length);
+  // Only portfolio pages are listed: every demonstration is noindex and stays out of the sitemap.
+  assert.equal(locations.length, portfolio.length, "Sitemap lists exactly the portfolio pages");
+  assert.ok(locations.every(l => !l.includes("/demos/")), "No demonstration in the sitemap");
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
   const browser = await chromium.launch({ channel: "chrome", headless: true });
@@ -164,7 +195,7 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       // Job posting page: no pay terms, a summary card with a WhatsApp shortcut, and an application form on the same intercepted endpoint.
       await goto(routes.agents[lang]);
       const recruiting = await page.locator("main").innerText();
-      assert.ok(!/\d[\d ,.]*\s?(USD|CDF|FC|\$|%)|\b(commissions?|primes?|salaire|rémunération|bonus|salary|salaries)\b/i.test(recruiting), "The recruiting page must not mention pay");
+      assert.ok(!PAY.test(recruiting), "The recruiting page must not mention pay");
       assert.equal(await page.locator(".job-grid .spec .btn-wa").count(), 1, "The summary card offers WhatsApp");
       assert.equal(await page.locator("#candidature #apply-form").count(), 1, "The application form sits under #candidature");
       assert.equal(await page.locator(".inquiry-band, .content-panel h3 a").count(), 0, "No closing band and no service tiles on the job posting");
@@ -279,6 +310,6 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
       console.log("Review screenshots: " + dest);
     }
     assert.deepEqual(errors, []);
-    console.log(`PASS: ${portfolio.length} portfolio pages, ${references} local references, ${locations.length} sitemap routes, language pairs, mobile menus, filters, inquiry context and demo returns.`);
+    console.log(`PASS: ${portfolio.length} portfolio pages, ${references} local references, ${locations.length} sitemap routes, language pairs, mobile menus, filters, inquiry context, demo returns, head metadata, structured data and demo noindex.`);
   } finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exitCode = 1; }).finally(() => server.close());

@@ -1,7 +1,7 @@
 "use strict";
 const fs = require("fs"), path = require("path");
 const iconStamp = require("crypto").createHash("sha256").update(fs.readFileSync(path.join(__dirname, "..", "assets", "favicon.svg"))).digest("hex").slice(0, 10);
-const { routes, services, projectServices, labels } = require("./content");
+const { routes, services, projectServices, labels, pageSeo } = require("./content");
 // Content stamp appended to stylesheet and script URLs: a rebuilt asset is never served from a stale cache.
 const assetStamp = (() => {
   let h = 5381;
@@ -13,10 +13,12 @@ const assetStamp = (() => {
 })();
 const visualFactory = require("./visual");
 const { projectCopy } = visualFactory;
+const createSeo = require("./seo");
 labels.fr.guide = "Construire pour la RDC";
 labels.en.guide = "Building for the DRC";
 module.exports = function createPages(D, siteUrl) {
   const C = D.config;
+  const seo = createSeo(D, siteUrl);
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const tr = (lang, fr, en) => lang === "fr" ? fr : en;
   const list = xs => "<ul>" + xs.map(x => "<li>" + esc(x) + "</li>").join("") + "</ul>";
@@ -25,7 +27,7 @@ module.exports = function createPages(D, siteUrl) {
   const link = (base, lang, key) => base + routes[key][lang];
   const inquiry = (base, lang, service, project) => link(base, lang, "contact") + ((service || project) ? "?" + new URLSearchParams({ ...(service ? { service } : {}), ...(project ? { project } : {}) }) : "");
   const button = (href, text, cls = "btn-primary") => `<a class="btn ${cls}" href="${esc(href)}">${esc(text)}</a>`;
-  const header = (title, lead, eyebrow = "IK Digital Solutions") => `<div class="page-intro wrap"><p class="eyebrow">${esc(eyebrow)}</p><h1>${esc(title)}</h1><p class="lead measure">${esc(lead)}</p></div>`;
+  const header = (title, lead, eyebrow = "IK Digital Solutions", after = "") => `<div class="page-intro wrap"><p class="eyebrow">${esc(eyebrow)}</p><h1>${esc(title)}</h1><p class="lead measure">${esc(lead)}</p>${after}</div>`;
   const section = (title, body, id = "", extra = "") => `<section class="section architecture-section ${extra}"${id ? ` id="${id}"` : ""}><div class="wrap"><div class="section-head"><h2>${esc(title)}</h2></div>${body}</div></section>`;
   function screenshot(p, lang, base) {
     const ext = p.shotExt || "png";
@@ -77,7 +79,7 @@ module.exports = function createPages(D, siteUrl) {
   }
   function servicePage(key, lang, base) {
     const s = services.find(s => s.key === key), x = s[lang], L = labels[lang];
-    return header(x.title, x.brief, L.services) + (["payments","whatsapp"].includes(key) ? section(tr(lang,"Un parcours connecté","A connected journey"), visual.integration.brands(lang,base) + visual.integration.diagram(lang,key)) : "") + section(tr(lang, "Pour votre entreprise", "For your business"), `<div class="grid-2"><div><p class="lead">${esc(x.audience)}</p><div class="cta-row">${button(inquiry(base, lang, key), L.discuss)}</div></div><div class="content-panel"><h3>${L.scope}</h3>${list(x.includes)}</div></div>`) +
+    return header(x.title, x.brief, L.services, `<p class="lead measure service-intro">${esc(s.seo[lang].intro)}</p>`) + (["payments","whatsapp"].includes(key) ? section(tr(lang,"Un parcours connecté","A connected journey"), visual.integration.brands(lang,base) + visual.integration.diagram(lang,key)) : "") + section(tr(lang, "Pour votre entreprise", "For your business"), `<div class="grid-2"><div><p class="lead">${esc(x.audience)}</p><div class="cta-row">${button(inquiry(base, lang, key), L.discuss)}</div></div><div class="content-panel"><h3>${L.scope}</h3>${list(x.includes)}</div></div>`) +
       section(s.examples.length ? L.examples : tr(lang, "Comment nous procédons", "How we work"), s.examples.length ? cards(s.examples.map(slug => D.projects.find(p => p.slug === slug)), lang, base) : x.panel ? `<div class="content-panel"><h3>${esc(x.panel[0])}</h3><p>${esc(x.panel[1])}</p>${button(link(base, lang, "process"), L.process, "btn-outline")}</div>` : key === "whatsapp" ? `<div class="content-panel"><h3>${tr(lang,"Du message à la bonne personne","From message to the right person")}</h3><p>${tr(lang,"Accueil → choix du service → collecte des informations → transfert à votre équipe. Nous dessinons ce parcours avec vos réponses métier et vos règles de suivi.","Welcome → service selection → useful details → handoff to your team. We design this journey around your business answers and follow-up rules.")}</p></div>` : `<div class="content-panel"><p>${tr(lang, "La maintenance se juge sur un périmètre et des preuves propres au système : procédure de déploiement, test de restauration, historique d'incidents et compte rendu. Nous définissons ces livrables avec vous avant de commencer.", "Maintenance is assessed through system-specific scope and evidence: deployment steps, restore tests, incident history and reporting. We agree on these deliverables before starting.")}</p>${button(link(base, lang, "process"), L.process, "btn-outline")}</div>`) +
       section(L.needs, `<div class="grid-2"><div class="content-panel">${list(x.needs)}</div><div>${steps(lang)}</div></div>`) +
       section(tr(lang,"Votre projet, votre périmètre","Your project, your scope"), visual.tiers(lang, base), "budget") +
@@ -167,19 +169,8 @@ module.exports = function createPages(D, siteUrl) {
     return header(L.discuss, tr(lang, "Dites-nous ce que vous souhaitez améliorer, ce qui existe déjà et vos priorités. Un premier échange permet de préciser la suite.", "Tell us what you want to improve, what already exists and your priorities. An initial conversation helps define the next step.")) +
       section(tr(lang, "Commençons par votre besoin", "Start with what you need"), `<div class="grid-2 contact-layout"><aside class="content-panel"><h3>${esc(C.company)}</h3><p>${esc(C.location[lang])}</p><p><a href="mailto:${esc(C.email)}">${esc(C.email)}</a></p><p><a href="https://wa.me/${C.whatsapp}">WhatsApp · +1 859 382 5280</a></p><p>${tr(lang, "Envoyez le formulaire ci-contre : il nous parvient par e-mail. Vous pouvez aussi préparer le même message pour WhatsApp.", "Send the form: it reaches us by e-mail. You can also prepare the same message for WhatsApp.")}</p><a href="${link(base, lang, "privacy")}">${L.privacy}</a></aside><form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="post" data-email="${esc(C.email)}" data-whatsapp="${C.whatsapp}" data-lang="${lang}"><input type="hidden" name="access_key" value="${esc(C.web3formsKey)}"><input type="hidden" name="subject" value="${tr(lang, "Nouvelle demande · ", "New inquiry · ")}${esc(C.company)}"><input type="hidden" name="from_name" value="${esc(C.company)}"><input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" hidden><div class="field"><label for="f-name">${tr(lang, "Votre nom", "Your name")}</label><input id="f-name" name="name" autocomplete="name" required></div><div class="field"><label for="f-company">${tr(lang, "Entreprise ou organisation", "Company or organization")}</label><input id="f-company" name="company" autocomplete="organization"></div><div class="field"><label for="f-email">${tr(lang, "Votre e-mail", "Your e-mail")}</label><input id="f-email" name="email" type="email" autocomplete="email" required></div><div class="field"><label for="f-phone">${tr(lang, "Téléphone ou WhatsApp (facultatif)", "Phone or WhatsApp (optional)")}</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div><div class="field"><label for="f-service">${L.services}</label><select id="f-service" name="service"><option value="">${tr(lang, "À définir ensemble", "Let's decide together")}</option>${services.map(s => `<option value="${s.key}">${esc(s[lang].title)}</option>`).join("")}</select></div><div class="field"><label for="f-project">${tr(lang, "Un projet vous a inspiré ?", "Inspired by a project?")}</label><select id="f-project" name="project"><option value="">${tr(lang, "Aucun en particulier", "None in particular")}</option>${D.projects.map(p => `<option value="${p.slug}">${esc(p[lang].title)}</option>`).join("")}</select></div><div class="field"><label for="f-need">${tr(lang, "Votre besoin et vos priorités", "Your needs and priorities")}</label><textarea id="f-need" name="message" rows="5" required></textarea></div><div class="cta-row"><button type="submit" class="btn btn-primary" data-label="${esc(T.contact.form.send)}" data-busy="${tr(lang, "Envoi…", "Sending…")}">${esc(T.contact.form.send)}</button><button type="button" class="btn btn-outline" id="f-whatsapp" hidden>${tr(lang, "Préparer WhatsApp", "Prepare WhatsApp")}</button></div><p class="form-status" id="f-status" role="status" aria-live="polite" hidden></p><p class="hint">${esc(T.contact.form.hint)}</p><p class="hint">${tr(lang, "Envoi assuré par Web3Forms. Vos coordonnées servent uniquement à répondre à votre demande.", "Delivery handled by Web3Forms. Your details are used only to reply to your inquiry.")}</p></form></div>`);
   }
-  // Job posting for one field sales representative. By the owner's decision it states no pay, commission or amounts.
-  function agents(lang, base) {
-    const L = labels[lang];
-    const block = (title, body) => `<section class="pblock"><h2>${esc(title)}</h2>${body}</section>`;
-    const stepList = items => `<ol class="process-list">${items.map(([t, d]) => `<li><h3>${esc(t)}</h3>${d ? `<p>${esc(d)}</p>` : ""}</li>`).join("")}</ol>`;
-    const kv = rows => `<dl>${rows.map(([k, v]) => `<div class="kv"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`;
-    const whatsappText = tr(lang, "Bonjour IK Digital Solutions, je postule au poste de commercial(e) terrain.", "Hello IK Digital Solutions, I am applying for the field sales position.");
-    const waHref = `https://wa.me/${C.whatsapp}?text=${encodeURIComponent(whatsappText)}`;
-    const send = tr(lang, "Envoyer ma candidature", "Send my application");
-    const chips = tr(lang, ["RDC · votre ville", "Indépendant(e)", "Horaires libres", "Dès que possible"], ["DRC · your city", "Independent", "Flexible hours", "As soon as possible"]);
-    const card = tr(lang,
-      [["Poste", "Commercial(e) terrain"], ["Lieu", "RDC, votre ville (Kinshasa, Lubumbashi ou ailleurs)"], ["Statut", "Indépendant(e)"], ["Horaires", "Libres, sur le terrain"], ["Début", "Dès que possible"], ["Candidature", "Formulaire ci-dessous ou WhatsApp"]],
-      [["Position", "Field sales representative"], ["Location", "DRC, your city (Kinshasa, Lubumbashi or elsewhere)"], ["Status", "Independent"], ["Hours", "Flexible, in the field"], ["Start", "As soon as possible"], ["Application", "Form below or WhatsApp"]]);
+  // Copy shared by the recruiting page and its JobPosting structured data.
+  function agentsCopy(lang) {
     const role = tr(lang,
       ["Vous travaillez sur le terrain, dans votre ville : vous repérez les entreprises qui ont besoin d'être en ligne et vous leur présentez ce que nous construisons.", "Nous prenons le relais pour le cadrage, le devis et la signature, et vous restez informé(e) de chaque étape.", "Vous êtes seul(e) sur place, avec l'équipe joignable sur WhatsApp."],
       ["You work in the field, in your city: you spot the businesses that need to be online and show them what we build.", "We take over scoping, the quote and the signature, and you stay informed at every step.", "You work alone on site, with the team reachable on WhatsApp."]);
@@ -193,6 +184,26 @@ module.exports = function createPages(D, siteUrl) {
       ["Vous connaissez les commerçants et les entreprises de votre ville", "Vous êtes à l'aise pour aborder un dirigeant et expliquer une offre simplement", "Vous êtes joignable sur WhatsApp et organisé(e) pour suivre plusieurs dossiers", "Vous maniez un smartphone sans difficulté", "Aucune compétence technique n'est requise : les questions techniques nous reviennent"],
       ["You know the merchants and businesses of your city", "You are comfortable approaching a manager and explaining an offer simply", "You are reachable on WhatsApp and organised enough to follow several deals", "You handle a smartphone with ease", "No technical skills are required: technical questions come back to us"]);
     const provide = tr(lang, "Une présentation prête à montrer, des démonstrations en ligne, un interlocuteur joignable sur WhatsApp, et une prise en main de l'offre avant vos premiers rendez-vous.", "A presentation ready to show, online demonstrations, a contact reachable on WhatsApp, and a walkthrough of the offer before your first meetings.");
+    return { role, missions, together, profile, provide };
+  }
+  function jobDescription(lang) {
+    const A = agentsCopy(lang), ul = xs => "<ul>" + xs.map(x => "<li>" + esc(x) + "</li>").join("") + "</ul>";
+    return A.role.map(p => "<p>" + esc(p) + "</p>").join("") + ul(A.missions) + ul(A.profile) + "<p>" + esc(A.provide) + "</p>";
+  }
+  // Job posting for one field sales representative. By the owner's decision it states no pay, commission or amounts.
+  function agents(lang, base) {
+    const L = labels[lang];
+    const block = (title, body) => `<section class="pblock"><h2>${esc(title)}</h2>${body}</section>`;
+    const stepList = items => `<ol class="process-list">${items.map(([t, d]) => `<li><h3>${esc(t)}</h3>${d ? `<p>${esc(d)}</p>` : ""}</li>`).join("")}</ol>`;
+    const kv = rows => `<dl>${rows.map(([k, v]) => `<div class="kv"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`;
+    const whatsappText = tr(lang, "Bonjour IK Digital Solutions, je postule au poste de commercial(e) terrain.", "Hello IK Digital Solutions, I am applying for the field sales position.");
+    const waHref = `https://wa.me/${C.whatsapp}?text=${encodeURIComponent(whatsappText)}`;
+    const send = tr(lang, "Envoyer ma candidature", "Send my application");
+    const chips = tr(lang, ["RDC · votre ville", "Indépendant(e)", "Horaires libres", "Dès que possible"], ["DRC · your city", "Independent", "Flexible hours", "As soon as possible"]);
+    const card = tr(lang,
+      [["Poste", "Commercial(e) terrain"], ["Lieu", "RDC, votre ville (Kinshasa, Lubumbashi ou ailleurs)"], ["Statut", "Indépendant(e)"], ["Horaires", "Libres, sur le terrain"], ["Début", "Dès que possible"], ["Candidature", "Formulaire ci-dessous ou WhatsApp"]],
+      [["Position", "Field sales representative"], ["Location", "DRC, your city (Kinshasa, Lubumbashi or elsewhere)"], ["Status", "Independent"], ["Hours", "Flexible, in the field"], ["Start", "As soon as possible"], ["Application", "Form below or WhatsApp"]]);
+    const { role, missions, together, profile, provide } = agentsCopy(lang);
     const hiring = tr(lang,
       [["Vous postulez", "Par le formulaire ci-dessous ou sur WhatsApp."], ["Un premier échange", "Sur WhatsApp ou par appel, pour parler de votre ville et de votre réseau."], ["Décision et démarrage", "Nous revenons vers vous, puis vous recevez la présentation et vos premiers exemples."]],
       [["You apply", "Through the form below or on WhatsApp."], ["A first conversation", "On WhatsApp or by call, about your city and your network."], ["Decision and start", "We get back to you, then you receive the presentation and your first examples."]]);
@@ -218,16 +229,18 @@ module.exports = function createPages(D, siteUrl) {
     const credits = legal ? '<section id="credits" class="photo-credits"><h2>' + tr(lang, 'Crédits photographiques', 'Photography credits') + '</h2><p>Kinshasa by night · MONUSCO Photos · <a href="https://commons.wikimedia.org/wiki/File:Kinshasa_by_night_(23769991270).jpg">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</p><p>La Gombe, Kinshasa · ByaduniaEspoir · <a href="https://commons.wikimedia.org/wiki/File:La_Gombe,_Kinshasa,_RDC.jpg">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p><p>' + tr(lang, 'Images redimensionnées et compressées en WebP ; recadrage et superposition colorée à l’affichage. Ces photographies illustrent Kinshasa et ne représentent pas nos bureaux ou nos équipes.', 'Images resized and compressed to WebP; cropped with color overlays in the layout. These photographs illustrate Kinshasa and do not depict our offices or staff.') + '</p></section>' : '';
     return header(labels[lang][key], tr(lang, "Informations sur le fonctionnement de ce portfolio · mise à jour le 16 septembre 2026.", "Information about this portfolio · updated 16 September 2026.")) + `<section class="section architecture-section"><div class="wrap prose legal-prose">${groups.map(([t, d]) => `<section><h2>${esc(t)}</h2><p>${esc(d)}</p></section>`).join("")}${credits}<p>${button(link(base, lang, legal ? "privacy" : "legal"), labels[lang][legal ? "privacy" : "legal"], "btn-outline")}</p></div></section>`;
   }
-  function layout({ lang, route, alternate, key, title, description, body, image = "shots/ets-financial-desktop.jpg" }) {
+  function layout({ lang, route, alternate, key, title, description, body, image = "shots/ets-financial-desktop.jpg", schema = [], noindex = false }) {
     const base = baseFor(route), L = labels[lang], other = lang === "fr" ? "en" : "fr";
     const selected = key.startsWith("project:") ? "work" : key === "guide" ? "process" : services.some(s => s.key === key) ? "services" : key;
     const nav = ["services", "work", "process", "about", "contact", "agents"].map(k => `<a href="${link(base, lang, k)}"${selected === k ? ' aria-current="page"' : ""}>${L[k]}</a>`).join("");
     const langHref = l => base + (l === lang ? route : alternate);
+    const ogImage = (siteUrl || base) + image;
     return `<!doctype html>
 <html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)} · ${esc(C.company)}</title><meta name="description" content="${esc(description)}">
-${siteUrl ? `<link rel="canonical" href="${siteUrl + route}"><link rel="alternate" hreflang="${lang}" href="${siteUrl + route}"><link rel="alternate" hreflang="${other}" href="${siteUrl + alternate}">` : ""}
-<meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:image" content="${(siteUrl || base) + image}"><meta property="og:type" content="website">
+${noindex ? '<meta name="robots" content="noindex">' : siteUrl ? `<link rel="canonical" href="${seo.url(route)}"><link rel="alternate" hreflang="${lang}" href="${seo.url(route)}"><link rel="alternate" hreflang="${other}" href="${seo.url(alternate)}"><link rel="alternate" hreflang="x-default" href="${seo.url(lang === "fr" ? route : alternate)}"><meta property="og:url" content="${seo.url(route)}">` : ""}
+<meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:image" content="${ogImage}"><meta property="og:type" content="website"><meta property="og:site_name" content="${esc(C.company)}"><meta property="og:locale" content="${lang === "fr" ? "fr_FR" : "en_US"}"><meta property="og:locale:alternate" content="${lang === "fr" ? "en_US" : "fr_FR"}"><meta name="twitter:card" content="summary_large_image">${C.googleSiteVerification ? `<meta name="google-site-verification" content="${esc(C.googleSiteVerification)}">` : ""}
+${noindex || !siteUrl ? "" : seo.script([seo.organization(lang, pageSeo.home[lang].description, ogImage), seo.website(), seo.webPage({ lang, route, title, description, image: ogImage, breadcrumb: schema.some(n => n["@type"] === "BreadcrumbList") }), ...schema])}
 <link rel="icon" type="image/png" sizes="32x32" href="${base}assets/favicon-32.png?v=${iconStamp}"><link rel="icon" type="image/svg+xml" sizes="any" href="${base}assets/favicon.svg?v=${iconStamp}"><link rel="apple-touch-icon" sizes="180x180" href="${base}assets/apple-touch-icon.png?v=${iconStamp}"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link href="${base}assets/style.css?v=${assetStamp}" rel="stylesheet"><link href="${base}assets/visual.css?v=${assetStamp}" rel="stylesheet">
 </head><body class="portfolio" data-page="${esc(key)}"><a class="skip" href="#main">${tr(lang, "Aller au contenu", "Skip to content")}</a>
@@ -239,13 +252,23 @@ ${siteUrl ? `<link rel="canonical" href="${siteUrl + route}"><link rel="alternat
     const s = services.find(s => s.key === key);
     const renderers = { home, services: servicesPage, work, process: processPage, about, contact, agents, guide: visual.guide };
     const body = s ? servicePage(key, lang, base) : renderers[key] ? renderers[key](lang, base) : information(key, lang, base);
-    const title = s ? s[lang].title : key === "home" ? tr(lang, "Sites web & applications · Spécialiste RDC", "Websites & applications · DRC specialist") : key === "agents" ? tr(lang, "Commercial(e) terrain · poste à pourvoir", "Field sales representative · open position") : L[key];
-    const description = s ? s[lang].brief : key === "agents" ? tr(lang, "IK Digital Solutions recrute un(e) commercial(e) terrain en RDC, dans votre ville : présentez nos sites web, applications et solutions mobile money aux entreprises et mettez-les en contact avec nous.", "IK Digital Solutions is hiring one field sales representative in the DRC, in your city: introduce our websites, applications and mobile money solutions to businesses and put them in touch with us.") : tr(lang, "Découvrez les services, les projets clients et les démonstrations d'IK Digital Solutions. Sites web, commerce, applications métier et maintenance.", "Explore IK Digital Solutions services, client work and demonstrations. Websites, commerce, business applications and maintenance.");
-    return layout({ lang, route, alternate: routes[key][lang === "fr" ? "en" : "fr"], key, title, description, body });
+    const { title, description } = s ? s.seo[lang] : pageSeo[key][lang];
+    const crumbs = items => seo.breadcrumbs(route, items);
+    const schema = s ? [crumbs([[L.home, routes.home[lang]], [L.services, routes.services[lang]], [s[lang].title, route]]), seo.service({ s, lang, route, description }), seo.faqPage(route, s[lang].faq)]
+      : key === "services" ? [seo.faqPage(route, visual.faq[lang])]
+      : key === "agents" && C.agentsPostedOn ? [seo.jobPosting({ lang, route, title: tr(lang, "Commercial(e) terrain", "Field sales representative"), description: jobDescription(lang) })]
+      : [];
+    return layout({ lang, route, alternate: routes[key][lang === "fr" ? "en" : "fr"], key, title, description, body, schema });
   }
   function projectPage(p, lang) {
-    const route = projectRoute(p, lang);
-    return layout({ lang, route, alternate: projectRoute(p, lang === "fr" ? "en" : "fr"), key: "project:" + p.slug, title: p[lang].title, description: p[lang].tagline, body: project(p, lang, baseFor(route)), image: "shots/" + p.slug + "-desktop." + (p.shotExt || "png") });
+    const route = projectRoute(p, lang), x = p[lang], L = labels[lang];
+    // Search snippet: the tagline when it is long enough, otherwise title, sector and the first problem sentence, cut at a boundary.
+    const clip = (s, max = 155) => { if (s.length <= max) return s; const cut = s.slice(0, max), dot = cut.lastIndexOf(". "); return dot > 60 ? cut.slice(0, dot + 1) : cut.slice(0, cut.lastIndexOf(" ")) + "…"; };
+    const title = p.isConcept ? `${x.title} · ${x.sector}` : x.title;
+    const problem = (x.problem || [])[0] || "";
+    const description = x.tagline.length >= 70 ? clip(x.tagline) : problem.length >= 70 ? clip(problem) : clip(`${x.title} · ${x.sector}. ${problem}`);
+    const schema = [seo.breadcrumbs(route, [[L.home, routes.home[lang]], [L.work, routes.work[lang]], [x.title, route]])];
+    return layout({ lang, route, alternate: projectRoute(p, lang === "fr" ? "en" : "fr"), key: "project:" + p.slug, title, description, body: project(p, lang, baseFor(route)), image: "shots/" + p.slug + "-desktop." + (p.shotExt || "png"), schema });
   }
   return { routes, page, projectPage, projectRoute, layout };
 };

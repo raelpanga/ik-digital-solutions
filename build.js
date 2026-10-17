@@ -7,6 +7,7 @@ global.window = {};
 require("./assets/content.js");
 const D = window.KDS;
 D.config.web3formsKey = String(D.config.web3formsKey || "").trim();
+D.config.googleSiteVerification = String(D.config.googleSiteVerification || "").trim();
 if (!D.config.web3formsKey) console.warn("Warning: config.web3formsKey is empty in assets/content.js. The contact form cannot deliver inquiries until a Web3Forms access key is set.");
 const concepts = require("./site/concepts");
 D.projects.push(...concepts.projects);
@@ -16,9 +17,7 @@ const OUT = path.resolve(__dirname, "docs");
 const Site = require("./site/pages")(D, SITE_URL);
 const { services, projectServices } = require("./site/content");
 const SITE_SLUGS = { kando: "kando-ressources", fleuve: "site-corporate", kimia: "kimia-express", truth: "truth-construction" };
-// Copies of real client sites are noindex, so listing them in the sitemap would only
-// earn "submitted URL marked noindex" warnings.
-const NOINDEX_DEMOS = new Set(["truth-construction"]);
+
 // Validate source dependencies before replacing generated output.
 for (const p of D.projects) {
   if (!projectServices[p.slug]?.every(key => services.some(s => s.key === key))) throw new Error("Missing service assignment: " + p.slug);
@@ -50,7 +49,9 @@ write("favicon.ico", fs.readFileSync(path.join(__dirname, "assets", "favicon.ico
 copyDir(path.join(__dirname, "assets", "media"), path.join(OUT, "assets", "media"));
 write(".nojekyll", "");
 if (arg("--cname")) write("CNAME", arg("--cname").trim() + "\n");
+// Portfolio pages only: demonstrations are built below but stay out of the sitemap.
 const pages = [];
+let demoPages = 0;
 for (const lang of ["fr", "en"]) {
   for (const [key, route] of Object.entries(Site.routes)) { write(route[lang], Site.page(key, lang)); pages.push(route[lang]); }
   for (const p of D.projects) { const route = Site.projectRoute(p, lang); write(route, Site.projectPage(p, lang)); pages.push(route); }
@@ -70,25 +71,29 @@ for (const f of fs.readdirSync(path.join(__dirname, "demos", "src"))) {
   if (!f.endsWith(".html")) continue;
   const slug = f.slice(0, -5);
   write("demos/" + slug + "/index.html", wrapDemo(path.join(__dirname, "demos", "src", f), slug));
-  pages.push("demos/" + slug + "/");
+
 }
 for (const { slug, generate, collection } of generators) {
   const n = generate(path.join(OUT, "demos", collection ? "" : slug), { portfolioHome: "../../projets/" + slug + ".html", portfolioHomeEn: "../../en/projects/" + slug + ".html", siteUrl: SITE_URL, publicBase: "/demos/" + slug });
-  const add = dir => {
-    for (const entry of fs.readdirSync(path.join(OUT, dir), { withFileTypes: true })) {
-      const rel = dir + "/" + entry.name;
-      if (entry.isDirectory()) add(rel); else if (entry.name.endsWith(".html")) pages.push(rel.replace(/index\.html$/, ""));
-    }
-  };
-  if (collection) {
-    for (const concept of concepts.demos) add("demos/" + concept.slug);
-  } else if (!NOINDEX_DEMOS.has(slug)) add("demos/" + slug);
   console.log("Demo " + slug + ": " + n + " pages");
 }
-write("404.html", Site.layout({ lang: "fr", route: "404.html", alternate: "404.html", key: "404", title: "Page introuvable", description: "Cette page n'existe pas.", body: '<section class="section"><div class="wrap"><h1>Page introuvable</h1><p><a href="index.html">Retour à l’accueil</a> · <a href="en/index.html">English home</a></p></div></section>' }).replace('<head>', '<head><base href="' + (SITE_URL || "/") + '">'));
+// Demonstrations stay crawlable (robots.txt allows them, so the directive is seen) but are never indexed or listed in the sitemap.
+const noindexDemos = dir => {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const f = path.join(dir, entry.name);
+    if (entry.isDirectory()) noindexDemos(f);
+    else if (entry.name.endsWith(".html")) {
+      const html = fs.readFileSync(f, "utf8");
+      if (!/<meta name="robots"/i.test(html)) fs.writeFileSync(f, html.replace(/<head\b[^>]*>/i, m => m + '<meta name="robots" content="noindex">'));
+      demoPages++;
+    }
+  }
+};
+noindexDemos(path.join(OUT, "demos"));
+write("404.html", Site.layout({ lang: "fr", route: "404.html", alternate: "404.html", key: "404", noindex: true, title: "Page introuvable", description: "Cette page n'existe pas.", body: '<section class="section"><div class="wrap"><h1>Page introuvable</h1><p><a href="index.html">Retour à l’accueil</a> · <a href="en/index.html">English home</a></p></div></section>' }).replace('<head>', '<head><base href="' + (SITE_URL || "/") + '">'));
 finalizeUrls(OUT, SITE_URL);
 if (SITE_URL) {
   write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + pages.map(p => '  <url><loc>' + SITE_URL.replace(/\/$/, "") + publicPath("/" + p) + '</loc></url>').join("\n") + '\n</urlset>\n');
 }
 write("robots.txt", "User-agent: *\nAllow: /\n" + (SITE_URL ? "Sitemap: " + SITE_URL + "sitemap.xml\n" : ""));
-console.log("Built " + pages.length + " pages + 404 in docs/");
+console.log("Built " + pages.length + " portfolio pages + " + demoPages + " demo pages + 404 in docs/");

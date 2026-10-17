@@ -122,6 +122,46 @@ vercel deploy --prod --scope geno-s
 
 Keep `.vercel/` and `.env*` local and untracked.
 
+## SEO
+
+The site targets searches made in the DR Congo, in French first. The pieces:
+
+- **Titles and descriptions.** Each service carries a `seo` block (`fr`/`en` `title`,
+  `description`, `intro`) next to its copy in `site/content.js`, `site/integrations.js` and
+  `site/expansion.js`; the `intro` sentence is shown under the page lead and names Kinshasa,
+  Lubumbashi and the DRC. The other routes read `pageSeo` in `site/content.js`. Project pages
+  use the tagline, or "Title · Sector. First problem sentence" when the tagline is short;
+  concept titles add their sector. `<title>` is the SEO title plus " · IK Digital Solutions".
+  `verify-site.js` enforces titles of at most 70 characters before the suffix, descriptions
+  of 50 to 160 characters, and no duplicate description within a language.
+- **Head tags.** Canonical, `hreflang` fr/en plus `x-default` (French), `og:url`,
+  `og:site_name`, `og:locale`, a Twitter card, and the Search Console tag when
+  `config.googleSiteVerification` is set.
+- **Structured data.** `site/seo.js` writes one JSON-LD graph per page: the studio as a
+  `ProfessionalService` serving the DRC (Kinshasa, Lubumbashi), the `WebSite`, the `WebPage`,
+  breadcrumbs on service and project pages, a `Service` and the two FAQs on each service
+  page, the ten FAQs on the services index, and a `JobPosting` on the recruiting page. By
+  the owner's decision the posting states no pay, so it carries no salary; set
+  `config.agentsPostedOn` to `""` once the position is filled and the node disappears.
+  All URLs are the clean public addresses.
+- **Indexing scope.** Every demonstration page is `noindex` (added by `build.js` after
+  generation) and absent from the sitemap, which lists the portfolio pages only.
+  `robots.txt` must keep allowing `/demos/`: a blocked page cannot show its `noindex`.
+  The 404 page is `noindex` without a canonical.
+- **No analytics.** The privacy page promises no audience measurement; do not add a tag
+  manager or analytics script.
+
+Google Search Console, once:
+
+1. Add a URL-prefix property for `https://iksolutions-inc.com/` and choose the HTML tag
+   method. Copy the `content` value of the tag Google shows.
+2. Paste it into `config.googleSiteVerification` in `assets/content.js`, rebuild, commit and
+   push. Vercel publishes within a minute.
+3. Click Verify in Search Console, then Sitemaps → submit `https://iksolutions-inc.com/sitemap.xml`.
+4. Check a few pages with the Rich Results Test (https://search.google.com/test/rich-results)
+   and https://validator.schema.org/. Warnings about a missing street address or salary are
+   expected; errors are not.
+
 ## Adding a project
 
 Copy a project object in `assets/content.js`. Fields: `slug`, `status` ("client" or
@@ -246,7 +286,7 @@ and English project-return paths through `portfolioHome` and `portfolioHomeEn`:
   homepage header is fixed to the top). `site.js` intercepts WhatsApp, `tel:`, `mailto:` and
   the copy-address button, showing a notice instead, so visitors never contact the client by
   accident; it also reads `?lang=en` so the English project page opens the copy in English.
-  The copy is left out of the sitemap through `NOINDEX_DEMOS` in `build.js`, and the project
+  The copy is left out of the sitemap like every other demonstration (see SEO), and the project
   sets `exploreNote` because the generic sentence about demonstration copies using fictional
   data is untrue here. To refresh it after the client site changes:
 
@@ -275,7 +315,7 @@ own work or labelled demonstrations. Competitor projects and images are not reus
   `en/guides/building-for-the-drc.html`: mobile money, offline planning and Digital
   Code questions, with official source links and project-specific legal validation.
 
-The generator produces 82 portfolio pages and 73 demo pages, plus the 404 page.
+The generator produces 82 portfolio pages and 86 demo pages (13 of them the TRUTH copy), plus the 404 page.
 Existing demo and project URLs remain stable. Photo credits appear on the legal
 pages. Testimonials, a real founder portrait and measured client outcomes require
 approved source material; no placeholder quotes or invented results are published.

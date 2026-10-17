@@ -4,6 +4,10 @@
 const services = [
   {
     key: "mobile", examples: [],
+    seo: {
+      fr: { title: "Développement d'application mobile à Kinshasa et en RDC", description: "Application Android et iPhone ou web installable (PWA) pour vos clients et vos équipes en RDC : écrans pensés pour la 3G, hors ligne et notifications.", intro: "Nous développons des applications mobiles pour les entreprises de Kinshasa, de Lubumbashi et de toute la RDC." },
+      en: { title: "Mobile app development in Kinshasa and across the DRC", description: "Android and iPhone apps or installable web apps (PWA) for your customers and teams in the DRC: screens built for 3G, offline mode and notifications.", intro: "We develop mobile applications for businesses in Kinshasa, Lubumbashi and across the DRC." }
+    },
     fr: {
       title: "Applications mobiles", brief: "Mettez votre service dans la poche de vos clients ou de vos équipes, sur Android comme sur iPhone.",
       audience: "Pour les entreprises qui veulent une application installable : commande, suivi de terrain, fidélité, ou un outil interne utilisé hors du bureau.",
@@ -23,6 +27,10 @@ const services = [
   },
   {
     key: "ai", examples: [],
+    seo: {
+      fr: { title: "IA et automatisation pour les entreprises en RDC", description: "Automatisation surveillée pour les entreprises de RDC : tri des demandes, lecture de factures et formulaires, assistant de réponse, validation humaine.", intro: "Nous mettons en place des automatisations surveillées pour les entreprises de Kinshasa, de Lubumbashi et de toute la RDC." },
+      en: { title: "AI and automation for businesses in the DRC", description: "Supervised automation for businesses in the DRC: request sorting, invoice and form reading, reply assistants, with human review on key decisions.", intro: "We set up supervised automation for companies in Kinshasa, Lubumbashi and across the DRC." }
+    },
     fr: {
       title: "IA & automatisation", brief: "Confiez les tâches répétitives à une automatisation surveillée : tri des demandes, lecture de documents, réponses assistées.",
       audience: "Pour les équipes qui recopient des données d’un fichier à l’autre, répondent chaque jour aux mêmes questions ou traitent des documents à la main.",
@@ -42,6 +50,10 @@ const services = [
   },
   {
     key: "audit", examples: [],
+    seo: {
+      fr: { title: "Audit de site web et conseil digital en RDC", description: "Audit indépendant de votre site ou application en RDC : vitesse, mobile, référencement, sécurité, Code du numérique. Rapport priorisé avec budget.", intro: "Nous auditons des sites et des applications pour des dirigeants de Kinshasa, de Lubumbashi et de toute la RDC." },
+      en: { title: "Website audit and digital advice in the DRC", description: "Independent audit of your website or application in the DRC: speed, mobile, search visibility, security and the Digital Code. Prioritised report.", intro: "We audit websites and applications for business owners in Kinshasa, Lubumbashi and across the DRC." }
+    },
     fr: {
       title: "Audit & conseil", brief: "Faites examiner un site, une application ou un projet avant d’investir : état réel, risques, priorités et budget.",
       audience: "Pour les dirigeants qui héritent d’un système, hésitent entre réparer et reconstruire, ou veulent un avis indépendant avant de signer un devis.",
@@ -61,6 +73,10 @@ const services = [
   },
   {
     key: "modernisation", examples: [],
+    seo: {
+      fr: { title: "Modernisation et intégration de logiciels en RDC", description: "Reliez vos outils de comptabilité, de stock, de boutique et de paiement en RDC et remplacez vos logiciels anciens par étapes, sans arrêter votre activité.", intro: "Nous modernisons et relions les outils des entreprises de Kinshasa, de Lubumbashi et de toute la RDC." },
+      en: { title: "Software modernisation and integrations in the DRC", description: "Connect your accounting, stock, storefront and payment tools in the DRC and replace ageing software step by step, without stopping your business.", intro: "We modernise and connect the tools of companies in Kinshasa, Lubumbashi and across the DRC." }
+    },
     fr: {
       title: "Modernisation & intégrations", brief: "Faites communiquer vos outils existants et remplacez par étapes ce qui vous freine, sans arrêter votre activité.",
       audience: "Pour les entreprises qui vivent avec un logiciel ancien, des fichiers partagés qui se dupliquent ou des outils qui ne se parlent pas.",
@@ -80,6 +96,10 @@ const services = [
   },
   {
     key: "team", examples: [],
+    seo: {
+      fr: { title: "Développeurs en renfort pour agences et DSI en RDC", description: "Capacité de développement au mois pour agences, éditeurs et DSI en RDC et aux États-Unis : code livré dans votre dépôt, compte rendu hebdomadaire.", intro: "Nous renforçons les équipes de développement d'agences et de DSI de Kinshasa, de Lubumbashi, de toute la RDC et des États-Unis." },
+      en: { title: "Team augmentation for agencies and IT teams, DRC and US", description: "Monthly development capacity for agencies, software companies and IT teams in the DRC and the US: code in your repository, weekly written updates.", intro: "We add development capacity to agencies and IT teams in Kinshasa, Lubumbashi, across the DRC and in the United States." }
+    },
     fr: {
       title: "Renfort d’équipe", brief: "Ajoutez une capacité de développement à votre équipe, au mois, avec un interlocuteur unique en français et en anglais.",
       audience: "Pour les agences, éditeurs et directions informatiques qui ont plus de travail que de mains disponibles, en RDC comme aux États-Unis.",

@@ -15,7 +15,11 @@ window.KDS = {
     // Web3Forms access key: create one at https://web3forms.com with the address above.
     // Form submissions are delivered to that address. The key is designed to be public.
     web3formsKey: "64e46a57-5655-4025-950f-280a5de426d4",
-    location: { fr: "Kentucky, États-Unis", en: "Kentucky, United States" }
+    location: { fr: "Kentucky, États-Unis", en: "Kentucky, United States" },
+    // Google Search Console "HTML tag" token (the content value). Empty = no meta tag is emitted.
+    googleSiteVerification: "",
+    // JobPosting datePosted for the recruiting page. Set to "" once the position is filled: the posting node disappears.
+    agentsPostedOn: "2026-10-16"
   },
 
   i18n: {
@@ -363,7 +367,7 @@ window.KDS = {
       fr: {
         title: "Geno's & MAC&CLAY · Locations et mariages",
         sector: "Location de tenues de cérémonie · Lexington, Kentucky (États-Unis)",
-        tagline: "Application complète pour un magasin de location de smokings et costumes : inscription des mariages, tenues, commandes, paiements Stripe, SMS et tableau du jour.",
+        tagline: "Application complète pour un magasin de location de smokings et costumes : mariages, tenues, commandes, paiements Stripe, SMS et tableau du jour.",
         problem: [
           "Geno's & MAC&CLAY loue et retouche des tenues de cérémonie, avec un entrepôt, des essayages en magasin et une forte activité de cortèges de mariage. Chaque commande était saisie dans trois logiciels : inscription des locations, caisse, gestion d'entrepôt. Triple saisie, erreurs de transcription, aucune source unique de vérité.",
           "Le propriétaire a abandonné une intégration Shopify en cours de route. Il fallait une application sur mesure qui devienne le système de référence, avec Stripe pour les paiements et une synchronisation à sens unique depuis l'ancien logiciel d'entrepôt."
@@ -764,7 +768,7 @@ window.KDS = {
       fr: {
         title: "Kando Ressources",
         sector: "Société minière · cuivre et cobalt, Lualaba",
-        tagline: "Site corporate bilingue pour un producteur de cuivre-cobalt : activités, espace investisseurs, durabilité avec mécanisme de plaintes, actualités, carrières.",
+        tagline: "Site corporate bilingue pour un producteur de cuivre-cobalt : activités, espace investisseurs, durabilité et mécanisme de plaintes, actualités.",
         problem: [
           "Les grandes sociétés minières présentent toutes la même architecture : qui nous sommes, activités, investisseurs, durabilité, actualités, carrières, contact. Leurs partenaires, prêteurs, administrations et communautés s'y attendent. La plupart des opérateurs installés en RDC n'ont pourtant aucun site à la hauteur de cette attente.",
           "Il fallait un site qui serve deux publics à la fois : les partenaires financiers, qui cherchent rapports, chiffres de production et déclaration ITIE, et les communautés riveraines, qui cherchent les programmes, les emplois et un moyen de déposer une plainte."
@@ -846,7 +850,7 @@ window.KDS = {
       fr: {
         title: "Kimia Express",
         sector: "Livraison et logistique · 12 villes de RDC",
-        tagline: "Site bilingue de livraison express : 18 pages, réservation de collecte, suivi de colis, tarifs et réseau de points relais en RDC. Données et paiements simulés.",
+        tagline: "Site bilingue de livraison express : 18 pages, réservation de collecte, suivi de colis, tarifs et points relais en RDC. Données et paiements simulés.",
         problem: [
           "Une société de coursiers reçoit ses commandes par appels et messages WhatsApp, donne ses prix de tête, et ses clients rappellent trois fois pour savoir où est leur colis. Les entreprises qui expédient tous les jours veulent un compte, des tarifs dégressifs et une facture mensuelle.",
           "Il fallait un site bilingue qui présente les services, les tarifs, le réseau et les parcours d’envoi et de suivi de colis."
@@ -1159,7 +1163,7 @@ window.KDS = {
       fr: {
         title: "Cimenterie du Fleuve",
         sector: "Industrie · ciment, béton et granulats, Kongo Central",
-        tagline: "Site corporate bilingue pour un cimentier : produits et fiches techniques, sites et logistique, appels d'offres, carrières, durabilité, mentions légales conformes au Code du numérique.",
+        tagline: "Site corporate bilingue pour un cimentier : produits et fiches techniques, sites et logistique, appels d'offres, carrières, durabilité, mentions légales.",
         problem: [
           "Un industriel congolais vend à trois publics à la fois : les chantiers et revendeurs qui cherchent une fiche technique et un point de vente, les fournisseurs qui cherchent les appels d'offres, et les candidats, partenaires et administrations qui le jugent sur son site. Un site vitrine d'une page ne sert aucun des trois.",
           "Il fallait aussi un site que le service communication puisse tenir à jour seul : nouveau communiqué, nouvel appel d'offres, poste ouvert, sans repasser par un prestataire."
@@ -1194,7 +1198,7 @@ window.KDS = {
       en: {
         title: "Cimenterie du Fleuve",
         sector: "Industry · cement, concrete and aggregates, Kongo Central",
-        tagline: "Bilingual corporate site for a cement maker: products and datasheets, sites and logistics, tenders, careers, sustainability, legal notice compliant with the Digital Code.",
+        tagline: "Bilingual corporate site for a cement maker: products and datasheets, sites and logistics, tenders, careers, sustainability and a legal notice.",
         problem: [
           "A Congolese manufacturer sells to three audiences at once: contractors and retailers looking for a datasheet and an outlet, suppliers looking for tenders, and candidates, partners and administrations who judge it on its site. A one-page brochure site serves none of them.",
           "The communications team also had to be able to keep the site current alone: a new release, a new tender, an open position, without going back to a vendor."

@@ -2,6 +2,10 @@
 const services = [
   {
     key: "payments", examples: ["commande-distributeur"],
+    seo: {
+      fr: { title: "Paiement mobile money en RDC : M-Pesa, Airtel, Orange Money", description: "Intégrez M-Pesa, Airtel Money, Orange Money et la carte bancaire à vos ventes en RDC : parcours de paiement, confirmation serveur et rapprochement.", intro: "Nous intégrons M-Pesa, Airtel Money et Orange Money pour les commerces et distributeurs de Kinshasa, de Lubumbashi et de toute la RDC." },
+      en: { title: "Mobile money payments in the DRC: M-Pesa, Airtel, Orange", description: "Connect M-Pesa, Airtel Money, Orange Money and cards to your sales in the DRC: mobile checkout, server-side confirmation and reconciliation exports.", intro: "We integrate M-Pesa, Airtel Money and Orange Money for shops and distributors in Kinshasa, Lubumbashi and across the DRC." }
+    },
     fr: {
       title: "Paiements & mobile money", brief: "Reliez vos ventes aux moyens de paiement utilisés par vos clients : M-Pesa, Airtel Money, Orange Money et carte bancaire, selon les accès disponibles.",
       audience: "Boutiques, distributeurs et entreprises de services : suivez une commande depuis la demande de paiement jusqu’au rapprochement de l’encaissement. Votre équipe retrouve les statuts et les références au même endroit.",
@@ -19,6 +23,10 @@ const services = [
   },
   {
     key: "whatsapp", examples: [],
+    seo: {
+      fr: { title: "Automatisation WhatsApp Business pour entreprises en RDC", description: "Automatisez WhatsApp Business pour votre entreprise en RDC : accueil, qualification, rendez-vous, notifications et transfert vers votre équipe.", intro: "Nous automatisons WhatsApp Business pour les entreprises de Kinshasa, de Lubumbashi et de toute la RDC." },
+      en: { title: "WhatsApp Business automation for companies in the DRC", description: "Automate WhatsApp Business for your company in the DRC: welcome flows, qualification, appointments, notifications and handoff to your team.", intro: "We automate WhatsApp Business for companies in Kinshasa, Lubumbashi and across the DRC." }
+    },
     fr: {
       title: "Automatisation WhatsApp Business", brief: "Transformez les conversations en demandes suivies : accueil, qualification, rendez-vous et notifications, avec un relais vers votre équipe.",
       audience: "Pour les équipes qui répondent chaque jour aux mêmes questions ou perdent des demandes dans les conversations. Organisez l’accueil, collectez les informations utiles et transmettez chaque demande à la bonne personne.",
