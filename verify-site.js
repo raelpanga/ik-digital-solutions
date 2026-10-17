@@ -15,7 +15,8 @@ const decode = s => s.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&qu
 const PAY = /\d[\d ,.]*\s?(USD|CDF|FC|\$|%)|\b(commissions?|primes?|salaire|rémunération|bonus|salary|salaries)\b/i;
 (async () => {
   // Verify all generated portfolio references without contacting client systems.
-  const portfolio = walk(root).filter(f => f.endsWith(".html") && !f.includes(path.sep + "demos" + path.sep) && !f.endsWith("404.html"));
+  // The Search Console verification file is a bare token, not a page.
+  const portfolio = walk(root).filter(f => f.endsWith(".html") && !f.includes(path.sep + "demos" + path.sep) && !f.endsWith("404.html") && !/[\\/]google[0-9a-f]+\.html$/.test(f));
   let references = 0;
   for (const file of portfolio) {
     const relative = path.relative(root, file).replace(/\\/g, "/"), html = fs.readFileSync(file, "utf8");

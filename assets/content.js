@@ -16,8 +16,11 @@ window.KDS = {
     // Form submissions are delivered to that address. The key is designed to be public.
     web3formsKey: "64e46a57-5655-4025-950f-280a5de426d4",
     location: { fr: "Kentucky, États-Unis", en: "Kentucky, United States" },
-    // Google Search Console "HTML tag" token (the content value). Empty = no meta tag is emitted.
+    // Google Search Console. Either method works; both can stay set.
+    // "HTML tag" token (the content value of the meta tag). Empty = no meta tag is emitted.
     googleSiteVerification: "",
+    // "HTML file" name (google….html): the file is written to the site root with the content Google expects. Empty = no file.
+    googleSiteVerificationFile: "google150b710bc9abd404.html",
     // JobPosting datePosted for the recruiting page. Set to "" once the position is filled: the posting node disappears.
     agentsPostedOn: "2026-10-16"
   },

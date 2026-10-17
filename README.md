@@ -136,7 +136,9 @@ The site targets searches made in the DR Congo, in French first. The pieces:
   of 50 to 160 characters, and no duplicate description within a language.
 - **Head tags.** Canonical, `hreflang` fr/en plus `x-default` (French), `og:url`,
   `og:site_name`, `og:locale`, a Twitter card, and the Search Console tag when
-  `config.googleSiteVerification` is set.
+  `config.googleSiteVerification` is set. When `config.googleSiteVerificationFile` names a
+  `google….html` file, `build.js` writes it to the site root with the body Google expects
+  (the "HTML file" method). The build throws if the name does not look like a Google token.
 - **Structured data.** `site/seo.js` writes one JSON-LD graph per page: the studio as a
   `ProfessionalService` serving the DRC (Kinshasa, Lubumbashi), the `WebSite`, the `WebPage`,
   breadcrumbs on service and project pages, a `Service` and the two FAQs on each service
@@ -153,10 +155,11 @@ The site targets searches made in the DR Congo, in French first. The pieces:
 
 Google Search Console, once:
 
-1. Add a URL-prefix property for `https://iksolutions-inc.com/` and choose the HTML tag
-   method. Copy the `content` value of the tag Google shows.
-2. Paste it into `config.googleSiteVerification` in `assets/content.js`, rebuild, commit and
-   push. Vercel publishes within a minute.
+1. Add a URL-prefix property for `https://iksolutions-inc.com/`. With the HTML file method,
+   put the file name Google gives you (`google….html`) in `config.googleSiteVerificationFile`;
+   with the HTML tag method, put the tag's `content` value in `config.googleSiteVerification`.
+2. Rebuild, commit and push. Vercel publishes within a minute. Note that clean URLs redirect
+   `/google….html` to `/google…` with a 308; the file body is served at both addresses.
 3. Click Verify in Search Console, then Sitemaps → submit `https://iksolutions-inc.com/sitemap.xml`.
 4. Check a few pages with the Rich Results Test (https://search.google.com/test/rich-results)
    and https://validator.schema.org/. Warnings about a missing street address or salary are

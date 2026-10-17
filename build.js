@@ -8,6 +8,8 @@ require("./assets/content.js");
 const D = window.KDS;
 D.config.web3formsKey = String(D.config.web3formsKey || "").trim();
 D.config.googleSiteVerification = String(D.config.googleSiteVerification || "").trim();
+D.config.googleSiteVerificationFile = String(D.config.googleSiteVerificationFile || "").trim();
+if (D.config.googleSiteVerificationFile && !/^google[0-9a-f]+\.html$/.test(D.config.googleSiteVerificationFile)) throw new Error("config.googleSiteVerificationFile must look like google….html");
 if (!D.config.web3formsKey) console.warn("Warning: config.web3formsKey is empty in assets/content.js. The contact form cannot deliver inquiries until a Web3Forms access key is set.");
 const concepts = require("./site/concepts");
 D.projects.push(...concepts.projects);
@@ -48,6 +50,8 @@ for (const f of ["style.css", "visual.css", "site.js", "favicon.svg", "favicon-3
 write("favicon.ico", fs.readFileSync(path.join(__dirname, "assets", "favicon.ico")));
 copyDir(path.join(__dirname, "assets", "media"), path.join(OUT, "assets", "media"));
 write(".nojekyll", "");
+// Search Console "HTML file" verification: Google fetches /<name> and expects this exact body.
+if (D.config.googleSiteVerificationFile) write(D.config.googleSiteVerificationFile, "google-site-verification: " + D.config.googleSiteVerificationFile + "\n");
 if (arg("--cname")) write("CNAME", arg("--cname").trim() + "\n");
 // Portfolio pages only: demonstrations are built below but stay out of the sitemap.
 const pages = [];
